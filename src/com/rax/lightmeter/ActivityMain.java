@@ -20,12 +20,15 @@ public class ActivityMain extends Activity {
 	private static final int MENU_ABOUT = Menu.FIRST + 1;
 
 	private TextView mTextAccuracy;
-	private TextView mTextValue1;
-	private TextView mTextValue2;
-	private TextView mTextValue3;
+	private TextView mTextLux;
+	private TextView mTextEv;
+	private TextView mTextIso;
+	private TextView mTextAperture;
+	private TextView mTextShutter;
 
 	private SensorManager mSensorManager;
 	private Sensor mLightSensor;
+	private LightMeter mMeter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,12 +37,15 @@ public class ActivityMain extends Activity {
 		setContentView(R.layout.activity_main);
 
 		mTextAccuracy = (TextView) findViewById(R.id.main_accuracy);
-		mTextValue1 = (TextView) findViewById(R.id.main_value1);
-		mTextValue2 = (TextView) findViewById(R.id.main_value2);
-		mTextValue3 = (TextView) findViewById(R.id.main_value3);
+		mTextLux = (TextView) findViewById(R.id.main_lux);
+		mTextEv = (TextView) findViewById(R.id.main_ev);
+		mTextIso = (TextView) findViewById(R.id.main_iso);
+		mTextAperture = (TextView) findViewById(R.id.main_aperture);
+		mTextShutter = (TextView) findViewById(R.id.main_shutter);
 
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+		mMeter = new LightMeter();
 	}
 
 	@Override
@@ -83,10 +89,11 @@ public class ActivityMain extends Activity {
 		@Override
 		public void onSensorChanged(SensorEvent event) {
 			//if (DEBUG) Log.v(TAG, "ActivityMain::SensorEventListener::onSensorChanged");
-			float[] values = event.values;
-			mTextValue1.setText(String.valueOf(values[0]));
-			mTextValue2.setText(String.valueOf(values[1]));
-			mTextValue3.setText(String.valueOf(values[2]));
+			float lux = event.values[0];
+			double ev = mMeter.caculateEv(lux);
+			
+			mTextLux.setText(String.valueOf(lux));
+			mTextEv.setText(String.valueOf(ev));
 		}
 
 	};

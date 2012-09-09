@@ -26,10 +26,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/main_label_value1" />
+                android:text="@string/main_label_lux" />
 
             <TextView
-                android:id="@+id/main_value1"
+                android:id="@+id/main_lux"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </TableRow>
@@ -39,10 +39,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/main_label_value2" />
+                android:text="@string/main_label_ev" />
 
             <TextView
-                android:id="@+id/main_value2"
+                android:id="@+id/main_ev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </TableRow>
@@ -52,10 +52,36 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/main_label_value3" />
+                android:text="@string/main_label_iso" />
 
             <TextView
-                android:id="@+id/main_value3"
+                android:id="@+id/main_iso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_label_aperture" />
+
+            <TextView
+                android:id="@+id/main_aperture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_label_shutter" />
+
+            <TextView
+                android:id="@+id/main_shutter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </TableRow>

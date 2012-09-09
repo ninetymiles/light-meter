@@ -5,9 +5,12 @@
 
     <!-- MainActivity labels -->
     <string name="main_label_accuracy">"Accuracy:"</string>
-    <string name="main_label_value1">"Value1:"</string>
-    <string name="main_label_value2">"Value2:"</string>
-    <string name="main_label_value3">"Value3:"</string>
+    <string name="main_label_lux">"Lux:"</string>
+    <string name="main_label_ev">"EV:"</string>
+    
+    <string name="main_label_iso">"ISO:"</string>
+    <string name="main_label_aperture">"Aperture:"</string>
+    <string name="main_label_shutter">"Shutter:"</string>
 
     <!-- MainActivity menus -->
     <string name="menu_settings">Settings</string>
