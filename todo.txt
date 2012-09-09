@@ -1,3 +1,15 @@
-// TODO: suggest for 18% gray, or pure white or pure black
-// TODO: Lite version can't change ISO
-// TODO: Lite version always on, Pro version have kill switch
+H Use scroll bar to select Aspe and Shutter
+H Default show 1/60 and F8, can remember last setting value 
+H Suggest for 18% gray, or pure white or pure black
+H Update icon
+H Add i18n
+M Obfucation
+M Ant can compile lite and pro version
+M Lite version can't change ISO
+M Lite version always on, Pro version have kill switch
+L Use google analytics sdk or flurry to tracking usage
+L Let user can send email back
+L Share this
+L Ask for rating
+L Add OOBE
+L Add help

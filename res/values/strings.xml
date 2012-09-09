@@ -32,7 +32,8 @@
 
     <!-- About -->
     <string name="about_version_info">"Version %1$s r%2$s"</string>
-    <string name="about_copyright">"©2012-2012 All rights reserved."</string>
+    <string name="about_copyright1">"Copyright © 2012"</string>
+    <string name="about_copyright2">"All rights reserved."</string>
     <string name="about_summary">""</string>
 
 </resources>

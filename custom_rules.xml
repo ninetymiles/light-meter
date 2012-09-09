@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="common" default="debug">
+	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" >
+		<classpath>
+			<pathelement location="project/ant-contrib-0.3.jar" />
+		</classpath>
+	</taskdef>
+
+	<property name="manifest" value="AndroidManifest.xml" />
+
+	<target name="-post-compile">
+		<propertycopy name="out.manifest.abs.file" from="manifest" />
+	</target>
+
+	<target name="-post-build">
+		<copy todir="./" file="${out.final.file}" overwrite="true" />
+	</target>
+
+</project>
