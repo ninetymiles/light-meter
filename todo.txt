@@ -1,2 +1,3 @@
 // TODO: suggest for 18% gray, or pure white or pure black
-// TODO
+// TODO: Lite version can't change ISO
+// TODO: Lite version always on, Pro version have kill switch
