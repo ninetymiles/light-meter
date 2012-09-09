@@ -11,6 +11,11 @@
     <string name="main_label_iso">"ISO:"</string>
     <string name="main_label_aperture">"Aperture:"</string>
     <string name="main_label_shutter">"Shutter:"</string>
+    <string name="main_label_mode">"Mode:"</string>
+    <string name="main_radio_mode_a">"A/Av (Aperture priority)"</string>
+    <string name="main_radio_mode_s">"S/Tv (Shutter priority)"</string>
+    <string name="main_radio_mode_none">"P (Program)"</string>
+    <string name="main_button">"Press me to measure"</string>
 
     <!-- MainActivity menus -->
     <string name="menu_settings">Settings</string>

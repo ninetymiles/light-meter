@@ -26,7 +26,6 @@ public class ActivityMain extends Activity {
 
 	private static final int DIALOG_QUIT_CONFIRM = 1;
 	
-	private TextView mTextAccuracy;
 	private TextView mTextLux;
 	private TextView mTextEv;
 	private TextView mTextIso;
@@ -42,8 +41,7 @@ public class ActivityMain extends Activity {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		mTextAccuracy = (TextView) findViewById(R.id.main_accuracy);
+		
 		mTextLux = (TextView) findViewById(R.id.main_lux);
 		mTextEv = (TextView) findViewById(R.id.main_ev);
 		mTextIso = (TextView) findViewById(R.id.main_iso);
@@ -125,6 +123,18 @@ public class ActivityMain extends Activity {
 	}
 
 	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
 	public void onBackPressed() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onBackPressed");
 		showDialog(DIALOG_QUIT_CONFIRM);
@@ -135,7 +145,6 @@ public class ActivityMain extends Activity {
 		@Override
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {
 			//if (DEBUG) Log.v(TAG, "ActivityMain::SensorEventListener::onAccuracyChanged");
-			mTextAccuracy.setText(String.valueOf(accuracy));
 		}
 
 		@Override
