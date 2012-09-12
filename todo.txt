@@ -1,18 +1,23 @@
 H Use scroll bar to select Aspe and Shutter
+H Scroll the seekbar may also use vibrator
 H Default show 1/60 and F8, can remember last setting value
 H Save last set shutter and F 
 H Suggest for 18% gray, or pure white or pure black
 H Update icon
 H Add i18n
 H Use volume key to set A or S value
+H Add image indicator to show locked status for measure button
+H Long pressed on measure button may trigger the locked status, or show hint
 M Obfucation
 M Ant can compile lite and pro version
 M Lite version can't change ISO
 M Lite version always on, Pro version have kill switch
-M Pro version can detect flash light
+M Pro version can detect flash light, press button to start measure, but lock on the maximum value
+M Flash light can sum multiple flash value
 L Use google analytics sdk or flurry to tracking usage
 L Let user can send email back
 L Share this
 L Ask for rating
-L Add OOBE
-L Add help
+L Add OOBE, severial page, or show toast cover on the main page elements
+L Add help, can show the toast content back
+L Can measure severial points, and computer a average value to suggest that
