@@ -63,6 +63,12 @@ public class LightMeterTest extends InstrumentationTestCase {
 		assertEquals(0, meter.getShutterByFv(1.4f));
 		assertEquals(-8000, meter.getShutterByFv(2.0f));
 		assertEquals(-8, meter.getShutterByFv(64f));
+		
+		meter.setISO(200);
+		assertEquals(-15, meter.getShutterByFv(64f));	// ISO200, can use 1/15 rather than 1/8 for shutter speed
+		
+		meter.setISO(50);
+		assertEquals(-4, meter.getShutterByFv(64f));	// ISO50, need slow down to 1/4
 	}
 	
 	public void testGetFvByShutter() throws Exception {
@@ -84,5 +90,40 @@ public class LightMeterTest extends InstrumentationTestCase {
 		assertEquals(0f, meter.getFvByShutter(-16000));
 		assertEquals(2.0f, meter.getFvByShutter(-8000));
 		assertEquals(64f, meter.getFvByShutter(-8));
+		
+		meter.setISO(200);
+		assertEquals(0f, meter.getFvByShutter(-8));		// ISO100 15EV will use 1/8 F64, ISO200 will out of range
+		assertEquals(11f, meter.getFvByShutter(-500));	// ISO100 15EV will use 1/500 F8, ISO200 can use F11 rather than F8
+		
+		meter.setISO(50);
+		assertEquals(5.6f, meter.getFvByShutter(-500));	// Use ISO50, need set aperture to F5.6
+	}
+	
+	public void testISO() throws Exception {
+		
+		class MockLightMeter extends LightMeter {
+			public int testGetEvIndex(int ev) {
+				return getEvIndex(ev);
+			}
+		};
+		
+		MockLightMeter meter = new MockLightMeter();
+		
+		meter.setISO(100);
+		assertEquals(0, meter.testGetEvIndex(-6));		// Default -6EV will be map to data line 0
+		assertEquals(6, meter.testGetEvIndex(0));		// 0EV will be map to data line 6
+		assertEquals(-1, meter.testGetEvIndex(-7));		// Out of range
+		assertEquals(27, meter.testGetEvIndex(21));		// Last line of sExposureValue
+		assertEquals(-1, meter.testGetEvIndex(22));		// Out of range
+		
+		meter.setISO(200);
+		assertEquals(0, meter.testGetEvIndex(-7));		// ISO200, -7EV will be map to data line 0
+		assertEquals(7, meter.testGetEvIndex(0));		// ISO200, 0EV will be map to data line 7
+		assertEquals(-1, meter.testGetEvIndex(21));		// 16EV will out of range
+		
+		meter.setISO(50);
+		assertEquals(-1, meter.testGetEvIndex(-6));		// ISO50, -6EV will out of range
+		assertEquals(5, meter.testGetEvIndex(0));		// 0EV will be map to data line 5
+		assertEquals(26, meter.testGetEvIndex(21));		// 21EV will be map to data line 26
 	}
 }

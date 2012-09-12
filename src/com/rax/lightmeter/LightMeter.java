@@ -9,9 +9,9 @@ public class LightMeter {
 	private static final String TAG = "RaxLog";
 	private static final boolean DEBUG = true;
 	
-	private int mISO;
-	private int mAperture;
-	private int mShutter;
+	private int mISO = 100;
+	private int mShutter = -60;
+	private float mAperture = 5.6f;
 	
 	private double mLux;
 	private double mEv;
@@ -27,6 +27,10 @@ public class LightMeter {
 		mLux = lux;
 		mEv = Math.log((mLux / 250)) / sLog2;
 		return mEv;
+	}
+	
+	public void setISO(int iso) {
+		mISO = iso;
 	}
 	
 	public double getLux() {
@@ -72,7 +76,8 @@ public class LightMeter {
 		return f;
 	}
 	
-	private int getFvIndex(float f) {
+	// Protected scope is for unit test
+	protected int getFvIndex(float f) {
 		int idx = -1;
 		for (int i = 0; i < sFvIndex.length; i++) {
 			if (f == sFvIndex[i]) {
@@ -83,17 +88,26 @@ public class LightMeter {
 		return idx;
 	}
 	
-	private int getEvIndex(int ev) {
-		int idx = -1;
-		if (ev >= -6 && ev <= 21) {
-			idx = ev + 6;
+	// Protected scope is for unit test
+	protected int getEvIndex(int ev) {
+		int offset = 6; // -6EV default map to data line 0
+		
+		// ISO 100 will set offset 0, ISO 200 will set offset 1 
+		offset += Math.log(mISO / 100f) / sLog2;
+		
+		if (DEBUG) Log.v(TAG, "LightMeter::getEvIndex ev:" + ev + " offset:" + offset + " l:" + sExposureValue.length);
+		
+		int idx = ev + offset;
+		if (idx < 0 || idx >= sExposureValue.length) {
+			idx = -1;
 		}
 		return idx;
 	}
 	
 	private static final float [] sFvIndex = { 1, 1.4f, 2, 2.8f, 4, 5.6f, 8, 11, 16, 22, 32, 45, 64};
 	
-	// Shutter values in second, positive value means seconds, nagitive value means 1/ seconds 
+	// Shutter values in second, positive value means seconds, nagitive value means 1/ seconds
+	// Reference http://en.wikipedia.org/wiki/Exposure_value
 	private static final int [][] sExposureValue = {
 		/* -6 EV */ { 60, 2 * 60, 4 * 60, 8 * 60, 16 * 60, 32 * 60, 64 * 60, 128 * 60, 256 * 60, 512 * 60, 1024 * 60, 2048 * 60, 4096 * 60},
 		/* -5 EV */ { 30, 60, 2 * 60, 4 * 60, 8 * 60, 16 * 60, 32 * 60, 64 * 60, 128 * 60, 256 * 60, 512 * 60, 1024 * 60, 2048 * 60},
