@@ -18,6 +18,7 @@ package com.rax.lightmeter.tests;
 
 import android.content.res.AssetManager;
 import android.test.InstrumentationTestCase;
+import android.util.Log;
 
 import com.rax.lightmeter.LightMeter;
 
@@ -41,5 +42,47 @@ public class LightMeterTest extends InstrumentationTestCase {
 		
 		assertEquals(10d, meter.caculateEv(1024 * 250));
 		assertEquals(3d, meter.caculateEv(8 * 250));
+	}
+	
+	public void testGetShutterByFv() throws Exception {
+		
+		LightMeter meter = new LightMeter();
+		
+		meter.caculateEv(0);
+		assertEquals(1, meter.getShutterByFv(1.0f));
+		assertEquals(0, meter.getShutterByFv(0f));		// Out of range
+		assertEquals(0, meter.getShutterByFv(128f));	// Out of range
+		
+		meter.caculateEv(1024 * 250);
+		assertEquals(-1000, meter.getShutterByFv(1.0f));
+		assertEquals(-30, meter.getShutterByFv(5.6f));
+		assertEquals(4, meter.getShutterByFv(64f));
+		
+		meter.caculateEv(Math.pow(2, 15) * 250);
+		assertEquals(0, meter.getShutterByFv(1.0f));
+		assertEquals(0, meter.getShutterByFv(1.4f));
+		assertEquals(-8000, meter.getShutterByFv(2.0f));
+		assertEquals(-8, meter.getShutterByFv(64f));
+	}
+	
+	public void testGetFvByShutter() throws Exception {
+		
+		LightMeter meter = new LightMeter();
+		
+		meter.caculateEv(0);
+		assertEquals(1.0f, meter.getFvByShutter(1));
+		assertEquals(8.0f, meter.getFvByShutter(60));
+		assertEquals(0f, meter.getFvByShutter(0));		// Invalid value
+		assertEquals(0f, meter.getFvByShutter(128));	// Out of range
+		
+		meter.caculateEv(1024 * 250);
+		assertEquals(1.0f, meter.getFvByShutter(-1000));
+		assertEquals(5.6f, meter.getFvByShutter(-30));
+		assertEquals(64f, meter.getFvByShutter(4));
+		
+		meter.caculateEv(Math.pow(2, 15) * 250);
+		assertEquals(0f, meter.getFvByShutter(-16000));
+		assertEquals(2.0f, meter.getFvByShutter(-8000));
+		assertEquals(64f, meter.getFvByShutter(-8));
 	}
 }
