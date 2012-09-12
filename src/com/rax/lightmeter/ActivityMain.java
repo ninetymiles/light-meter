@@ -51,6 +51,21 @@ public class ActivityMain extends Activity {
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 		mMeter = new LightMeter();
+		mMeter.setISO(100);
+		
+		mTextIso.setText(String.valueOf(mMeter.getISO()));
+	}
+	
+	private String printShutterValue(int shutter) {
+		String str;
+		if (shutter == 0) {
+			str = "N/A";
+		} else if (shutter < 0) {
+			str = String.format("1 / %d s", -shutter);
+		} else {
+			str = String.format("%d s", shutter);
+		}
+		return str;
 	}
 
 	@Override
@@ -155,6 +170,21 @@ public class ActivityMain extends Activity {
 			
 			mTextLux.setText(String.valueOf(lux));
 			mTextEv.setText(String.valueOf(ev));
+			
+			float f = mMeter.getFvByShutter(-60);
+			if (f != 0) {
+				mTextAperture.setText(String.valueOf(f));
+				mTextShutter.setText(printShutterValue(-60));
+			} else {
+				int shutter = mMeter.getShutterByFv(5.6f);
+				if (shutter == 0) {
+					shutter = mMeter.getShutterByFv(22f);
+					mTextAperture.setText(String.valueOf(22f));
+				} else {
+					mTextAperture.setText(String.valueOf(5.6f));
+				}
+				mTextShutter.setText(printShutterValue(shutter));
+			}
 		}
 
 	};

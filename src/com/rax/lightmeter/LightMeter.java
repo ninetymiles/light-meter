@@ -10,8 +10,6 @@ public class LightMeter {
 	private static final boolean DEBUG = true;
 	
 	private int mISO = 100;
-	private int mShutter = -60;
-	private float mAperture = 5.6f;
 	
 	private double mLux;
 	private double mEv;
@@ -41,6 +39,11 @@ public class LightMeter {
 		return mEv;
 	}
 	
+	public int getISO() {
+		return mISO;
+	}
+	
+	// Return 0 means invalid
 	public int getShutterByFv(float f) {
 		if (DEBUG) Log.v(TAG, "LightMeter::getShutterByFv f:" + f);
 		int s = 0;
@@ -56,6 +59,7 @@ public class LightMeter {
 		return s;
 	}
 	
+	// Return 0 for invalid result
 	public float getFvByShutter(int shutter) {
 		if (DEBUG) Log.v(TAG, "LightMeter::getFvByShutter s:" + shutter);
 		float f = 0;

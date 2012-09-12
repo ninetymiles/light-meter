@@ -1,13 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="12dp" >
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:padding="12dip" >
+        android:layout_weight="1" >
 
         <TableRow>
 
@@ -77,8 +77,7 @@
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dip" >
+        android:layout_height="wrap_content" >
 
         <TableRow>
 
@@ -86,12 +85,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginRight="8dp"
                 android:text="@string/main_label_mode" />
 
             <RadioGroup
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <RadioButton
                     android:layout_gravity="center_vertical"
@@ -113,6 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginRight="8dp"
                 android:text="@string/main_label_iso" />
 
             <SeekBar
@@ -126,6 +127,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginRight="8dp"
                 android:text="@string/main_label_aperture" />
 
             <SeekBar
@@ -151,7 +153,6 @@
         android:id="@+id/main_button"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_margin="8dp"
         android:text="@string/main_button" >
     </Button>
 

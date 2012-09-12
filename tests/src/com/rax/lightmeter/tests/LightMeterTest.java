@@ -18,7 +18,6 @@ package com.rax.lightmeter.tests;
 
 import android.content.res.AssetManager;
 import android.test.InstrumentationTestCase;
-import android.util.Log;
 
 import com.rax.lightmeter.LightMeter;
 

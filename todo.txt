@@ -4,6 +4,7 @@ H Save last set shutter and F
 H Suggest for 18% gray, or pure white or pure black
 H Update icon
 H Add i18n
+H Use volume key to set A or S value
 M Obfucation
 M Ant can compile lite and pro version
 M Lite version can't change ISO
