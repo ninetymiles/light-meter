@@ -20,10 +20,10 @@ public class LightMeter {
 		// if (DEBUG) Log.v(TAG, "LightMeter::caculateEv lux:" + lux);
 		
 		// Caculate EV from Lux
-		// Lux = 250 * 2^EV
+		// Lux = 2.5 * 2^EV
 		
 		mLux = lux;
-		mEv = Math.log((mLux / 250)) / sLog2;
+		mEv = Math.log((mLux / 2.50d)) / sLog2;
 		return mEv;
 	}
 	

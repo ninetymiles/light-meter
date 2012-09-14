@@ -1,4 +1,5 @@
 H Use scroll bar to select Aspe and Shutter
+H Use light theme for UI
 H Scroll the seekbar may also use vibrator
 H Default show 1/60 and F8, can remember last setting value
 H Save last set shutter and F 
