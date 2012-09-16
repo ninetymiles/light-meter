@@ -48,7 +48,7 @@ public class ActivityFirst extends Activity {
 				startActivity(intent);
 				finish();
 			}
-		}, 1800);
+		}, 1000);
 	}
 
 	@Override

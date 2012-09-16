@@ -14,9 +14,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.Button;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
-public class ActivityMain extends Activity {
+public class ActivityMain extends Activity implements OnClickListener {
 	
 	private static final String TAG = "RaxLog";
 	private static final boolean DEBUG = true;
@@ -31,6 +38,8 @@ public class ActivityMain extends Activity {
 	private TextView mTextIso;
 	private TextView mTextAperture;
 	private TextView mTextShutter;
+	
+	private Button mBtnMeasure;
 
 	private SensorManager mSensorManager;
 	private Sensor mLightSensor;
@@ -42,11 +51,20 @@ public class ActivityMain extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		mTextLux = (TextView) findViewById(R.id.main_lux);
-		mTextEv = (TextView) findViewById(R.id.main_ev);
-		mTextIso = (TextView) findViewById(R.id.main_iso);
-		mTextAperture = (TextView) findViewById(R.id.main_aperture);
-		mTextShutter = (TextView) findViewById(R.id.main_shutter);
+		mTextLux = (TextView) findViewById(R.id.main_lux_value);
+		mTextEv = (TextView) findViewById(R.id.main_ev_value);
+		mTextIso = (TextView) findViewById(R.id.main_iso_value);
+		mTextAperture = (TextView) findViewById(R.id.main_aperture_value);
+		mTextShutter = (TextView) findViewById(R.id.main_shutter_value);
+		
+		mBtnMeasure = (Button) findViewById(R.id.main_button);
+		mBtnMeasure.setOnClickListener(this);
+		mBtnMeasure.setOnTouchListener(mTouchListener);
+		
+		findViewById(R.id.main_button_up).setOnClickListener(this);
+		findViewById(R.id.main_button_down).setOnClickListener(this);
+		
+		((RadioGroup) findViewById(R.id.main_option_mode)).setOnCheckedChangeListener(mOnCheckedChangeListener);
 
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -61,7 +79,7 @@ public class ActivityMain extends Activity {
 		if (shutter == 0) {
 			str = "N/A";
 		} else if (shutter < 0) {
-			str = String.format("1 / %d s", -shutter);
+			str = String.format("1/%d s", -shutter);
 		} else {
 			str = String.format("%d s", shutter);
 		}
@@ -71,14 +89,14 @@ public class ActivityMain extends Activity {
 	@Override
 	protected void onPause() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onPause");
-		mSensorManager.unregisterListener(mSensorListener, mLightSensor);
+		//mSensorManager.unregisterListener(mSensorListener, mLightSensor);
 		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onResume");
-		mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
+		//mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
 		super.onResume();
 	}
 
@@ -112,6 +130,17 @@ public class ActivityMain extends Activity {
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onClick(View v) {
+		if (DEBUG) Log.v(TAG, "ActivityMain::onClick id:" + v.getId());
+		switch (v.getId()) {
+		case R.id.main_button_up:
+			break;
+		case R.id.main_button_down:
+			break;
+		}
 	}
 	
 	@Override
@@ -154,7 +183,43 @@ public class ActivityMain extends Activity {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onBackPressed");
 		showDialog(DIALOG_QUIT_CONFIRM);
 	}
-
+	
+	private OnTouchListener mTouchListener = new OnTouchListener() {
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if (DEBUG) Log.v(TAG, "ActivityMain::OnTouchListener::onTouch id:" + v.getId());
+			
+			switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
+				break;
+			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_CANCEL:
+				mSensorManager.unregisterListener(mSensorListener, mLightSensor);
+				break;
+			}
+			return false;
+		}
+	};
+	
+	private OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
+		@Override
+		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			if (DEBUG) Log.v(TAG, "ActivityMain::OnCheckedChangeListener::onCheckedChanged checkedId:" + checkedId);
+			switch (checkedId) {
+			case R.id.main_option_mode_a:
+				mTextAperture.setSelected(true);
+				break;
+			case R.id.main_option_mode_s:
+				mTextShutter.setSelected(true);
+				break;
+			case R.id.main_option_mode_iso:
+				mTextIso.setSelected(true);
+				break;
+			}
+		}
+	};
+	
 	private SensorEventListener mSensorListener = new SensorEventListener() {
 
 		@Override
@@ -184,4 +249,6 @@ public class ActivityMain extends Activity {
 		}
 
 	};
+
+
 }

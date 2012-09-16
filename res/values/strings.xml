@@ -3,19 +3,24 @@
     <!-- Global App resources -->
     <string name="app_name">LightMeter</string>
 
-    <!-- MainActivity labels -->
-    <string name="main_label_accuracy">"Accuracy:"</string>
-    <string name="main_label_lux">"Lux:"</string>
-    <string name="main_label_ev">"EV:"</string>
-    
-    <string name="main_label_iso">"ISO:"</string>
+    <!-- MainActivity labels in LCD -->
+    <string name="main_label_lux">"Lx"</string>
+    <string name="main_label_ev">"EV"</string>
+    <string name="main_label_iso">"ISO"</string>
+
+    <!-- MainActivity labels in setting -->
     <string name="main_label_aperture">"Aperture:"</string>
     <string name="main_label_shutter">"Shutter:"</string>
-    <string name="main_label_mode">"Mode:"</string>
-    <string name="main_radio_mode_a">"A/Av (Aperture priority)"</string>
-    <string name="main_radio_mode_s">"S/Tv (Shutter priority)"</string>
-    <string name="main_radio_mode_none">"P (Program)"</string>
-    <string name="main_button">"Press me to measure"</string>
+    <string name="main_label_option">"Option:"</string>
+    <string name="main_radio_mode_a">"A/Av"</string>
+    <string name="main_radio_mode_s">"S/Tv"</string>
+    <string name="main_radio_mode_none">"P"</string>
+    <string name="main_radio_mode_iso">"ISO"</string>
+
+    <!-- MainActivity buttons -->
+    <string name="main_button_up">"UP"</string>
+    <string name="main_button_down">"DOWN"</string>
+    <string name="main_button_measure">"Press me to measure"</string>
 
     <!-- MainActivity menus -->
     <string name="menu_settings">Settings</string>
