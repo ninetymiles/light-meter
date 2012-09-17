@@ -13,17 +13,24 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.rax.lightmeter.ActivityFirst"
+            android:configChanges="keyboardHidden|orientation|keyboard|uiMode"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.rax.lightmeter.ActivityMain" >
+        <activity
+            android:name="com.rax.lightmeter.ActivityMain"
+            android:configChanges="keyboardHidden|orientation|keyboard|uiMode" >
         </activity>
-        <activity android:name="com.rax.lightmeter.ActivityAbout" >
+        <activity
+            android:name="com.rax.lightmeter.ActivityAbout"
+            android:configChanges="keyboardHidden|orientation|keyboard|uiMode" >
         </activity>
-        <activity android:name="com.rax.lightmeter.ActivitySettings" >
+        <activity
+            android:name="com.rax.lightmeter.ActivitySettings"
+            android:configChanges="keyboardHidden|orientation|keyboard|uiMode" >
         </activity>
     </application>
 
