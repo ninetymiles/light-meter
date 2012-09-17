@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -58,6 +59,11 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	public void onCreate(Bundle savedInstanceState) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onCreate");
 		super.onCreate(savedInstanceState);
+		
+		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_ENABLE_KEEP_SCREEN_ON", false)) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
+		
 		setContentView(R.layout.activity_main);
 		
 		mTextLux = (TextView) findViewById(R.id.main_lux_value);

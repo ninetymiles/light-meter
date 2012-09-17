@@ -20,11 +20,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class ActivityFirst extends Activity {
 
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 	private static final String TAG = "RaxLog";
 
 	@Override
@@ -39,16 +40,17 @@ public class ActivityFirst extends Activity {
 	protected void onStart() {
 		super.onStart();
 		if (DEBUG) Log.v(TAG, "ActivityFirst::onStart");
-
-		new Handler().postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				if (DEBUG) Log.v(TAG, "Runnable::run timeout");
-				Intent intent = new Intent(ActivityFirst.this, ActivityMain.class);
-				startActivity(intent);
-				finish();
-			}
-		}, 1000);
+		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_SHOW_SPLASH", false)) {
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					if (DEBUG) Log.v(TAG, "Runnable::run timeout");
+					startMain();
+				}
+			}, 1000);
+		} else {
+			startMain();
+		}
 	}
 
 	@Override
@@ -61,5 +63,11 @@ public class ActivityFirst extends Activity {
 	protected void onDestroy() {
 		if (DEBUG) Log.v(TAG, "ActivityFirst::onDestroy");
 		super.onDestroy();
+	}
+	
+	private void startMain() {
+		Intent intent = new Intent(ActivityFirst.this, ActivityMain.class);
+		startActivity(intent);
+		finish();
 	}
 }
