@@ -21,18 +21,18 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class ActivityMain extends Activity implements OnClickListener {
+public class ActivityMain extends Activity implements OnClickListener, OnFocusChangeListener {
 	
 	private static final String TAG = "RaxLog";
 	private static final boolean DEBUG = true;
 	
-	private static final int MENU_SETTING = Menu.FIRST;
-	private static final int MENU_ABOUT = Menu.FIRST + 1;
-
 	private static final int DIALOG_QUIT_CONFIRM = 1;
 	
 	private TextView mTextLux;
@@ -40,6 +40,9 @@ public class ActivityMain extends Activity implements OnClickListener {
 	private TextView mTextIso;
 	private TextView mTextAperture;
 	private TextView mTextShutter;
+	
+	private LinearLayout mLcdLayout;
+	private LinearLayout mBtnLayout;
 	
 	private Button mBtnMeasure;
 	private Button mBtnUp;
@@ -63,6 +66,10 @@ public class ActivityMain extends Activity implements OnClickListener {
 		mTextAperture = (TextView) findViewById(R.id.main_aperture_value);
 		mTextShutter = (TextView) findViewById(R.id.main_shutter_value);
 		
+		mLcdLayout = (LinearLayout) findViewById(R.id.main_lcd_layout);
+		mLcdLayout.setOnClickListener(this);
+		mBtnLayout = (LinearLayout) findViewById(R.id.main_button_layout);
+		
 		mBtnMeasure = (Button) findViewById(R.id.main_button);
 		mBtnMeasure.setOnClickListener(this);
 		mBtnMeasure.setOnTouchListener(mTouchListener);
@@ -73,12 +80,13 @@ public class ActivityMain extends Activity implements OnClickListener {
 		mBtnDown = (Button) findViewById(R.id.main_button_down);
 		mBtnDown.setOnClickListener(this);
 		
-		//((RadioGroup) findViewById(R.id.main_option_mode)).setOnCheckedChangeListener(mOnCheckedChangeListener);
-		
 		mTextIso.setOnClickListener(this);
+		mTextIso.setOnFocusChangeListener(this);
 		mTextAperture.setOnClickListener(this);
+		mTextAperture.setOnFocusChangeListener(this);
 		mTextShutter.setOnClickListener(this);
-
+		mTextShutter.setOnFocusChangeListener(this);
+		
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 		mMeter = new LightMeter();
@@ -117,28 +125,18 @@ public class ActivityMain extends Activity implements OnClickListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (DEBUG) Log.v(TAG, "ActivityMain::onPrepareOptionsMenu");
-		menu.add(0, MENU_SETTING, 0, R.string.menu_setting).setIcon(android.R.drawable.ic_menu_preferences);
-		menu.add(0, MENU_ABOUT, 0, R.string.menu_about).setIcon(android.R.drawable.ic_menu_info_details);
-		return super.onCreateOptionsMenu(menu);
-		//getMenuInflater().inflate(R.menu.activity_main, menu);
-		//return true;
-	}
-	
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		if (DEBUG) Log.v(TAG, "ActivityMain::onPrepareOptionsMenu");
-		return super.onPrepareOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.activity_main_menu, menu);
+		return true;
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onOptionsItemSelected itemId:" + item.getItemId());
 		switch (item.getItemId()) {
-		case MENU_SETTING:
+		case R.id.menu_setting:
 			startActivity(new Intent(this, ActivitySettings.class));
 			break;
-		case MENU_ABOUT:
+		case R.id.menu_about:
 			startActivity(new Intent(this, ActivityAbout.class));
 			break;
 		default:
@@ -156,20 +154,30 @@ public class ActivityMain extends Activity implements OnClickListener {
 		case R.id.main_button_down:
 			break;
 		case R.id.main_iso_value:
-			mTextIso.setSelected(true);
-			mTextAperture.setSelected(false);
-			mTextShutter.setSelected(false);
 			break;
 		case R.id.main_aperture_value:
-			mTextIso.setSelected(false);
-			mTextAperture.setSelected(true);
-			mTextShutter.setSelected(false);
 			break;
 		case R.id.main_shutter_value:
-			mTextIso.setSelected(false);
-			mTextAperture.setSelected(false);
-			mTextShutter.setSelected(true);
 			break;
+		case R.id.main_lcd_layout:
+			clearFocus();
+			break;
+		}
+	}
+	
+	@Override
+	public void onFocusChange(View v, boolean hasFocus) {
+		if (DEBUG) Log.v(TAG, "ActivityMain::onFocusChange id:" + v.getId() + " hasFocus:" + hasFocus);
+		if (mTextIso.isFocused() || mTextAperture.isFocused() || mTextShutter.isFocused()) {
+			if (mBtnLayout.isShown() == false) {
+				mBtnLayout.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+				mBtnLayout.setVisibility(View.VISIBLE);
+			}
+		} else {
+			if (mBtnLayout.isShown()) {
+				mBtnLayout.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
+				mBtnLayout.setVisibility(View.GONE);
+			}
 		}
 	}
 	
@@ -194,7 +202,8 @@ public class ActivityMain extends Activity implements OnClickListener {
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-		// TODO: Check keyboard and ui_mode and orentation
+		if (DEBUG) Log.v(TAG, "ActivityMain::onConfigurationChanged");
+		
 		super.onConfigurationChanged(newConfig);
 	}
 
@@ -247,6 +256,7 @@ public class ActivityMain extends Activity implements OnClickListener {
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
+				clearFocus();
 				break;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
@@ -256,24 +266,6 @@ public class ActivityMain extends Activity implements OnClickListener {
 			return false;
 		}
 	};
-	
-//	private OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
-//		@Override
-//		public void onCheckedChanged(RadioGroup group, int checkedId) {
-//			if (DEBUG) Log.v(TAG, "ActivityMain::OnCheckedChangeListener::onCheckedChanged checkedId:" + checkedId);
-//			switch (checkedId) {
-//			case R.id.main_option_mode_a:
-//				mTextAperture.setSelected(true);
-//				break;
-//			case R.id.main_option_mode_s:
-//				mTextShutter.setSelected(true);
-//				break;
-//			case R.id.main_option_mode_iso:
-//				mTextIso.setSelected(true);
-//				break;
-//			}
-//		}
-//	};
 	
 	private SensorEventListener mSensorListener = new SensorEventListener() {
 
@@ -301,8 +293,12 @@ public class ActivityMain extends Activity implements OnClickListener {
 			}
 			mTextShutter.setText(printShutterValue(shutter));
 		}
-
 	};
-
+	
+	private void clearFocus() {
+		if (mTextIso.isFocused()) mTextIso.clearFocus();
+		if (mTextAperture.isFocused()) mTextAperture.clearFocus();
+		if (mTextShutter.isFocused()) mTextShutter.clearFocus();
+	}
 
 }
