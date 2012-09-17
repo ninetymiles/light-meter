@@ -35,6 +35,8 @@
     <string name="conf_allow_lock_screen_summary">"Allow lock screen when metering"</string>
     <string name="conf_allow_tracking">"Help improve usage"</string>
     <string name="conf_allow_tracking_summary">"Help improve this product by submitting anonymous usage data"</string>
+    <string name="conf_use_volume_key">"Use volume key"</string>
+    <string name="conf_use_volume_key_summary">"Use volume key to change aperture, shutter speed, and ISO"</string>
 
     <!-- Dialogs -->
     <string name="dlg_quit_confirm_title">"Notice"</string>

@@ -146,80 +146,33 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        android:layout_weight="1"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_option_border"
+        android:orientation="horizontal"
+        android:padding="2dp" >
 
-        <TextView
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/main_button_up"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="8dp"
-            android:text="@string/main_label_option" />
+            android:layout_weight="1"
+            android:text="@string/main_button_up" >
+        </Button>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/main_button_down"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/main_option_border"
-            android:orientation="horizontal"
-            android:padding="6dp" >
-
-            <RadioGroup
-                android:id="@+id/main_option_mode"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <RadioButton
-                    android:id="@+id/main_option_mode_a"
-                    android:layout_width="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/main_radio_mode_a" />
-
-                <RadioButton
-                    android:id="@+id/main_option_mode_s"
-                    android:layout_width="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/main_radio_mode_s" />
-
-                <RadioButton
-                    android:id="@+id/main_option_mode_iso"
-                    android:layout_width="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/main_radio_mode_iso" />
-            </RadioGroup>
-
-            <LinearLayout
-                android:layout_width="160dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
-
-                <Button
-                    android:id="@+id/main_button_up"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/main_button_up" >
-                </Button>
-
-                <Button
-                    android:id="@+id/main_button_down"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/main_button_down" >
-                </Button>
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_weight="1"
+            android:text="@string/main_button_down" >
+        </Button>
     </LinearLayout>
 
     <Button
         android:id="@+id/main_button"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:text="@string/main_button_measure" >
     </Button>
 

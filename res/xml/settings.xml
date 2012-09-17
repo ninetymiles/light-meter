@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:title="@string/app_name">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/app_name" >
 
     <CheckBoxPreference
-            android:key="CONF_SHOW_SPLASH"
-            android:defaultValue="true"
-            android:title="@string/conf_show_splash"
-            android:summary="@string/conf_show_splash_summary" />
-            
+        android:defaultValue="true"
+        android:key="CONF_SHOW_SPLASH"
+        android:summary="@string/conf_show_splash_summary"
+        android:title="@string/conf_show_splash" />
     <CheckBoxPreference
-            android:key="CONF_ALLOW_LOCK_SCREEN"
-            android:defaultValue="false"
-            android:title="@string/conf_allow_lock_screen"
-            android:summary="@string/conf_allow_lock_screen_summary" />
+        android:defaultValue="false"
+        android:key="CONF_ALLOW_LOCK_SCREEN"
+        android:summary="@string/conf_allow_lock_screen_summary"
+        android:title="@string/conf_allow_lock_screen" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="CONF_ALLOW_TRACKING"
+        android:summary="@string/conf_allow_tracking_summary"
+        android:title="@string/conf_allow_tracking" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="CONF_ENABLE_VOLUME_KEY"
+        android:summary="@string/conf_use_volume_key_summary"
+        android:title="@string/conf_use_volume_key" />
 
-	<CheckBoxPreference
-            android:key="CONF_ALLOW_TRACKING"
-            android:defaultValue="true"
-            android:title="@string/conf_allow_tracking"
-            android:summary="@string/conf_allow_tracking_summary" />
-            
 </PreferenceScreen>

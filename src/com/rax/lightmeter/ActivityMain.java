@@ -6,12 +6,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -19,8 +23,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 public class ActivityMain extends Activity implements OnClickListener {
@@ -40,10 +42,14 @@ public class ActivityMain extends Activity implements OnClickListener {
 	private TextView mTextShutter;
 	
 	private Button mBtnMeasure;
+	private Button mBtnUp;
+	private Button mBtnDown;
 
 	private SensorManager mSensorManager;
 	private Sensor mLightSensor;
 	private LightMeter mMeter;
+	
+	private boolean mIsEnableVolumeKey = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,10 +67,17 @@ public class ActivityMain extends Activity implements OnClickListener {
 		mBtnMeasure.setOnClickListener(this);
 		mBtnMeasure.setOnTouchListener(mTouchListener);
 		
-		findViewById(R.id.main_button_up).setOnClickListener(this);
-		findViewById(R.id.main_button_down).setOnClickListener(this);
+		mBtnUp = (Button) findViewById(R.id.main_button_up);
+		mBtnUp.setOnClickListener(this);
 		
-		((RadioGroup) findViewById(R.id.main_option_mode)).setOnCheckedChangeListener(mOnCheckedChangeListener);
+		mBtnDown = (Button) findViewById(R.id.main_button_down);
+		mBtnDown.setOnClickListener(this);
+		
+		//((RadioGroup) findViewById(R.id.main_option_mode)).setOnCheckedChangeListener(mOnCheckedChangeListener);
+		
+		mTextIso.setOnClickListener(this);
+		mTextAperture.setOnClickListener(this);
+		mTextShutter.setOnClickListener(this);
 
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -97,6 +110,8 @@ public class ActivityMain extends Activity implements OnClickListener {
 	protected void onResume() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onResume");
 		//mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		mIsEnableVolumeKey = prefs.getBoolean("CONF_ENABLE_VOLUME_KEY", true);
 		super.onResume();
 	}
 
@@ -140,9 +155,49 @@ public class ActivityMain extends Activity implements OnClickListener {
 			break;
 		case R.id.main_button_down:
 			break;
+		case R.id.main_iso_value:
+			mTextIso.setSelected(true);
+			mTextAperture.setSelected(false);
+			mTextShutter.setSelected(false);
+			break;
+		case R.id.main_aperture_value:
+			mTextIso.setSelected(false);
+			mTextAperture.setSelected(true);
+			mTextShutter.setSelected(false);
+			break;
+		case R.id.main_shutter_value:
+			mTextIso.setSelected(false);
+			mTextAperture.setSelected(false);
+			mTextShutter.setSelected(true);
+			break;
 		}
 	}
 	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (DEBUG) Log.v(TAG, "ActivityMain::onKeyDown keyCode:" + keyCode);
+		boolean handled = false;
+		if (mIsEnableVolumeKey) {
+			switch (keyCode) {
+			case KeyEvent.KEYCODE_VOLUME_DOWN:
+				mBtnDown.performClick();
+				handled = true;
+				break;
+			case KeyEvent.KEYCODE_VOLUME_UP:
+				mBtnUp.performClick();
+				handled = true;
+				break;
+			}
+		}
+		return handled || super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		// TODO: Check keyboard and ui_mode and orentation
+		super.onConfigurationChanged(newConfig);
+	}
+
 	@Override
 	protected Dialog onCreateDialog(int id, Bundle args) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onCreateDialog id:" + id);
@@ -202,23 +257,23 @@ public class ActivityMain extends Activity implements OnClickListener {
 		}
 	};
 	
-	private OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
-		@Override
-		public void onCheckedChanged(RadioGroup group, int checkedId) {
-			if (DEBUG) Log.v(TAG, "ActivityMain::OnCheckedChangeListener::onCheckedChanged checkedId:" + checkedId);
-			switch (checkedId) {
-			case R.id.main_option_mode_a:
-				mTextAperture.setSelected(true);
-				break;
-			case R.id.main_option_mode_s:
-				mTextShutter.setSelected(true);
-				break;
-			case R.id.main_option_mode_iso:
-				mTextIso.setSelected(true);
-				break;
-			}
-		}
-	};
+//	private OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
+//		@Override
+//		public void onCheckedChanged(RadioGroup group, int checkedId) {
+//			if (DEBUG) Log.v(TAG, "ActivityMain::OnCheckedChangeListener::onCheckedChanged checkedId:" + checkedId);
+//			switch (checkedId) {
+//			case R.id.main_option_mode_a:
+//				mTextAperture.setSelected(true);
+//				break;
+//			case R.id.main_option_mode_s:
+//				mTextShutter.setSelected(true);
+//				break;
+//			case R.id.main_option_mode_iso:
+//				mTextIso.setSelected(true);
+//				break;
+//			}
+//		}
+//	};
 	
 	private SensorEventListener mSensorListener = new SensorEventListener() {
 
@@ -233,11 +288,10 @@ public class ActivityMain extends Activity implements OnClickListener {
 			float lux = event.values[0];
 			double ev = mMeter.caculateEv(lux);
 			
-			mTextLux.setText(String.valueOf(lux));
-			mTextEv.setText(String.valueOf(ev));
-			
 			mTextLux.setText(String.format("%.2f", lux));
 			mTextEv.setText(String.format("%.2f", ev));
+			
+			// TODO: For each F2.8 F5.6 F11 and then F22
 			
 			mTextAperture.setText(String.valueOf(5.6f));
 			int shutter = mMeter.getShutterByFv(5.6f);

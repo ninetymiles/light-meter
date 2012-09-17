@@ -1,4 +1,7 @@
-H Use scroll bar to select Aspe and Shutter
+
+H Caculate F2.8 F5.6 F8 F11
+H Support keyboard / uiMode / orentation change from configurationChange in XML
+H Support 1/3 EV or 1/2 EV, should replace the data table
 H Use light theme for UI
 H Scroll the seekbar may also use vibrator
 H Default show 1/60 and F8, can remember last setting value
@@ -6,7 +9,6 @@ H Save last set shutter and F
 H Suggest for 18% gray, or pure white or pure black
 H Update icon
 H Add i18n
-H Use volume key to set A or S value
 H Add image indicator to show locked status for measure button
 H Long pressed on measure button may trigger the locked status, or show hint
 M Obfucation
