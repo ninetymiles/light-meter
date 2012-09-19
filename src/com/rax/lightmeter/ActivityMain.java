@@ -286,18 +286,18 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			mTextLux.setText(String.format("%.2f", lux));
 			mTextEv.setText(String.format("%.2f", ev));
 			
-			// TODO: For each F2.8 F5.6 F11 and then F22
-			
-			mTextAperture.setText(String.valueOf(2.0d));
-			double shutter;
-			
-			shutter = mMeter.getTByFv(2.0d);
+			double shutter = mMeter.getTByFv(2.8d);
+			mTextAperture.setText(String.valueOf(2.8d));
 			if (shutter == 0) {
 				shutter = mMeter.getTByFv(5.6d);
 				mTextAperture.setText(String.valueOf(5.6d));
 				if (shutter == 0) {
-					shutter = mMeter.getTByFv(22d);
-					mTextAperture.setText(String.valueOf(22d));
+					shutter = mMeter.getTByFv(11d);
+					mTextAperture.setText(String.valueOf(11d));
+					if (shutter == 0) {
+						shutter = mMeter.getTByFv(22d);
+						mTextAperture.setText(String.valueOf(22d));
+					}
 				}
 			}
 			mTextShutter.setText(printShutterValue(shutter));
@@ -309,5 +309,4 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		if (mTextAperture.isFocused()) mTextAperture.clearFocus();
 		if (mTextShutter.isFocused()) mTextShutter.clearFocus();
 	}
-
 }
