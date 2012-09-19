@@ -69,29 +69,26 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mTextLux = (TextView) findViewById(R.id.main_lux_value);
 		mTextEv = (TextView) findViewById(R.id.main_ev_value);
 		mTextIso = (TextView) findViewById(R.id.main_iso_value);
+		mTextIso.setOnClickListener(this);
+		mTextIso.setOnFocusChangeListener(this);
 		mTextAperture = (TextView) findViewById(R.id.main_aperture_value);
+		mTextAperture.setOnClickListener(this);
+		mTextAperture.setOnFocusChangeListener(this);
 		mTextShutter = (TextView) findViewById(R.id.main_shutter_value);
+		mTextShutter.setOnClickListener(this);
+		mTextShutter.setOnFocusChangeListener(this);
 		
 		mLcdLayout = (LinearLayout) findViewById(R.id.main_lcd_layout);
 		mLcdLayout.setOnClickListener(this);
-		mBtnLayout = (LinearLayout) findViewById(R.id.main_button_layout);
 		
+		mBtnLayout = (LinearLayout) findViewById(R.id.main_button_layout);
 		mBtnMeasure = (Button) findViewById(R.id.main_button);
 		mBtnMeasure.setOnClickListener(this);
 		mBtnMeasure.setOnTouchListener(mTouchListener);
-		
 		mBtnUp = (Button) findViewById(R.id.main_button_up);
 		mBtnUp.setOnClickListener(this);
-		
 		mBtnDown = (Button) findViewById(R.id.main_button_down);
 		mBtnDown.setOnClickListener(this);
-		
-		mTextIso.setOnClickListener(this);
-		mTextIso.setOnFocusChangeListener(this);
-		mTextAperture.setOnClickListener(this);
-		mTextAperture.setOnFocusChangeListener(this);
-		mTextShutter.setOnClickListener(this);
-		mTextShutter.setOnFocusChangeListener(this);
 		
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -101,14 +98,14 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mTextIso.setText(String.valueOf(mMeter.getISO()));
 	}
 	
-	private String printShutterValue(int shutter) {
+	private String printShutterValue(double shutter) {
 		String str;
 		if (shutter == 0) {
 			str = "N/A";
 		} else if (shutter < 0) {
-			str = String.format("1/%d s", -shutter);
+			str = String.format("1/%.0f s", -shutter);
 		} else {
-			str = String.format("%d s", shutter);
+			str = String.format("%.0f s", shutter);
 		}
 		return str;
 	}
@@ -284,18 +281,24 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		public void onSensorChanged(SensorEvent event) {
 			//if (DEBUG) Log.v(TAG, "ActivityMain::SensorEventListener::onSensorChanged");
 			float lux = event.values[0];
-			double ev = mMeter.caculateEv(lux);
+			double ev = mMeter.setLux(lux);
 			
 			mTextLux.setText(String.format("%.2f", lux));
 			mTextEv.setText(String.format("%.2f", ev));
 			
 			// TODO: For each F2.8 F5.6 F11 and then F22
 			
-			mTextAperture.setText(String.valueOf(5.6f));
-			int shutter = mMeter.getShutterByFv(5.6f);
+			mTextAperture.setText(String.valueOf(2.0d));
+			double shutter;
+			
+			shutter = mMeter.getTByFv(2.0d);
 			if (shutter == 0) {
-				shutter = mMeter.getShutterByFv(22f);
-				mTextAperture.setText(String.valueOf(22f));
+				shutter = mMeter.getTByFv(5.6d);
+				mTextAperture.setText(String.valueOf(5.6d));
+				if (shutter == 0) {
+					shutter = mMeter.getTByFv(22d);
+					mTextAperture.setText(String.valueOf(22d));
+				}
 			}
 			mTextShutter.setText(printShutterValue(shutter));
 		}
