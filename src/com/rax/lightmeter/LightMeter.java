@@ -24,6 +24,8 @@ public class LightMeter {
 	private static final String TAG = "RaxLog";
 	private static final boolean DEBUG = true;
 	
+	public static enum STEP { FULL, HALF, THIRD };
+	
 	private int mISO = 100;
 	
 	private double mLux;

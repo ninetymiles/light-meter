@@ -54,6 +54,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private LightMeter mMeter;
 	
 	private boolean mIsEnableVolumeKey = true;
+	private int mEvStep = 2;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -123,6 +124,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		//mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mIsEnableVolumeKey = prefs.getBoolean("CONF_ENABLE_VOLUME_KEY", true);
+		mEvStep = prefs.getInt("CONF_EV_STEP", 2);
 		super.onResume();
 	}
 
