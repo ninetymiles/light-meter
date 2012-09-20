@@ -87,7 +87,7 @@ public class LightMeter {
 	}
 	
 	private double getMatchTv(double value) {
-		double matched = getMatchFromArray(value, sTvIndex);
+		double matched = getMatchFromArray(value, sTvIndex3);
 		if (matched == MAX_TV) matched = 0;
 		else {
 			if (DEBUG) Log.v(TAG, "LightMeter::getMatchTv matched:" + matched);
@@ -142,7 +142,7 @@ public class LightMeter {
 	
 	private boolean findT(double T) {
 		boolean matched = false;
-		for (double t : sTvIndex) {
+		for (double t : sTvIndex3) {
 			if (t == T) {
 				matched = true;
 				break;
@@ -156,83 +156,154 @@ public class LightMeter {
 	
 	private static final double MIN_FV = 0;
 	private static final double MAX_FV = 64 + 64 / 3;	// Add 1/3 EV for detect overflow
+	//private static final double MAX_FV = 512 + 512 / 3;
 	
 	// Step 1/3 EV
 	private static final double [] sFvIndex3 = {
 		MIN_FV,
-		1d, 
-		1.4d, 1.6d, 1.8d,
-		2d, 
-		2.8d, 3.2d, 3.5d,
-		4d, 4.5d, 5d,
-		5.6d, 6.3d, 7.1d,
-		8d, 9d, 10d, 
-		11d, 13d, 14d, 
-		16d, 18d, 20d, 
-		22d, 25d, 29d, 
-		32d, 
-		45d, 
-		64d,
+		1d,		1.1d,	1.2d,
+		1.4d,	1.6d,	1.8d,
+		2d,		2.2d,	2.5d,
+		2.8d,	3.2d,	3.5d,
+		4d,		4.5d,	5d,
+		5.6d,	6.3d,	7.1d,
+		8d,		9d,		10d, 
+		11d,	13d,	14d, 
+		16d,	18d,	20d, 
+		22d,	25d,	28d, 
+		32d,	36d,	40d,
+		45d,	51d,	57d, 
+		64d,//	72d,	80d,
+		//90d,	102d,	114d,
+		//128d,	144d,	161d,
+		//181d,	203d,	228d,
+		//256d,	287d,	323d,
+		//362d,	407d,	456d,
+		//512d,
 		MAX_FV
 	};
 	
 	// Step 1/2 EV
 	private static final double [] sFvIndex2 = {
 		MIN_FV,
-		1d,
+		1d,		1.2d,
 		1.4d,	1.7d,
-		2d,
-		2.8d,
-		4d,
-		5.6d,
-		8d, 
-		11d, 
-		16d, 
-		22d, 
-		32d, 
-		45d, 
-		64d,
+		2d,		2.4d,
+		2.8d,	3.4d,
+		4d,		4.8d,
+		5.6d,	6.7d,
+		8d,		9.5d,
+		11d,	14d,
+		16d,	19d,
+		22d,	27d,
+		32d,	38d,
+		45d,	54d,
+		64d,//	76d,
+		//90d,	108d,
+		//128d,	152d,
+		//181d,	215d,
+		//256d,	304d,
+		//362d,	431d,
+		//512d,
 		MAX_FV
 	};
 	
 	private static final double MIN_TV = 0;
 	private static final double MAX_TV = 60 * 4096 * 2;
 	
-	private static final double [] sTvIndex = {
+	private static final double [] sTvIndex3 = {
 		MIN_TV,
-		-8000, -6000, -5000,
-		-4000, -3200, -2500,
-		-2000, -1600, -1250,
-		-1000, -800, -640,
-		-500, -400, -320,
-		-250, -200, -160, 
-		-125, -100, -80, 
-		-60, -50, -40,
-		-30, -25, -20,
-		-15, -13, -10,
-		-8, -6, -5, 
-		-4, -3, -2.5,
-		-2, -1.6, -1.3,
-		1, 1.3, 1.6,
-		2, 2.5, 3,
-		4, 5, 6,
-		8, 10, 13, 
-		15, 20, 25,
-		30, 40, 50,
-		60, 80, 100,
-		60 * 2, 60 * 2.5, 60 * 3,
-		60 * 4, 60 * 5, 60 * 6,
-		60 * 8, 60 * 10, 60 * 13,
-		60 * 16, 60 * 20, 60 * 25,
-		60 * 32,
-		60 * 64,
-		60 * 128,
-		60 * 256,
-		60 * 512,
-		60 * 1024,
-		60 * 2048,
+		-8000,		-6400,		-5000,
+		-4000,		-3200,		-2500,
+		-2000,		-1600,		-1250,
+		-1000,		-800,		-640,
+		-500,		-400,		-320,
+		-250,		-200,		-160, 
+		-125,		-100,		-80, 
+		-60,		-50,		-40,
+		-30,		-25,		-20,
+		-15,		-13,		-10,
+		-8,			-6,			-5, 
+		-4,			-3,			-2.5,
+		-2,			-1.6,		-1.3,
+		1,			1.3,		1.6,
+		2,			2.5,		3,
+		4,			5,			6,
+		8,			10,			13, 
+		15,			20,			25,
+		30,			40,			50,
+		60,			80,			100,
+		60 * 2,		60 * 2.5,	60 * 3,
+		60 * 4,		60 * 5,		60 * 6,
+		60 * 8,		60 * 10,	60 * 13,
+		60 * 16,	60 * 20,	60 * 25,
+		60 * 32,	60 * 40,	60 * 50,
+		60 * 64,	60 * 80,	60 * 100,
+		60 * 128,	60 * 160,	60 * 200,
+		60 * 256,	60 * 320,	60 * 400,
+		60 * 512,	60 * 640,	60 * 800,
+		60 * 1024,	60 * 1280,	60 * 1600,
+		60 * 2048,	60 * 2560,	60 * 3200,
 		60 * 4096,
 		MAX_TV
+	};
+	
+	private static final double [] sTvIndex2 = {
+		MIN_TV,
+		-8000,		-6000,
+		-4000,		-3000,
+		-2000,		-1500,
+		-1000,		-750,
+		-500,		-320,
+		-250,		-160, 
+		-125,		-80, 
+		-60,		-40,
+		-30,		-20,
+		-15,		-10,
+		-8,			-5, 
+		-4,			-2.5,
+		-2,			-1.2,
+		1,			-0.6,
+		2,			3,
+		4,			6,
+		8,			12, 
+		15,			25,
+		30,			45,
+		60,			60 * 1.5,
+		60 * 2,		60 * 3,
+		60 * 4,		60 * 6,
+		60 * 8,		60 * 12,
+		60 * 16,	60 * 24,
+		60 * 32,	60 * 48,
+		60 * 64,	60 * 96,
+		60 * 128,	60 * 192,
+		60 * 256,	60 * 320,	60 * 400,
+		60 * 512,	60 * 640,	60 * 800,
+		60 * 1024,	60 * 1280,	60 * 1600,
+		60 * 2048,	60 * 2560,	60 * 3200,
+		60 * 4096,
+		MAX_TV
+	};
+	
+	private static final int[] sISOIndex = {
+		//0.8,	1,		1.2,
+		//1.6,	2,		2.5,
+		//3,		4,		5,
+		//6,		8,		10,
+		//12,		16,		20,
+		//25,		32,		40, 
+		50,		64,		80, 
+		100,	125,	160,
+		200,	250,	320,
+		400,	500,	640,
+		800,	1000,	1250,
+		1600,	2000,	2500,
+		3200,	4000,	5000,
+		6400,
+		12800,
+		25600,
+		51200,
+		102400,
 	};
 	
 	// Shutter values in second, positive value means seconds, nagitive value means 1/ seconds

@@ -1,4 +1,5 @@
 H Support 1/3 EV or 1/2 EV, should replace the data table
+H ISO from 50 - 25600
 H Default show 1/60 and F8, can remember last setting value
 H Save last set shutter and F 
 H Suggest for 18% gray, or pure white or pure black
