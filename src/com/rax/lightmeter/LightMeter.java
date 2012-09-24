@@ -156,6 +156,63 @@ public class LightMeter {
 		return matched;
 	}
 	
+	public int getISO(STEP step, boolean dir) {
+		int idx = -1;
+		int offset = 0;
+		switch (step) {
+		case FULL: offset = 3 * (dir ? 1 : -1); break;
+		case HALF: offset = 2 * (dir ? 1 : -1); break;
+		case THIRD: offset = 1 * (dir ? 1 : -1); break;
+		}
+		for (int i = 0; i < sISOIndex.length; i++) {
+			if (sISOIndex[i] == mISO) {
+				idx = i + offset;
+				if (idx >= sISOIndex.length) idx = sISOIndex.length - 1;
+				if (idx < 0) idx = 0;
+				break;
+			}
+		}
+		return (idx == -1) ? mISO : sISOIndex[idx];
+	}
+	
+	public double getFv(STEP step, double cur, boolean dir) {
+		int idx = -1;
+		int offset = 0;
+		switch (step) {
+		case FULL: offset = 3 * (dir ? 1 : -1); break;
+		case HALF: offset = 2 * (dir ? 1 : -1); break;
+		case THIRD: offset = 1 * (dir ? 1 : -1); break;
+		}
+		for (int i = 0; i < sFvIndex3.length; i++) {
+			if (sFvIndex3[i] == cur) {
+				idx = i + offset;
+				if (idx >= sFvIndex3.length - 1) idx = sFvIndex3.length - 2;
+				if (idx <= 0) idx = 1;
+				break;
+			}
+		}
+		return (idx == -1) ? cur : sFvIndex3[idx];
+	}
+	
+	public double getTv(STEP step, double cur, boolean dir) {
+		int idx = -1;
+		int offset = 0;
+		switch (step) {
+		case FULL: offset = 3 * (dir ? 1 : -1); break;
+		case HALF: offset = 2 * (dir ? 1 : -1); break;
+		case THIRD: offset = 1 * (dir ? 1 : -1); break;
+		}
+		for (int i = 0; i < sTvIndex3.length; i++) {
+			if (sTvIndex3[i] == cur) {
+				idx = i + offset;
+				if (idx >= sTvIndex3.length) idx = sTvIndex3.length - 1;
+				if (idx < 0) idx = 0;
+				break;
+			}
+		}
+		return (idx == -1) ? cur : sTvIndex3[idx];
+	}
+	
 	private static final double MIN_FV = 0;
 	private static final double MAX_FV = 64 + 64 / 3;	// Add 1/3 EV for detect overflow
 	//private static final double MAX_FV = 512 + 512 / 3;

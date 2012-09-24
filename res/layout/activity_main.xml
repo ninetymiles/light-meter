@@ -73,9 +73,8 @@
 
             <TextView
                 android:id="@+id/main_iso_value"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.2"
                 android:background="@drawable/main_lcd_text_background_selector"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
@@ -96,11 +95,13 @@
                 android:layout_marginRight="3dp" >
 
                 <TextView
+                    android:id="@+id/main_shutter_mode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:background="@drawable/main_lcd_text_border"
+                    android:background="@drawable/main_lcd_text_border_selector"
                     android:gravity="center"
+                    android:padding="3dp"
                     android:text="T"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </FrameLayout>
@@ -121,13 +122,16 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="6dp"
                 android:layout_marginRight="3dp" >
 
                 <TextView
+                    android:id="@+id/main_aperture_mode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
+                    android:background="@drawable/main_lcd_text_border_selector"
+                    android:gravity="center"
+                    android:padding="3dp"
                     android:text="F"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </FrameLayout>
@@ -160,7 +164,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/main_option_border"
         android:orientation="horizontal"
-        android:padding="2dp"
+        android:paddingTop="2dp"
         android:visibility="gone" >
 
         <Button
@@ -184,6 +188,7 @@
         android:id="@+id/main_button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="6dp"
         android:layout_weight="1"
         android:text="@string/main_button_measure" >
     </Button>

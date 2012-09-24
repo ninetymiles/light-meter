@@ -35,6 +35,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private static final boolean DEBUG = true;
 	
 	private static final int DIALOG_QUIT_CONFIRM = 1;
+	private static enum Mode { UNDEFINED, TV_FIRST, FV_FIRST };
 	
 	private TextView mTextLux;
 	private TextView mTextEv;
@@ -54,7 +55,11 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private LightMeter mMeter;
 	
 	private boolean mIsEnableVolumeKey = true;
-	private int mEvStep = 2;
+	private LightMeter.STEP mEvStep = LightMeter.STEP.THIRD;
+	private double mFv = 8f;
+	private double mTv = -60;
+	private int mISO = 200;
+	private Mode mMode = Mode.UNDEFINED;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -100,13 +105,14 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	}
 	
 	private String printShutterValue(double shutter) {
+		if (DEBUG) Log.v(TAG, "ActivityMain::printShutterValue shutter:" + shutter);
 		String str;
 		if (shutter == 0) {
 			str = "N/A";
 		} else if (shutter < 0) {
-			str = String.format("1/%.0f s", -shutter);
+			str = "1/" + String.valueOf(Math.abs(shutter));
 		} else {
-			str = String.format("%.0f s", shutter);
+			str = String.valueOf(shutter);
 		}
 		return str;
 	}
@@ -124,7 +130,8 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		//mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mIsEnableVolumeKey = prefs.getBoolean("CONF_ENABLE_VOLUME_KEY", true);
-		mEvStep = prefs.getInt("CONF_EV_STEP", 2);
+		mEvStep = LightMeter.STEP.values()[Integer.valueOf(prefs.getString("CONF_EV_STEP", "2"))];
+		if (DEBUG) Log.v(TAG, "ActivityMain::onResume mIsEnableVolumeKey:" + mIsEnableVolumeKey + " mEvStep:" + mEvStep);
 		super.onResume();
 	}
 
@@ -150,22 +157,88 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		return super.onOptionsItemSelected(item);
 	}
 	
+	private void setMode(Mode mode) {
+		if (DEBUG) Log.v(TAG, "ActivityMain::setMode mode:" + mode);
+		mMode = mode;
+		findViewById(R.id.main_aperture_mode).setPressed(mMode == Mode.FV_FIRST);
+		findViewById(R.id.main_shutter_mode).setPressed(mMode == Mode.TV_FIRST);
+	}
+	
+	private void updateEv() {
+		if (DEBUG) Log.v(TAG, "ActivityMain::updateEv mMode:" + mMode + " mFv:" + mFv + " mTv:" + mTv);
+		double shutter = 0;
+		double aperture = 0;
+		switch (mMode) {
+		case UNDEFINED:
+			aperture = 2.8d;
+			shutter = mMeter.getTByFv(aperture);
+			if (shutter == 0) {
+				aperture = 5.6d;
+				shutter = mMeter.getTByFv(aperture);
+				if (shutter == 0) {
+					aperture = 11d;
+					shutter = mMeter.getTByFv(aperture);
+					if (shutter == 0) {
+						aperture = 22d;
+						shutter = mMeter.getTByFv(aperture);
+					}
+				}
+			}
+			break;
+		case TV_FIRST:
+			shutter = mTv;
+			aperture = mMeter.getFvByT(shutter);
+			break;
+		case FV_FIRST:
+			aperture = mFv;
+			shutter = mMeter.getTByFv(aperture);
+			break;
+		}
+		mTextAperture.setText(String.valueOf(aperture));
+		mTextShutter.setText(printShutterValue(shutter));
+	}
+	
 	@Override
 	public void onClick(View v) {
-		if (DEBUG) Log.v(TAG, "ActivityMain::onClick id:" + v.getId());
+		//if (DEBUG) Log.v(TAG, "ActivityMain::onClick id:" + v.getId());
 		switch (v.getId()) {
 		case R.id.main_button_up:
+			if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_UP");
+			if (mTextIso.isFocused()) {
+				mISO = mMeter.getISO(mEvStep, true);
+				mTextIso.setText(String.valueOf(mISO));
+				mMeter.setISO(mISO);
+				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mISO:" + mISO);
+			}
+			if (mTextShutter.isFocused()) {
+				mTv = mMeter.getTv(mEvStep, mTv, true);
+				mTextShutter.setText(printShutterValue(mTv));
+				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mTv:" + mTv);
+			}
+			if (mTextAperture.isFocused()) {
+				mFv = mMeter.getFv(mEvStep, mFv, true);
+				mTextAperture.setText(String.valueOf(mFv));
+				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mFv:" + mFv);
+			}
 			break;
 		case R.id.main_button_down:
-			break;
-		case R.id.main_iso_value:
-			break;
-		case R.id.main_aperture_value:
-			break;
-		case R.id.main_shutter_value:
-			break;
-		case R.id.main_lcd_layout:
-			clearFocus();
+			if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_DOWN");
+			if (mTextIso.isFocused()) {
+				mISO = mMeter.getISO(mEvStep, false);
+				mTextIso.setText(String.valueOf(mISO));
+				mMeter.setISO(mISO);
+				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mISO:" + mISO);
+			}
+			if (mTextShutter.isFocused()) {
+				mTv = mMeter.getTv(mEvStep, mTv, false);
+				mTextShutter.setText(printShutterValue(mTv));
+				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mTv:" + mTv);
+			}
+			if (mTextAperture.isFocused()) {
+				mFv = mMeter.getFv(mEvStep, mFv, false);
+				mTextAperture.setText(String.valueOf(mFv));
+				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mFv:" + mFv);
+			}
 			break;
 		}
 	}
@@ -173,6 +246,12 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onFocusChange id:" + v.getId() + " hasFocus:" + hasFocus);
+		
+		switch (v.getId()) {
+		case R.id.main_aperture_value: setMode(Mode.FV_FIRST); break;
+		case R.id.main_shutter_value: setMode(Mode.TV_FIRST); break;
+		}
+		
 		if (mTextIso.isFocused() || mTextAperture.isFocused() || mTextShutter.isFocused()) {
 			if (mBtnLayout.isShown() == false) {
 				mBtnLayout.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
@@ -256,8 +335,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private OnTouchListener mTouchListener = new OnTouchListener() {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (DEBUG) Log.v(TAG, "ActivityMain::OnTouchListener::onTouch id:" + v.getId());
-			
+			//if (DEBUG) Log.v(TAG, "ActivityMain::OnTouchListener::onTouch id:" + v.getId() + " action:" + event.getAction());
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
@@ -284,25 +362,9 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			//if (DEBUG) Log.v(TAG, "ActivityMain::SensorEventListener::onSensorChanged");
 			float lux = event.values[0];
 			double ev = mMeter.setLux(lux);
-			
 			mTextLux.setText(String.format("%.2f", lux));
 			mTextEv.setText(String.format("%.2f", ev));
-			
-			double shutter = mMeter.getTByFv(2.8d);
-			mTextAperture.setText(String.valueOf(2.8d));
-			if (shutter == 0) {
-				shutter = mMeter.getTByFv(5.6d);
-				mTextAperture.setText(String.valueOf(5.6d));
-				if (shutter == 0) {
-					shutter = mMeter.getTByFv(11d);
-					mTextAperture.setText(String.valueOf(11d));
-					if (shutter == 0) {
-						shutter = mMeter.getTByFv(22d);
-						mTextAperture.setText(String.valueOf(22d));
-					}
-				}
-			}
-			mTextShutter.setText(printShutterValue(shutter));
+			updateEv();
 		}
 	};
 	
