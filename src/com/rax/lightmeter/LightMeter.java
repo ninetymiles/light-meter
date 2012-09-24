@@ -88,7 +88,7 @@ public class LightMeter {
 		return getMatchFv(N);
 	}
 	
-	private double getMatchTv(double value) {
+	public double getMatchTv(double value) {
 		double matched = getMatchFromArray(value, sTvIndex3);
 		if (matched == MAX_TV) matched = 0;
 		else {
@@ -97,7 +97,7 @@ public class LightMeter {
 		return matched;
 	}
 	
-	private double getMatchFv(double value) {
+	public double getMatchFv(double value) {
 		double matched = getMatchFromArray(value, sFvIndex3);
 		if (matched == MAX_FV) matched = 0;
 		else {
@@ -113,7 +113,7 @@ public class LightMeter {
 		double matched = 0;
 		for (int i = 0; i < arr.length; i++) {
 			v = (arr[i] < 0) ? -1 / arr[i] : arr[i];
-			//if (DEBUG) Log.v(TAG, "LightMeter::getMatchFromArray arr[i]:" + arr[i] + " v:" + String.format("%.6f", v) + " value-v:" + String.format("%.6f", Math.abs(value - v)));
+			//if (DEBUG) Log.v(TAG, "LightMeter::getMatchFromArray arr[i]:" + arr[i] + " v:" + String.format("%.6f", v) + " diff:" + String.format("%.6f", Math.abs(value - v)));
 			if (Math.abs(value - v) < diff) {
 				diff = Math.abs(value - v);
 				matched = arr[i];
@@ -183,6 +183,7 @@ public class LightMeter {
 		case HALF: offset = 2 * (dir ? 1 : -1); break;
 		case THIRD: offset = 1 * (dir ? 1 : -1); break;
 		}
+		cur = getMatchFv(cur);
 		for (int i = 0; i < sFvIndex3.length; i++) {
 			if (sFvIndex3[i] == cur) {
 				idx = i + offset;
@@ -202,6 +203,8 @@ public class LightMeter {
 		case HALF: offset = 2 * (dir ? 1 : -1); break;
 		case THIRD: offset = 1 * (dir ? 1 : -1); break;
 		}
+		cur = (cur < 0) ? (-1 / cur) : cur;
+		cur = getMatchTv(cur);
 		for (int i = 0; i < sTvIndex3.length; i++) {
 			if (sTvIndex3[i] == cur) {
 				idx = i + offset;
@@ -267,7 +270,7 @@ public class LightMeter {
 		MAX_FV
 	};
 	
-	private static final double MIN_TV = 0;
+	private static final double MIN_TV = -8000 * 1.5;
 	private static final double MAX_TV = 60 * 4096 * 2;
 	
 	private static final double [] sTvIndex3 = {

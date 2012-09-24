@@ -34,6 +34,11 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private static final String TAG = "RaxLog";
 	private static final boolean DEBUG = true;
 	
+	private final String PREFS_FV = "PREFS_FV";
+	private final String PREFS_TV = "PREFS_TV";
+	private final String PREFS_ISO = "PREFS_ISO";
+	private final String PREFS_MODE = "PREFS_MODE";
+	
 	private static final int DIALOG_QUIT_CONFIRM = 1;
 	private static enum Mode { UNDEFINED, TV_FIRST, FV_FIRST };
 	
@@ -121,6 +126,12 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	protected void onPause() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onPause");
 		//mSensorManager.unregisterListener(mSensorListener, mLightSensor);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		prefs.edit()
+				.putFloat(PREFS_FV, (float) mFv)
+				.putFloat(PREFS_TV, (float) mTv).putInt(PREFS_ISO, mISO)
+				.putInt(PREFS_MODE, mMode.ordinal())
+				.commit();
 		super.onPause();
 	}
 
@@ -131,7 +142,21 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mIsEnableVolumeKey = prefs.getBoolean("CONF_ENABLE_VOLUME_KEY", true);
 		mEvStep = LightMeter.STEP.values()[Integer.valueOf(prefs.getString("CONF_EV_STEP", "2"))];
-		if (DEBUG) Log.v(TAG, "ActivityMain::onResume mIsEnableVolumeKey:" + mIsEnableVolumeKey + " mEvStep:" + mEvStep);
+		mFv = mMeter.getMatchFv(prefs.getFloat(PREFS_FV, 8f));
+		mTv = prefs.getFloat(PREFS_TV, -60);
+		mTv = mMeter.getMatchTv((mTv < 0) ? (-1 / mTv) : mTv);
+		mISO = prefs.getInt(PREFS_ISO, 200);
+		mMode = Mode.values()[prefs.getInt(PREFS_MODE, 0)];
+		setMode(mMode);
+		mTextAperture.setText(String.valueOf(mFv));
+		mTextShutter.setText(printShutterValue(mTv));
+		if (DEBUG) Log.v(TAG, "ActivityMain::onResume" +
+				" mIsEnableVolumeKey:" + mIsEnableVolumeKey + 
+				" mEvStep:" + mEvStep +
+				" mMode:" + mMode +
+				" mISO:" + mISO +
+				" mFv:" + mFv + 
+				" mTv:" + mTv);
 		super.onResume();
 	}
 
@@ -315,18 +340,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	}
 
 	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onRestoreInstanceState(savedInstanceState);
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
-		super.onSaveInstanceState(outState);
-	}
-
-	@Override
 	public void onBackPressed() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onBackPressed");
 		showDialog(DIALOG_QUIT_CONFIRM);
@@ -354,7 +367,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 
 		@Override
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-			//if (DEBUG) Log.v(TAG, "ActivityMain::SensorEventListener::onAccuracyChanged");
+			if (DEBUG) Log.v(TAG, "ActivityMain::SensorEventListener::onAccuracyChanged accuracy:" + accuracy);
 		}
 
 		@Override
