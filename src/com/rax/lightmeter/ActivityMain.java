@@ -274,9 +274,11 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onFocusChange id:" + v.getId() + " hasFocus:" + hasFocus);
 		
-		switch (v.getId()) {
-		case R.id.main_aperture_value: setMode(Mode.FV_FIRST); break;
-		case R.id.main_shutter_value: setMode(Mode.TV_FIRST); break;
+		if (hasFocus) {
+			switch (v.getId()) {
+			case R.id.main_aperture_value: setMode(Mode.FV_FIRST); break;
+			case R.id.main_shutter_value: setMode(Mode.TV_FIRST); break;
+			}
 		}
 		
 		if (mTextIso.isFocused() || mTextAperture.isFocused() || mTextShutter.isFocused()) {
