@@ -323,6 +323,22 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	}
 
 	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		if (DEBUG) Log.v(TAG, "ActivityMain::onSaveInstanceState");
+		outState.putDouble("LUX", mMeter.getLux());
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		if (DEBUG) Log.v(TAG, "ActivityMain::onRestoreInstanceState");
+		mMeter.setLux(savedInstanceState.getDouble("LUX"));
+		mTextLux.setText(String.format("%.2f", mMeter.getLux()));
+		mTextEv.setText(String.format("%.2f", mMeter.getEv()));
+		super.onRestoreInstanceState(savedInstanceState);
+	}
+	
+	@Override
 	protected Dialog onCreateDialog(int id, Bundle args) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onCreateDialog id:" + id);
 		switch (id) {
