@@ -1,12 +1,7 @@
 H Support 1/3 EV or 1/2 EV, should replace the data table
-H Remove the first flash screen
 H Add two tab to support reflect and incidence mode
-H Suggest for 18% gray, or pure white or pure black
 H Update icon
 H Add i18n
-H Add image indicator to show locked status for measure button
-H Long pressed on measure button may trigger the locked status, or show hint
-M Set sensor to Game/Normal sensitivy, provide settings
 M Obfucation
 M Ant can compile lite and pro version
 M Pro version can detect flash light, press button to start measure, but lock on the maximum value

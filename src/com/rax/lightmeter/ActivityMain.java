@@ -187,8 +187,8 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private void setMode(Mode mode) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::setMode mode:" + mode);
 		mMode = mode;
-		findViewById(R.id.main_aperture_mode).setPressed(mMode == Mode.FV_FIRST);
-		findViewById(R.id.main_shutter_mode).setPressed(mMode == Mode.TV_FIRST);
+		findViewById(R.id.main_aperture_mode).setSelected(mMode == Mode.FV_FIRST);
+		findViewById(R.id.main_shutter_mode).setSelected(mMode == Mode.TV_FIRST);
 	}
 	
 	private void updateEv() {
