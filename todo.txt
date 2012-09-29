@@ -6,6 +6,7 @@ M Obfucation
 M Ant can compile lite and pro version
 M Pro version can detect flash light, press button to start measure, but lock on the maximum value
 M Pro version Flash light can sum multiple flash value
+L Show mark line on the LCD bottom
 L Notifi user sensor no sensitivy enough
 L Use google analytics sdk or flurry to tracking usage
 L Let user can send email back

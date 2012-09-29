@@ -223,6 +223,8 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		}
 		mTextAperture.setText(String.valueOf(aperture));
 		mTextShutter.setText(printShutterValue(shutter));
+		mTv = shutter;
+		mFv = aperture;
 	}
 	
 	@Override
