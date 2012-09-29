@@ -1,10 +1,6 @@
 H Support 1/3 EV or 1/2 EV, should replace the data table
 H Remove the first flash screen
 H Add two tab to support reflect and incidence mode
-H All font use black color
-H Do not rotate screen when press the measue button
-H Default show 1/60 and F8, can remember last setting value
-H Save last set shutter and F 
 H Suggest for 18% gray, or pure white or pure black
 H Update icon
 H Add i18n

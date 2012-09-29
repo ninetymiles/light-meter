@@ -19,8 +19,6 @@ package com.rax.lightmeter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class ActivityFirst extends Activity {
@@ -30,39 +28,16 @@ public class ActivityFirst extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		if (DEBUG) Log.v(TAG, "ActivityFirst::onCreate");
-
 		setContentView(R.layout.activity_first);
+		super.onCreate(savedInstanceState);
 	}
 
 	@Override
 	protected void onStart() {
-		super.onStart();
 		if (DEBUG) Log.v(TAG, "ActivityFirst::onStart");
-		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_SHOW_SPLASH", false)) {
-			new Handler().postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					if (DEBUG) Log.v(TAG, "Runnable::run timeout");
-					startMain();
-				}
-			}, 1000);
-		} else {
-			startMain();
-		}
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		if (DEBUG) Log.v(TAG, "ActivityFirst::onStop");
-	}
-
-	@Override
-	protected void onDestroy() {
-		if (DEBUG) Log.v(TAG, "ActivityFirst::onDestroy");
-		super.onDestroy();
+		startMain();
+		super.onStart();
 	}
 	
 	private void startMain() {

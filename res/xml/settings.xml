@@ -3,20 +3,15 @@
     android:title="@string/app_name" >
 
     <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="CONF_SHOW_SPLASH"
-        android:summary="@string/conf_show_splash_summary"
-        android:title="@string/conf_show_splash" />
+        android:defaultValue="true"
+        android:key="CONF_ENABLE_TRACKING"
+        android:summary="@string/conf_enable_tracking_summary"
+        android:title="@string/conf_enable_tracking" />
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="CONF_ENABLE_KEEP_SCREEN_ON"
         android:summary="@string/conf_enable_keep_screen_on_summary"
         android:title="@string/conf_enable_keep_screen_on" />
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="CONF_ENABLE_TRACKING"
-        android:summary="@string/conf_enable_tracking_summary"
-        android:title="@string/conf_enable_tracking" />
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="CONF_ENABLE_VOLUME_KEY"

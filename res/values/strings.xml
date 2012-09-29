@@ -29,8 +29,6 @@
     <string name="menu_feedback">"Feedback"</string>
 
     <!-- Config settins -->
-    <string name="conf_show_splash">"Show splash screen"</string>
-    <string name="conf_show_splash_summary">"Show splash screen when launch app"</string>
     <string name="conf_enable_keep_screen_on">"Keep screen on"</string>
     <string name="conf_enable_keep_screen_on_summary">"Keep screen on while using this app, take effect after next launch"</string>
     <string name="conf_enable_tracking">"Help improve usage"</string>
