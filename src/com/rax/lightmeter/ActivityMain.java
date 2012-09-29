@@ -58,6 +58,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private SensorManager mSensorManager;
 	private Sensor mLightSensor;
 	private LightMeter mMeter;
+	private OrientationHelper mOrientation;
 	
 	private boolean mIsEnableVolumeKey = true;
 	private LightMeter.STEP mEvStep = LightMeter.STEP.THIRD;
@@ -76,6 +77,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		}
 		
 		setContentView(R.layout.activity_main);
+		mOrientation = new OrientationHelper(this);
 		
 		mTextLux = (TextView) findViewById(R.id.main_lux_value);
 		mTextEv = (TextView) findViewById(R.id.main_ev_value);
@@ -352,11 +354,13 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
+				mOrientation.lock();
 				clearFocus();
 				break;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
 				mSensorManager.unregisterListener(mSensorListener, mLightSensor);
+				mOrientation.unlock();
 				break;
 			}
 			return false;
