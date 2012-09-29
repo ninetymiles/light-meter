@@ -159,20 +159,21 @@ public class LightMeter {
 	public int getISO(STEP step, boolean dir) {
 		int idx = -1;
 		int offset = 0;
+		int[] isoList = sISOIndex2;
 		switch (step) {
-		case FULL: offset = 3 * (dir ? 1 : -1); break;
-		case HALF: offset = 2 * (dir ? 1 : -1); break;
-		case THIRD: offset = 1 * (dir ? 1 : -1); break;
+		case FULL: offset = 2 * (dir ? 1 : -1); break;
+		case HALF: offset = 1 * (dir ? 1 : -1); break;
+		case THIRD: offset = 1 * (dir ? 1 : -1); isoList = sISOIndex3; break;
 		}
-		for (int i = 0; i < sISOIndex.length; i++) {
-			if (sISOIndex[i] == mISO) {
+		for (int i = 0; i < isoList.length; i++) {
+			if (isoList[i] == mISO) {
 				idx = i + offset;
-				if (idx >= sISOIndex.length) idx = sISOIndex.length - 1;
+				if (idx >= isoList.length) idx = isoList.length - 1;
 				if (idx < 0) idx = 0;
 				break;
 			}
 		}
-		return (idx == -1) ? mISO : sISOIndex[idx];
+		return (idx == -1) ? mISO : isoList[idx];
 	}
 	
 	public double getFv(STEP step, double cur, boolean dir) {
@@ -347,13 +348,13 @@ public class LightMeter {
 		MAX_TV
 	};
 	
-	private static final int[] sISOIndex = {
+	private static final int[] sISOIndex3 = {
 		//0.8,	1,		1.2,
 		//1.6,	2,		2.5,
-		//3,		4,		5,
-		//6,		8,		10,
-		//12,		16,		20,
-		//25,		32,		40, 
+		//3,	4,		5,
+		//6,	8,		10,
+		//12,	16,		20,
+		//25,	32,		40, 
 		50,		64,		80, 
 		100,	125,	160,
 		200,	250,	320,
@@ -361,10 +362,25 @@ public class LightMeter {
 		800,	1000,	1250,
 		1600,	2000,	2500,
 		3200,	4000,	5000,
-		6400,
-		12800,
-		25600,
-		51200,
+		6400,	8000,	10000,
+		12800,	16000,	20000,
+		25600,	32000,	40000,
+		51200,	64000,	80000,
+		102400,
+	};
+	
+	private static final int[] sISOIndex2 = {
+		50,		75, 
+		100,	150,
+		200,	300,
+		400,	600,
+		800,	1200,
+		1600,	2400,
+		3200,	4800,
+		6400,	9600,
+		12800,	19200,
+		25600,	38400,
+		51200,	76800,
 		102400,
 	};
 	

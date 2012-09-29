@@ -2,16 +2,20 @@ H Support 1/3 EV or 1/2 EV, should replace the data table
 H Add two tab to support reflect and incidence mode
 H Update icon
 H Add i18n
-M Obfucation
-M Ant can compile lite and pro version
+M Obfuscation
+M Support Google Play IAP
+M Support Amazon Market IAP
 M Pro version can detect flash light, press button to start measure, but lock on the maximum value
 M Pro version Flash light can sum multiple flash value
+M Pro version need list all the purchased item
+M Pro version need show help page to tell what is pro version
+L Pro Can save measure list, and computer a average value to suggest that
+L Pro Can force set +1EV or -1EV etc
 L Show mark line on the LCD bottom
-L Notifi user sensor no sensitivy enough
-L Use google analytics sdk or flurry to tracking usage
+L Notify user device sensor no sensitive enough
+L Use google analytics SDK or Flurry to tracking usage
 L Let user can send email back
 L Share this
 L Ask for rating
-L Add OOBE, severial page, or show toast cover on the main page elements
+L Add multiple page OOBE, or show toast cover on the main page elements, after support save measure list
 L Add help, can show the toast content back
-L Can measure severial points, and computer a average value to suggest that
