@@ -57,7 +57,7 @@ public class LightMeterAdvancedTest extends InstrumentationTestCase {
 		assertEquals(-8d, mMeter.getShutterByAperture(64d));
 	}
 	
-	public void t1estGetApertureByShutter() throws Exception {
+	public void testGetApertureByShutter() throws Exception {
 		mMeter.setLux(1 * 2.5);					// 0 EV
 		assertEquals(1.0d, mMeter.getApertureByShutter(1));
 		assertEquals(2.8d, mMeter.getApertureByShutter(8));
@@ -68,7 +68,7 @@ public class LightMeterAdvancedTest extends InstrumentationTestCase {
 		assertEquals(64d, mMeter.getApertureByShutter(-8));
 	}
 	
-	public void t1estISO() throws Exception {
+	public void testISO() throws Exception {
 		mMeter.setISO(200);
 		mMeter.setLux(Math.pow(2, 15) * 2.5);	// 15 EV
 		assertEquals(-15d, mMeter.getShutterByAperture(64d));	// ISO200, can use 1/15 rather than 1/8 for shutter speed
@@ -86,6 +86,5 @@ public class LightMeterAdvancedTest extends InstrumentationTestCase {
 		mMeter.setISO(50);
 		mMeter.setLux(Math.pow(2, 15) * 2.5);	// 15 EV
 		assertEquals(5.6d, mMeter.getApertureByShutter(-500));	// Use ISO50, need set aperture to F5.6
-		
 	}
 }

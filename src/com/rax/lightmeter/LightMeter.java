@@ -75,19 +75,19 @@ public class LightMeter {
 	
 	// Return 0 means invalid
 	public double getShutterByAperture(double N) {
-		if (DEBUG) Log.v(TAG, "LightMeter::getTByFv N:" + N + " mEv:" + mEv);
+		if (DEBUG) Log.v(TAG, "LightMeter::getShutterByAperture N:" + N + " mEv:" + mEv);
 		double t = (N * N * 250) / (mLux * mISO);
 		//double t = (N * N) / Math.pow(2, mEv);
-		if (DEBUG) Log.v(TAG, "LightMeter::getTByFv t:" + t);
+		if (DEBUG) Log.v(TAG, "LightMeter::getShutterByAperture t:" + t);
 		return getMatchShutter(t);
 	}
 	
 	// Return 0 for invalid result
 	public double getApertureByShutter(double t) {
-		if (DEBUG) Log.v(TAG, "LightMeter::getFvByT t:" + t);
+		if (DEBUG) Log.v(TAG, "LightMeter::getApertureByShutter t:" + t);
 		double T = (t < 0) ? -1 / t : t;
 		double N = Math.sqrt(mLux * mISO * T / 250f);
-		if (DEBUG) Log.v(TAG, "LightMeter::getFvByT N:" + N);
+		if (DEBUG) Log.v(TAG, "LightMeter::getApertureByShutter N:" + N);
 		return getMatchAperture(N);
 	}
 	
@@ -132,6 +132,7 @@ public class LightMeter {
 		if (index != -1) {
 			try {
 				value = sISOIndex[index + mStepValue];
+				if (value == 0) value = mISO;
 			} catch(ArrayIndexOutOfBoundsException ex) {
 				value = resetISO();
 			}
@@ -146,6 +147,7 @@ public class LightMeter {
 		if (index != -1) {
 			try {
 				value = sISOIndex[index - mStepValue];
+				if (value == 0) value = mISO;
 			} catch(ArrayIndexOutOfBoundsException ex) {
 				value = resetISO();
 			}
@@ -156,10 +158,11 @@ public class LightMeter {
 	
 	public double getNextAperture(double currentValue) {
 		double value = currentValue;
-		int index = findIndexByValue(currentValue, sApertureIndex);
+		int index = findIndexByValue(currentValue, sApertureIndex, mStepValue);
 		if (index != -1) {
 			try {
 				value = sApertureIndex[index + mStepValue];
+				if (value == 0) value = currentValue;
 			} catch(ArrayIndexOutOfBoundsException ex) {
 				value = resetAperture(currentValue);
 			}
@@ -169,10 +172,11 @@ public class LightMeter {
 	
 	public double getPreviousAperture(double currentValue) {
 		double value = currentValue;
-		int index = findIndexByValue(currentValue, sApertureIndex);
+		int index = findIndexByValue(currentValue, sApertureIndex, mStepValue);
 		if (index != -1) {
 			try {
 				value = sApertureIndex[index - mStepValue];
+				if (value == 0) value = currentValue;
 			} catch(ArrayIndexOutOfBoundsException ex) {
 				value = resetAperture(currentValue);
 			}
@@ -182,10 +186,11 @@ public class LightMeter {
 	
 	public double getNextShutter(double currentValue) {
 		double value = currentValue;
-		int index = findIndexByValue(currentValue, sShutterIndex);
+		int index = findIndexByValue(currentValue, sShutterIndex, mStepValue);
 		if (index != -1) {
 			try {
 				value = sShutterIndex[index + mStepValue];
+				if (value == 0) value = currentValue;
 			} catch(ArrayIndexOutOfBoundsException ex) {
 				value = resetAperture(currentValue);
 			}
@@ -195,10 +200,11 @@ public class LightMeter {
 	
 	public double getPreviousShutter(double currentValue) {
 		double value = currentValue;
-		int index = findIndexByValue(currentValue, sShutterIndex);
+		int index = findIndexByValue(currentValue, sShutterIndex, mStepValue);
 		if (index != -1) {
 			try {
 				value = sShutterIndex[index - mStepValue];
+				if (value == 0) value = currentValue;
 			} catch(ArrayIndexOutOfBoundsException ex) {
 				value = resetAperture(currentValue);
 			}
@@ -221,7 +227,7 @@ public class LightMeter {
 	
 	public double resetAperture(double currentValue) {
 		double value = currentValue;
-		int index = findIndexByValue(currentValue, sApertureIndex);
+		int index = findIndexByValue(currentValue, sApertureIndex, 1);
 		
 		if (index != -1) {
 			index = index / 6 * 6;
@@ -232,14 +238,14 @@ public class LightMeter {
 	
 	public double resetShutter(double currentValue) {
 		double value = currentValue;
-		int index = findIndexByValue(currentValue, sShutterIndex);
+		int index = findIndexByValue(currentValue, sShutterIndex, 1);
 		
 		if (index != -1) {
 			index = index / 6 * 6;
 			value = sShutterIndex[index];
 		}
 		return value;
-	} 
+	}
 	
 	private int findIndexByValue(int value, int[] array) {
 		int index = -1;
@@ -252,9 +258,9 @@ public class LightMeter {
 		return index;
 	}
 	
-	private int findIndexByValue(double value, double[] array) {
+	private int findIndexByValue(double value, double[] array, int step) {
 		int index = -1;
-		for (int i = 0; i < array.length; i++) {
+		for (int i = 0; i < array.length; i += step) {
 			if (array[i] == value) {
 				index = i;
 				break;
@@ -263,8 +269,8 @@ public class LightMeter {
 		return index;
 	}
 	
-	private static final double MIN_APERTURE_VALUE = 0.8d;
-	private static final double MAX_APERTURE_VALUE = 512 + 512 / 3;	// Add 1/3 EV for detect overflow
+	private static final double MIN_APERTURE_VALUE = 0.9d;
+	private static final double MAX_APERTURE_VALUE = 64 + 64 / 3;	// Add 1/3 EV for detect overflow
 
 	//	0		1/6	2/6		3/6		4/6		5/6
 	//	EV		N/A	+1/3EV	+1/2EV	+2/3EV	N/A
@@ -276,18 +282,12 @@ public class LightMeter {
 		4d,		0,	4.5d,	4.8d,	5d,		0,
 		5.6d,	0,	6.3d,	6.7d,	7.1d,	0,
 		8d,		0,	9d,		9.5d,	10d,	0,
-		11d,	0,	13d,	14d,	14d,	0,
+		11d,	0,	13d,	13d,	14d,	0,
 		16d,	0,	18d,	19d,	20d,	0,
 		22d,	0,	25d,	27d,	28d,	0,
 		32d,	0,	36d,	38d,	40d,	0,
 		45d,	0,	51d,	54d,	57d,	0,
-		64d,	0,	72d,	76d,	80d,	0,
-		90d,	0,	102d,	108d,	114d,	0,
-		128d,	0,	144d,	152d,	161d,	0,
-		181d,	0,	203d,	215d,	228d,	0,
-		256d,	0,	287d,	304d,	323d,	0,
-		362d,	0,	407d,	431d,	456d,	0,
-		512d,
+		64d,
 	};
 
 	private static final double MIN_SHUTTER_VALUE = -8000 * 4 / 3;
@@ -299,20 +299,20 @@ public class LightMeter {
 		-4000,		0,	-3200,		-3000,		-2500,		0,
 		-2000,		0,	-1600,		-1500,		-1250,		0,
 		-1000,		0,	-800,		-750,		-640,		0,
-		-500,		0,	-400,		0,			-320,		0,
-		-250,		0,	-200,		0,			-160, 		0,
-		-125,		0,	-100,		0,			-80, 		0,
-		-60,		0,	-50,		0,			-40,		0,
-		-30,		0,	-25,		0,			-20,		0,
-		-15,		0,	-13,		0,			-10,		0,
-		-8,			0,	-6,			0,			-5,			0,
-		-4,			0,	-3,			0,			-2.5,		0,
-		-2,			0,	-1.6,		0,			-1.3,		0,
-		1,			0,	1.3,		0,			1.6,		0,
-		2,			0,	2.5,		0,			3,			0,
-		4,			0,	5,			0,			6,			0,
-		8,			0,	10,			0,			13,			0,
-		15,			0,	20,			0,			25,			0,
+		-500,		0,	-400,		-350,		-320,		0,
+		-250,		0,	-200,		-180,		-160, 		0,
+		-125,		0,	-100,		-90,		-80, 		0,
+		-60,		0,	-50,		-45,		-40,		0,
+		-30,		0,	-25,		-20,		-20,		0,
+		-15,		0,	-13,		-10,		-10,		0,
+		-8,			0,	-6,			-6,			-5,			0,
+		-4,			0,	-3,			-3,			-2.5,		0,
+		-2,			0,	-1.6,		-1.5,		-1.3,		0,
+		1,			0,	1.3,		1.5,		1.6,		0,
+		2,			0,	2.5,		3,			3,			0,
+		4,			0,	5,			6,			6,			0,
+		8,			0,	10,			10,			13,			0,
+		15,			0,	20,			20,			25,			0,
 		30,			0,	40,			0,			50,			0,
 		60,			0,	80,			0,			100,		0,
 		60 * 2,		0,	60 * 2.5,	0,			60 * 3,		0,

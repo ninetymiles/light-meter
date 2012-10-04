@@ -94,6 +94,11 @@ public class LightMeterBaseTest extends InstrumentationTestCase {
 		assertEquals(9d, mMeter.getNextAperture(8d));
 		assertEquals(10d, mMeter.getNextAperture(9d));
 		assertEquals(11d, mMeter.getNextAperture(10d));
+		
+		// F1 - 1/2 EV and F1 - 2/3 EV are both F1.2
+		assertEquals(1.1d, mMeter.getNextAperture(1.0d));
+		assertEquals(1.2d, mMeter.getNextAperture(1.1d));
+		assertEquals(1.4d, mMeter.getNextAperture(1.2d));
 	}
 	
 	public void testGetPriviousAperture() throws Exception {
@@ -128,7 +133,7 @@ public class LightMeterBaseTest extends InstrumentationTestCase {
 		assertEquals(-8000d, mMeter.getPreviousShutter(-6000));
 	}
 	
-	public void t1estGetMatchAperture() throws Exception {
+	public void testGetMatchAperture() throws Exception {
 		assertEquals(8d, mMeter.getMatchAperture(7.9d));
 		assertEquals(8d, mMeter.getMatchAperture(8.1d));
 		
