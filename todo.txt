@@ -1,5 +1,3 @@
-H Fill all the 1/2 values
-H Shutter value > 60, should show minutes instead
 H Add two tab to support reflect and incidence mode
 H Update icon
 H Add i18n

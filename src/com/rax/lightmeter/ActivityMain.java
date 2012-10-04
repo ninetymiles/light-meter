@@ -113,11 +113,20 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	
 	private String printShutterValue(double shutter) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::printShutterValue shutter:" + shutter);
-		String str;
+		String str = "";
 		if (shutter == 0) {
 			str = "N/A";
 		} else if (shutter < 0) {
 			str = "1/" + String.valueOf(Math.abs(shutter));
+		} else if (shutter > 60) {
+			int sec = (int) shutter % 60;
+			int min = (int) shutter / 60 % 60;
+			int hour = (int) shutter / 3600;
+			if (hour > 0) {
+				str = hour + "h " + min + "\" " + sec;
+			} else if (min > 0) {
+				str = min + "\" " + sec;
+			}
 		} else {
 			str = String.valueOf(shutter);
 		}
