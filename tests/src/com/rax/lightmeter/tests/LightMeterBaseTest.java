@@ -127,4 +127,21 @@ public class LightMeterBaseTest extends InstrumentationTestCase {
 		mMeter.setStep(STEP.HALF);
 		assertEquals(-8000d, mMeter.getPreviousShutter(-6000));
 	}
+	
+	public void t1estGetMatchAperture() throws Exception {
+		assertEquals(8d, mMeter.getMatchAperture(7.9d));
+		assertEquals(8d, mMeter.getMatchAperture(8.1d));
+		
+		assertEquals(1d, mMeter.getMatchAperture(0.9d));
+		assertEquals(0d, mMeter.getMatchAperture(0.5d));	// Overflow
+	}
+	
+	public void testGetMatchShutter() throws Exception {
+		assertEquals(-60d, mMeter.getMatchShutter(-60d));
+		assertEquals(-60d, mMeter.getMatchShutter(-65d));
+		assertEquals(-80d, mMeter.getMatchShutter(-75d));
+		
+		assertEquals(-8000d, mMeter.getMatchShutter(-9000d));
+		assertEquals(0d, mMeter.getMatchShutter(60 * 4096 * 3 / 2));
+	}
 }

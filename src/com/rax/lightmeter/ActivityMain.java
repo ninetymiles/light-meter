@@ -147,7 +147,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mMeter.setStep(mEvStep);
 		mFv = mMeter.getMatchAperture(prefs.getFloat(PREFS_FV, 8f));
 		mTv = prefs.getFloat(PREFS_TV, -60);
-		mTv = mMeter.getMatchTv((mTv < 0) ? (-1 / mTv) : mTv);
+		mTv = mMeter.getMatchShutter((mTv < 0) ? (-1 / mTv) : mTv);
 		mISO = prefs.getInt(PREFS_ISO, 200);
 		mMode = Mode.values()[prefs.getInt(PREFS_MODE, 0)];
 		setMode(mMode);
@@ -199,27 +199,27 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		switch (mMode) {
 		case UNDEFINED:
 			aperture = 2.8d;
-			shutter = mMeter.getTByFv(aperture);
+			shutter = mMeter.getShutterByAperture(aperture);
 			if (shutter == 0) {
 				aperture = 5.6d;
-				shutter = mMeter.getTByFv(aperture);
+				shutter = mMeter.getShutterByAperture(aperture);
 				if (shutter == 0) {
 					aperture = 11d;
-					shutter = mMeter.getTByFv(aperture);
+					shutter = mMeter.getShutterByAperture(aperture);
 					if (shutter == 0) {
 						aperture = 22d;
-						shutter = mMeter.getTByFv(aperture);
+						shutter = mMeter.getShutterByAperture(aperture);
 					}
 				}
 			}
 			break;
 		case TV_FIRST:
 			shutter = mTv;
-			aperture = mMeter.getFvByT(shutter);
+			aperture = mMeter.getApertureByShutter(shutter);
 			break;
 		case FV_FIRST:
 			aperture = mFv;
-			shutter = mMeter.getTByFv(aperture);
+			shutter = mMeter.getShutterByAperture(aperture);
 			break;
 		}
 		mTextAperture.setText(String.valueOf(aperture));
