@@ -193,6 +193,32 @@ public class LightMeter {
 		return value;
 	}
 	
+	public double getNextAperture(double currentValue) {
+		double value = currentValue;
+		int index = findIndexByValue(currentValue, sApertureIndex);
+		if (index != -1) {
+			try {
+				value = sApertureIndex[index + mStepValue];
+			} catch(ArrayIndexOutOfBoundsException ex) {
+				value = resetAperture(currentValue);
+			}
+		}
+		return value;
+	}
+	
+	public double getPreviousAperture(double currentValue) {
+		double value = currentValue;
+		int index = findIndexByValue(currentValue, sApertureIndex);
+		if (index != -1) {
+			try {
+				value = sApertureIndex[index - mStepValue];
+			} catch(ArrayIndexOutOfBoundsException ex) {
+				value = resetAperture(currentValue);
+			}
+		}
+		return value;
+	}
+	
 	public int resetISO() {
 		int value = mISO;
 		int index = findIndexByValue(mISO, sISOIndex);
@@ -203,6 +229,17 @@ public class LightMeter {
 			mISO = value;
 		}
 		
+		return value;
+	}
+	
+	public double resetAperture(double currentValue) {
+		double value = currentValue;
+		int index = findIndexByValue(currentValue, sApertureIndex);
+		
+		if (index != -1) {
+			index = index / 6 * 6;
+			value = sApertureIndex[index];
+		}
 		return value;
 	}
 	
@@ -217,24 +254,15 @@ public class LightMeter {
 		return index;
 	}
 	
-	public double getFv(STEP step, double cur, boolean dir) {
-		int idx = -1;
-		int offset = 0;
-		switch (step) {
-		case FULL: offset = 3 * (dir ? 1 : -1); break;
-		case HALF: offset = 2 * (dir ? 1 : -1); break;
-		case THIRD: offset = 1 * (dir ? 1 : -1); break;
-		}
-		cur = getMatchFv(cur);
-		for (int i = 0; i < sFvIndex3.length; i++) {
-			if (sFvIndex3[i] == cur) {
-				idx = i + offset;
-				if (idx >= sFvIndex3.length - 1) idx = sFvIndex3.length - 2;
-				if (idx <= 0) idx = 1;
+	private int findIndexByValue(double value, double[] array) {
+		int index = -1;
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == value) {
+				index = i;
 				break;
 			}
 		}
-		return (idx == -1) ? cur : sFvIndex3[idx];
+		return index;
 	}
 	
 	public double getTv(STEP step, double cur, boolean dir) {
@@ -259,8 +287,32 @@ public class LightMeter {
 	}
 	
 	private static final double MIN_FV = 0;
-	private static final double MAX_FV = 64 + 64 / 3;	// Add 1/3 EV for detect overflow
-	//private static final double MAX_FV = 512 + 512 / 3;
+	//private static final double MAX_FV = 64 + 64 / 3;	// Add 1/3 EV for detect overflow
+	private static final double MAX_FV = 512 + 512 / 3;	// Add 1/3 EV for detect overflow
+	
+	private static final double[] sApertureIndex = {
+//		0		1/6		2/6		3/6		4/6		5/6
+		1d,		0,		1.1d,	1.2d,	1.2d,	0,
+		1.4d,	0,		1.6d,	1.7d,	1.8d,	0,
+		2d,		0,		2.2d,	2.4d,	2.5d,	0,
+		2.8d,	0,		3.2d,	3.4d,	3.5d,	0,
+		4d,		0,		4.5d,	4.8d,	5d,		0,
+		5.6d,	0,		6.3d,	6.7d,	7.1d,	0,
+		8d,		0,		9d,		9.5d,	10d,	0,
+		11d,	0,		13d,	14d,	14d,	0,
+		16d,	0,		18d,	19d,	20d,	0,
+		22d,	0,		25d,	27d,	28d,	0,
+		32d,	0,		36d,	38d,	40d,	0,
+		45d,	0,		51d,	54d,	57d,	0,
+		64d,	0,		72d,	76d,	80d,	0,
+		90d,	0,		102d,	108d,	114d,	0,
+		128d,	0,		144d,	152d,	161d,	0,
+		181d,	0,		203d,	215d,	228d,	0,
+		256d,	0,		287d,	304d,	323d,	0,
+		362d,	0,		407d,	431d,	456d,	0,
+		512d,
+//		MAX_FV
+	};
 	
 	// Step 1/3 EV
 	private static final double [] sFvIndex3 = {

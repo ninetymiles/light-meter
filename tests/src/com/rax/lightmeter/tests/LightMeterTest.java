@@ -152,4 +152,27 @@ public class LightMeterTest extends InstrumentationTestCase {
 		mMeter.setStep(STEP.FULL);
 		assertEquals(50, mMeter.getPreviousISO());
 	}
+	
+	public void testResetAperture() throws Exception {
+		assertEquals(5.6d, mMeter.resetAperture(5.6d));
+		assertEquals(5.6d, mMeter.resetAperture(6.3d));
+		assertEquals(5.6d, mMeter.resetAperture(6.7d));
+		assertEquals(5.6d, mMeter.resetAperture(7.1d));
+	}
+	
+	public void testGetNextAperture() throws Exception {
+		mMeter.setStep(STEP.THIRD);
+		assertEquals(9d, mMeter.getNextAperture(8d));
+		assertEquals(10d, mMeter.getNextAperture(9d));
+		assertEquals(11d, mMeter.getNextAperture(10d));
+	}
+	
+	public void testGetPriviousAperture() throws Exception {
+		mMeter.setStep(STEP.FULL);
+		assertEquals(4d, mMeter.getPreviousAperture(5.6d));
+		assertEquals(1d, mMeter.getPreviousAperture(1d));
+		
+		mMeter.setStep(STEP.HALF);
+		assertEquals(4.8d, mMeter.getPreviousAperture(5.6d));
+	}
 }

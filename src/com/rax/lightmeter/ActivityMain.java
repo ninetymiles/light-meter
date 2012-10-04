@@ -245,7 +245,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mTv:" + mTv);
 			}
 			if (mTextAperture.isFocused()) {
-				mFv = mMeter.getFv(mEvStep, mFv, true);
+				mFv = mMeter.getNextAperture(mFv);
 				mTextAperture.setText(String.valueOf(mFv));
 				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mFv:" + mFv);
 			}
@@ -263,7 +263,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mTv:" + mTv);
 			}
 			if (mTextAperture.isFocused()) {
-				mFv = mMeter.getFv(mEvStep, mFv, false);
+				mFv = mMeter.getPreviousAperture(mFv);
 				mTextAperture.setText(String.valueOf(mFv));
 				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mFv:" + mFv);
 			}
