@@ -75,26 +75,29 @@ public class LightMeter {
 	
 	// Return 0 means invalid
 	public double getTByFv(double N) {
-		double t = 0;
 		if (DEBUG) Log.v(TAG, "LightMeter::getTByFv N:" + N + " mEv:" + mEv);
-		if (findFv(N)) {
-			t = (N * N * 250) / (mLux * mISO);
-			//t = (N * N) / Math.pow(2, mEv);
-		}
+		double t = (N * N * 250) / (mLux * mISO);
+		//double t = (N * N) / Math.pow(2, mEv);
 		if (DEBUG) Log.v(TAG, "LightMeter::getTByFv t:" + t);
 		return getMatchTv(t);
 	}
 	
 	// Return 0 for invalid result
 	public double getFvByT(double t) {
-		double N = 0;
 		if (DEBUG) Log.v(TAG, "LightMeter::getFvByT t:" + t);
-		if (findT(t)) {
-			double T = (t < 0) ? -1 / t : t;
-			N = Math.sqrt(mLux * mISO * T / 250f);
-		}
+		double T = (t < 0) ? -1 / t : t;
+		double N = Math.sqrt(mLux * mISO * T / 250f);
 		if (DEBUG) Log.v(TAG, "LightMeter::getFvByT N:" + N);
-		return getMatchFv(N);
+		return getMatchAperture(N);
+	}
+	
+	public double getMatchAperture(double value) {
+		double matched = getMatchFromArray(value, sFvIndex3);
+		if (matched == MAX_FV) matched = 0;
+		else {
+			if (DEBUG) Log.v(TAG, "LightMeter::getFvByT matched:" + matched);
+		}
+		return matched;
 	}
 	
 	public double getMatchTv(double value) {
@@ -102,15 +105,6 @@ public class LightMeter {
 		if (matched == MAX_TV) matched = 0;
 		else {
 			if (DEBUG) Log.v(TAG, "LightMeter::getMatchTv matched:" + matched);
-		}
-		return matched;
-	}
-	
-	public double getMatchFv(double value) {
-		double matched = getMatchFromArray(value, sFvIndex3);
-		if (matched == MAX_FV) matched = 0;
-		else {
-			if (DEBUG) Log.v(TAG, "LightMeter::getMatchFv matched:" + matched);
 		}
 		return matched;
 	}
@@ -127,40 +121,6 @@ public class LightMeter {
 				diff = Math.abs(value - v);
 				matched = arr[i];
 			}
-		}
-		return matched;
-	}
-	
-	private boolean findFv(double N) {
-		boolean matched = false;
-		for (double f : sFvIndex3) {
-			if (f == N) {
-				matched = true;
-				break;
-			}
-		}
-		for (double f : sFvIndex2) {
-			if (f == N) {
-				matched = true;
-				break;
-			}
-		}
-		if (matched == false) {
-			if (DEBUG) Log.v(TAG, "LightMeter::findFv not found N:" + N);
-		}
-		return matched;
-	}
-	
-	private boolean findT(double T) {
-		boolean matched = false;
-		for (double t : sTvIndex3) {
-			if (t == T) {
-				matched = true;
-				break;
-			}
-		}
-		if (matched == false) {
-			if (DEBUG) Log.v(TAG, "LightMeter::findT not found T:" + T);
 		}
 		return matched;
 	}
@@ -219,6 +179,32 @@ public class LightMeter {
 		return value;
 	}
 	
+	public double getNextShutter(double currentValue) {
+		double value = currentValue;
+		int index = findIndexByValue(currentValue, sShutterIndex);
+		if (index != -1) {
+			try {
+				value = sShutterIndex[index + mStepValue];
+			} catch(ArrayIndexOutOfBoundsException ex) {
+				value = resetAperture(currentValue);
+			}
+		}
+		return value;
+	}
+	
+	public double getPreviousShutter(double currentValue) {
+		double value = currentValue;
+		int index = findIndexByValue(currentValue, sShutterIndex);
+		if (index != -1) {
+			try {
+				value = sShutterIndex[index - mStepValue];
+			} catch(ArrayIndexOutOfBoundsException ex) {
+				value = resetAperture(currentValue);
+			}
+		}
+		return value;
+	}
+	
 	public int resetISO() {
 		int value = mISO;
 		int index = findIndexByValue(mISO, sISOIndex);
@@ -243,6 +229,17 @@ public class LightMeter {
 		return value;
 	}
 	
+	public double resetShutter(double currentValue) {
+		double value = currentValue;
+		int index = findIndexByValue(currentValue, sShutterIndex);
+		
+		if (index != -1) {
+			index = index / 6 * 6;
+			value = sShutterIndex[index];
+		}
+		return value;
+	} 
+	
 	private int findIndexByValue(int value, int[] array) {
 		int index = -1;
 		for (int i = 0; i < array.length; i++) {
@@ -265,51 +262,30 @@ public class LightMeter {
 		return index;
 	}
 	
-	public double getTv(STEP step, double cur, boolean dir) {
-		int idx = -1;
-		int offset = 0;
-		switch (step) {
-		case FULL: offset = 3 * (dir ? 1 : -1); break;
-		case HALF: offset = 2 * (dir ? 1 : -1); break;
-		case THIRD: offset = 1 * (dir ? 1 : -1); break;
-		}
-		cur = (cur < 0) ? (-1 / cur) : cur;
-		cur = getMatchTv(cur);
-		for (int i = 0; i < sTvIndex3.length; i++) {
-			if (sTvIndex3[i] == cur) {
-				idx = i + offset;
-				if (idx >= sTvIndex3.length) idx = sTvIndex3.length - 1;
-				if (idx < 0) idx = 0;
-				break;
-			}
-		}
-		return (idx == -1) ? cur : sTvIndex3[idx];
-	}
-	
 	private static final double MIN_FV = 0;
 	//private static final double MAX_FV = 64 + 64 / 3;	// Add 1/3 EV for detect overflow
 	private static final double MAX_FV = 512 + 512 / 3;	// Add 1/3 EV for detect overflow
 	
 	private static final double[] sApertureIndex = {
-//		0		1/6		2/6		3/6		4/6		5/6
-		1d,		0,		1.1d,	1.2d,	1.2d,	0,
-		1.4d,	0,		1.6d,	1.7d,	1.8d,	0,
-		2d,		0,		2.2d,	2.4d,	2.5d,	0,
-		2.8d,	0,		3.2d,	3.4d,	3.5d,	0,
-		4d,		0,		4.5d,	4.8d,	5d,		0,
-		5.6d,	0,		6.3d,	6.7d,	7.1d,	0,
-		8d,		0,		9d,		9.5d,	10d,	0,
-		11d,	0,		13d,	14d,	14d,	0,
-		16d,	0,		18d,	19d,	20d,	0,
-		22d,	0,		25d,	27d,	28d,	0,
-		32d,	0,		36d,	38d,	40d,	0,
-		45d,	0,		51d,	54d,	57d,	0,
-		64d,	0,		72d,	76d,	80d,	0,
-		90d,	0,		102d,	108d,	114d,	0,
-		128d,	0,		144d,	152d,	161d,	0,
-		181d,	0,		203d,	215d,	228d,	0,
-		256d,	0,		287d,	304d,	323d,	0,
-		362d,	0,		407d,	431d,	456d,	0,
+//		0		1/6	2/6		3/6		4/6		5/6
+		1d,		0,	1.1d,	1.2d,	1.2d,	0,
+		1.4d,	0,	1.6d,	1.7d,	1.8d,	0,
+		2d,		0,	2.2d,	2.4d,	2.5d,	0,
+		2.8d,	0,	3.2d,	3.4d,	3.5d,	0,
+		4d,		0,	4.5d,	4.8d,	5d,		0,
+		5.6d,	0,	6.3d,	6.7d,	7.1d,	0,
+		8d,		0,	9d,		9.5d,	10d,	0,
+		11d,	0,	13d,	14d,	14d,	0,
+		16d,	0,	18d,	19d,	20d,	0,
+		22d,	0,	25d,	27d,	28d,	0,
+		32d,	0,	36d,	38d,	40d,	0,
+		45d,	0,	51d,	54d,	57d,	0,
+		64d,	0,	72d,	76d,	80d,	0,
+		90d,	0,	102d,	108d,	114d,	0,
+		128d,	0,	144d,	152d,	161d,	0,
+		181d,	0,	203d,	215d,	228d,	0,
+		256d,	0,	287d,	304d,	323d,	0,
+		362d,	0,	407d,	431d,	456d,	0,
 		512d,
 //		MAX_FV
 	};
@@ -366,6 +342,43 @@ public class LightMeter {
 	
 	private static final double MIN_TV = -8000 * 1.5;
 	private static final double MAX_TV = 60 * 4096 * 2;
+	
+	private static final double[] sShutterIndex = {
+		//MIN_TV,
+		-8000,		0,	-6400,		-6000,		-5000,		0,
+		-4000,		0,	-3200,		-3000,		-2500,		0,
+		-2000,		0,	-1600,		-1500,		-1250,		0,
+		-1000,		0,	-800,		-750,		-640,		0,
+		-500,		0,	-400,		0,			-320,		0,
+		-250,		0,	-200,		0,			-160, 		0,
+		-125,		0,	-100,		0,			-80, 		0,
+		-60,		0,	-50,		0,			-40,		0,
+		-30,		0,	-25,		0,			-20,		0,
+		-15,		0,	-13,		0,			-10,		0,
+		-8,			0,	-6,			0,			-5,			0,
+		-4,			0,	-3,			0,			-2.5,		0,
+		-2,			0,	-1.6,		0,			-1.3,		0,
+		1,			0,	1.3,		0,			1.6,		0,
+		2,			0,	2.5,		0,			3,			0,
+		4,			0,	5,			0,			6,			0,
+		8,			0,	10,			0,			13,			0,
+		15,			0,	20,			0,			25,			0,
+		30,			0,	40,			0,			50,			0,
+		60,			0,	80,			0,			100,		0,
+		60 * 2,		0,	60 * 2.5,	0,			60 * 3,		0,
+		60 * 4,		0,	60 * 5,		0,			60 * 6,		0,
+		60 * 8,		0,	60 * 10,	0,			60 * 13,	0,
+		60 * 16,	0,	60 * 20,	0,			60 * 25,	0,
+		60 * 32,	0,	60 * 40,	0,			60 * 50,	0,
+		60 * 64,	0,	60 * 80,	0,			60 * 100,	0,
+		60 * 128,	0,	60 * 160,	0,			60 * 200,	0,
+		60 * 256,	0,	60 * 320,	0,			60 * 400,	0,
+		60 * 512,	0,	60 * 640,	0,			60 * 800,	0,
+		60 * 1024,	0,	60 * 1280,	0,			60 * 1600,	0,
+		60 * 2048,	0,	60 * 2560,	0,			60 * 3200,	0,
+		60 * 4096,
+		MAX_TV
+	};
 	
 	private static final double [] sTvIndex3 = {
 		MIN_TV,

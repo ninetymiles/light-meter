@@ -145,7 +145,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mIsEnableVolumeKey = prefs.getBoolean("CONF_ENABLE_VOLUME_KEY", true);
 		mEvStep = LightMeter.STEP.values()[Integer.valueOf(prefs.getString("CONF_EV_STEP", "2"))];
 		mMeter.setStep(mEvStep);
-		mFv = mMeter.getMatchFv(prefs.getFloat(PREFS_FV, 8f));
+		mFv = mMeter.getMatchAperture(prefs.getFloat(PREFS_FV, 8f));
 		mTv = prefs.getFloat(PREFS_TV, -60);
 		mTv = mMeter.getMatchTv((mTv < 0) ? (-1 / mTv) : mTv);
 		mISO = prefs.getInt(PREFS_ISO, 200);
@@ -240,7 +240,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mISO:" + mISO);
 			}
 			if (mTextShutter.isFocused()) {
-				mTv = mMeter.getTv(mEvStep, mTv, true);
+				mTv = mMeter.getNextShutter(mTv);
 				mTextShutter.setText(printShutterValue(mTv));
 				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mTv:" + mTv);
 			}
@@ -258,7 +258,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mISO:" + mISO);
 			}
 			if (mTextShutter.isFocused()) {
-				mTv = mMeter.getTv(mEvStep, mTv, false);
+				mTv = mMeter.getPreviousShutter(mTv);
 				mTextShutter.setText(printShutterValue(mTv));
 				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mTv:" + mTv);
 			}
