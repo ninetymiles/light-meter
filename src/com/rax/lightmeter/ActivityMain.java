@@ -144,6 +144,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mIsEnableVolumeKey = prefs.getBoolean("CONF_ENABLE_VOLUME_KEY", true);
 		mEvStep = LightMeter.STEP.values()[Integer.valueOf(prefs.getString("CONF_EV_STEP", "2"))];
+		mMeter.setStep(mEvStep);
 		mFv = mMeter.getMatchFv(prefs.getFloat(PREFS_FV, 8f));
 		mTv = prefs.getFloat(PREFS_TV, -60);
 		mTv = mMeter.getMatchTv((mTv < 0) ? (-1 / mTv) : mTv);
@@ -234,9 +235,8 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		case R.id.main_button_up:
 			if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_UP");
 			if (mTextIso.isFocused()) {
-				mISO = mMeter.getISO(mEvStep, true);
+				mISO = mMeter.getNextISO();
 				mTextIso.setText(String.valueOf(mISO));
-				mMeter.setISO(mISO);
 				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mISO:" + mISO);
 			}
 			if (mTextShutter.isFocused()) {
@@ -253,9 +253,8 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		case R.id.main_button_down:
 			if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_DOWN");
 			if (mTextIso.isFocused()) {
-				mISO = mMeter.getISO(mEvStep, false);
+				mISO = mMeter.getPreviousISO();
 				mTextIso.setText(String.valueOf(mISO));
-				mMeter.setISO(mISO);
 				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mISO:" + mISO);
 			}
 			if (mTextShutter.isFocused()) {
