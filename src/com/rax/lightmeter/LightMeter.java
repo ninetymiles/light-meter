@@ -136,8 +136,10 @@ public class LightMeter {
 			} catch(ArrayIndexOutOfBoundsException ex) {
 				value = resetISO();
 			}
-			mISO = value;
+		} else {
+			value = sISOIndex[0];
 		}
+		mISO = value;
 		return value;
 	}
 	
@@ -151,8 +153,10 @@ public class LightMeter {
 			} catch(ArrayIndexOutOfBoundsException ex) {
 				value = resetISO();
 			}
-			mISO = value;
+		} else {
+			value = sISOIndex[0];
 		}
+		mISO = value;
 		return value;
 	}
 	
@@ -166,6 +170,8 @@ public class LightMeter {
 			} catch(ArrayIndexOutOfBoundsException ex) {
 				value = resetAperture(currentValue);
 			}
+		} else {
+			value = sApertureIndex[0];
 		}
 		return value;
 	}
@@ -180,6 +186,8 @@ public class LightMeter {
 			} catch(ArrayIndexOutOfBoundsException ex) {
 				value = resetAperture(currentValue);
 			}
+		} else {
+			value = sApertureIndex[0];
 		}
 		return value;
 	}
@@ -194,6 +202,8 @@ public class LightMeter {
 			} catch(ArrayIndexOutOfBoundsException ex) {
 				value = resetAperture(currentValue);
 			}
+		} else {
+			value = sShutterIndex[0];
 		}
 		return value;
 	}
@@ -208,6 +218,8 @@ public class LightMeter {
 			} catch(ArrayIndexOutOfBoundsException ex) {
 				value = resetAperture(currentValue);
 			}
+		} else {
+			value = sShutterIndex[0];
 		}
 		return value;
 	}

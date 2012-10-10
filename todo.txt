@@ -1,4 +1,5 @@
 H Add two tab to support reflect and incidence mode
+H Use list view adapter to provide drop-down list instead of UP/DOWN button
 H Update icon
 H Add i18n
 M Obfuscation
