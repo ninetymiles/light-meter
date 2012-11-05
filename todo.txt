@@ -1,8 +1,6 @@
 H Add two tab to support reflect and incidence mode
 H Use list view adapter to provide drop-down list instead of UP/DOWN button
-H Update icon
 H Add i18n
-M Obfuscation
 M Support Google Play IAP
 M Support Amazon Market IAP
 M Pro version can detect flash light, press button to start measure, but lock on the maximum value
