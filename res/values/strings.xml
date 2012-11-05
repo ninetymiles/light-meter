@@ -39,9 +39,10 @@
     <string name="conf_ev_step_summary">"Steps to adjust the aperture, shutter speed or ISO"</string>
 
     <!-- Dialogs -->
-    <string name="dlg_quit_confirm_title">"Notice"</string>
-    <string name="dlg_quit_confirm_message">"Are you sure you want to exit?"</string>
     <string name="dlg_ev_step_title">"Choose a step value"</string>
+    
+    <!-- Toast -->
+    <string name="toast_quit">"Press back twice to quit"</string>
 
     <!-- About -->
     <string name="about_version_info">"Version %1$s r%2$s"</string>

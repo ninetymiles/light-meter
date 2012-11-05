@@ -1,10 +1,7 @@
 package com.rax.lightmeter;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -28,6 +25,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ActivityMain extends Activity implements OnClickListener, OnFocusChangeListener {
 	
@@ -39,8 +37,9 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private final String PREFS_ISO = "PREFS_ISO";
 	private final String PREFS_MODE = "PREFS_MODE";
 	
-	private static final int DIALOG_QUIT_CONFIRM = 1;
 	private static enum Mode { UNDEFINED, TV_FIRST, FV_FIRST };
+	
+	private long mExitTime;
 	
 	private TextView mTextLux;
 	private TextView mTextEv;
@@ -347,32 +346,15 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	}
 	
 	@Override
-	protected Dialog onCreateDialog(int id, Bundle args) {
-		if (DEBUG) Log.v(TAG, "ActivityMain::onCreateDialog id:" + id);
-		switch (id) {
-		case DIALOG_QUIT_CONFIRM:
-			return new AlertDialog.Builder(this)
-					.setTitle(R.string.dlg_quit_confirm_title)
-					.setMessage(R.string.dlg_quit_confirm_message)
-					.setPositiveButton(android.R.string.ok,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int id) {
-									finish();
-								}
-							})
-					.setNegativeButton(android.R.string.cancel,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int id) {
-								}
-							}).create();
-		}
-		return null;
-	}
-
-	@Override
 	public void onBackPressed() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onBackPressed");
-		showDialog(DIALOG_QUIT_CONFIRM);
+		
+		if (System.currentTimeMillis() - mExitTime > 2000) {
+			Toast.makeText(getApplicationContext(), R.string.toast_quit, Toast.LENGTH_SHORT).show();
+			mExitTime = System.currentTimeMillis();
+		} else {
+			finish();
+		}
 	}
 	
 	private OnTouchListener mTouchListener = new OnTouchListener() {
