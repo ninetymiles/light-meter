@@ -40,7 +40,7 @@ public class ActivityAbout extends PreferenceActivity {
 			PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 			Preference prefsVersion = getPreferenceScreen().findPreference(KEY_ABOUT_VERSION);
 			String strTemplate = getResources().getString(R.string.about_version_summary);
-			String strVersion = String.format(strTemplate, packageInfo.versionName, packageInfo.versionCode);
+			String strVersion = String.format(strTemplate, packageInfo.versionName);
 			prefsVersion.setSummary(strVersion);
 		} catch (NameNotFoundException ex) {
 			Log.e(TAG, "ActivityAbout::onCreate " + ex.getMessage());

@@ -48,6 +48,6 @@
     <string name="about_category_title">"About"</string>
     <string name="about_app_summary">"© 2012 All rights reserved."</string>
     <string name="about_version_title">"Version"</string>
-    <string name="about_version_summary">"%1$s r%2$s"</string>
+    <string name="about_version_summary">"%1$s"</string>
     
 </resources>
