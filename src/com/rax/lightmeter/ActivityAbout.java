@@ -16,40 +16,34 @@
 
 package com.rax.lightmeter;
 
-import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
 import android.util.Log;
-import android.widget.TextView;
 
-public class ActivityAbout extends Activity {
+public class ActivityAbout extends PreferenceActivity {
 
-	private static final boolean DEBUG = true;
 	private static final String TAG = "RaxLog";
+	private static final boolean DEBUG = true;
+
+	private static final String KEY_ABOUT_VERSION = "preference_about_version";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (DEBUG) Log.v(TAG, "ActivityAbout::onCreate");
-		setContentView(R.layout.activity_about);
-	}
-
-	@Override
-	protected void onStart() {
-		if (DEBUG) Log.v(TAG, "ActivityAbout::onStart");
-
+		
+		addPreferencesFromResource(R.xml.about);
+		
 		try {
 			PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-			((TextView) findViewById(R.id.about_version_info)).setText(String
-					.format(getResources().getString(
-							R.string.about_version_info),
-							packageInfo.versionName, packageInfo.versionCode));
+			Preference prefsVersion = getPreferenceScreen().findPreference(KEY_ABOUT_VERSION);
+			String strTemplate = getResources().getString(R.string.about_version_summary);
+			String strVersion = String.format(strTemplate, packageInfo.versionName, packageInfo.versionCode);
+			prefsVersion.setSummary(strVersion);
 		} catch (NameNotFoundException ex) {
-			Log.e(TAG, "ActivityAbout::onStart " + ex.getMessage());
+			Log.e(TAG, "ActivityAbout::onCreate " + ex.getMessage());
 		}
-
-		super.onStart();
 	}
-
 }
