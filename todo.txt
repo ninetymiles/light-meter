@@ -12,6 +12,7 @@ L Pro Can force set +1EV or -1EV etc
 L Show mark line on the LCD bottom
 L Notify user device sensor no sensitive enough
 L Use google analytics SDK or Flurry to tracking usage
+    Track measure time, and EV step
 L Let user can send email back
 L Share this
 L Ask for rating

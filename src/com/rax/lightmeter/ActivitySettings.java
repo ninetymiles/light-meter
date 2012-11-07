@@ -19,6 +19,7 @@ package com.rax.lightmeter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.rax.flurry.FlurryAgentWrapper;
@@ -32,6 +33,8 @@ public class ActivitySettings extends PreferenceActivity implements SharedPrefer
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings);
+		
+		PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
 	}
 
 	@Override
@@ -52,7 +55,7 @@ public class ActivitySettings extends PreferenceActivity implements SharedPrefer
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (DEBUG) Log.d(TAG, "ActivitySettings::onSharedPreferenceChanged key:" + key);
 		if ("CONF_ENABLE_TRACKING".equals(key)) {
-			//FlurryAgentWrapper.setTrackingEnabled(this, sharedPreferences.getBoolean(key, true));
+			FlurryAgentWrapper.setTrackingEnabled(this, sharedPreferences.getBoolean(key, true));
 		}
 	}
 }
