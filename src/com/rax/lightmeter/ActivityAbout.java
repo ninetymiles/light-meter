@@ -23,6 +23,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 
+import com.rax.flurry.FlurryAgentWrapper;
+
 public class ActivityAbout extends PreferenceActivity {
 
 	private static final String TAG = "RaxLog";
@@ -45,5 +47,19 @@ public class ActivityAbout extends PreferenceActivity {
 		} catch (NameNotFoundException ex) {
 			Log.e(TAG, "ActivityAbout::onCreate " + ex.getMessage());
 		}
+	}
+	
+	@Override
+	protected void onStart() {
+		if (DEBUG) Log.v(TAG, "ActivityAbout::onStart");
+		FlurryAgentWrapper.onStartSession(this);
+		super.onStart();
+	}
+	
+	@Override
+	protected void onStop() {
+		if (DEBUG) Log.v(TAG, "ActivityAbout::onStop");
+		FlurryAgentWrapper.onEndSession(this);
+		super.onStop();
 	}
 }

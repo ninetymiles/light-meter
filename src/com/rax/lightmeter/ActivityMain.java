@@ -27,6 +27,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rax.flurry.FlurryAgentWrapper;
+
 public class ActivityMain extends Activity implements OnClickListener, OnFocusChangeListener {
 	
 	private static final String TAG = "RaxLog";
@@ -131,7 +133,20 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		}
 		return str;
 	}
-
+	
+	@Override
+	protected void onStart() {
+		if (DEBUG) Log.v(TAG, "ActivityMain::onStart");
+		FlurryAgentWrapper.onStartSession(this);
+		super.onStart();
+	}
+	
+	@Override
+	protected void onStop() {
+		if (DEBUG) Log.v(TAG, "ActivityMain::onStop");
+		FlurryAgentWrapper.onEndSession(this);
+		super.onStop();
+	}
 	@Override
 	protected void onPause() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onPause");

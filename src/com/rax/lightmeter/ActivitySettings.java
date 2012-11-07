@@ -16,14 +16,43 @@
 
 package com.rax.lightmeter;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.util.Log;
 
-public class ActivitySettings extends PreferenceActivity {
+import com.rax.flurry.FlurryAgentWrapper;
+
+public class ActivitySettings extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+	private static final String TAG = "RaxLog";
+	private static final boolean DEBUG = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings);
+	}
+
+	@Override
+	protected void onStart() {
+		if (DEBUG) Log.v(TAG, "ActivitySettings::onStart");
+		FlurryAgentWrapper.onStartSession(this);
+		super.onStart();
+	}
+
+	@Override
+	protected void onStop() {
+		if (DEBUG) Log.v(TAG, "ActivitySettings::onStop");
+		FlurryAgentWrapper.onEndSession(this);
+		super.onStop();
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		if (DEBUG) Log.d(TAG, "ActivitySettings::onSharedPreferenceChanged key:" + key);
+		if ("CONF_ENABLE_TRACKING".equals(key)) {
+			//FlurryAgentWrapper.setTrackingEnabled(this, sharedPreferences.getBoolean(key, true));
+		}
 	}
 }

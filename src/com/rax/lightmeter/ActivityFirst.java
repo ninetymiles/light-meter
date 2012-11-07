@@ -21,6 +21,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.rax.flurry.FlurryAgentWrapper;
+
 public class ActivityFirst extends Activity {
 
 	private static final boolean DEBUG = false;
@@ -36,10 +38,18 @@ public class ActivityFirst extends Activity {
 	@Override
 	protected void onStart() {
 		if (DEBUG) Log.v(TAG, "ActivityFirst::onStart");
+		FlurryAgentWrapper.onStartSession(this);
 		startMain();
 		super.onStart();
 	}
 	
+	@Override
+	protected void onStop() {
+		if (DEBUG) Log.v(TAG, "ActivityFirst::onStop");
+		FlurryAgentWrapper.onEndSession(this);
+		super.onStop();
+	}
+
 	private void startMain() {
 		Intent intent = new Intent(ActivityFirst.this, ActivityMain.class);
 		startActivity(intent);
