@@ -1,6 +1,5 @@
 package com.rax.flurry;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
@@ -48,18 +47,6 @@ public final class FlurryAgentWrapper {
 	
 	public static final void logEvent(String eventId) {
 		if (isEnableTracking) FlurryAgent.logEvent(eventId);
-	}
-	
-	public static final void logUserChoose(String eventId, String eventDes) {
-		HashMap<String, String> parameters = new HashMap<String, String>();
-		parameters.put("USER_CHOOSE", eventDes);
-		if (isEnableTracking) FlurryAgent.logEvent(eventId, parameters);
-	}
-	
-	public static final void logEventResult(String eventId, String eventDes) {
-		HashMap<String, String> parameters = new HashMap<String, String>();
-		parameters.put("RESULT", eventDes);
-		if (isEnableTracking) FlurryAgent.logEvent(eventId, parameters);
 	}
 	
 	public static final void logEvent(String eventId, boolean timed) {

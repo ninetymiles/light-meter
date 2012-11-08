@@ -432,12 +432,14 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
+				FlurryAgentWrapper.logEvent("MEASURE", true);
 				mOrientation.lock();
 				clearFocus();
 				break;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
 				mSensorManager.unregisterListener(mSensorListener, mLightSensor);
+				FlurryAgentWrapper.endTimedEvent("MEASURE");
 				mOrientation.unlock();
 				break;
 			}
