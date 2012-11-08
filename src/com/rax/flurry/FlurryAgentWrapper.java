@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
+import com.rax.lightmeter.BuildConfig;
 
 
 public final class FlurryAgentWrapper {
@@ -22,7 +23,7 @@ public final class FlurryAgentWrapper {
 	private static boolean isInitialized = false;
 	
 	public static final void onStartSession(Context context) {
-		String flurryKey = FLURRY_KEY_DEV;
+		String flurryKey = BuildConfig.DEBUG ? FLURRY_KEY_DEV : FLURRY_KEY_PUB;
 		if (isInitialized == false) {
 			FlurryAgent.setCaptureUncaughtExceptions(false);
 			FlurryAgent.setContinueSessionMillis(15000);
