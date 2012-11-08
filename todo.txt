@@ -1,6 +1,3 @@
-H Add i18n for zh-CN
-H Add RaxStudio into about page
-H Change App name to Rax LightMeter
 L Let user can send email back
 L Share this
 L Ask for rating
