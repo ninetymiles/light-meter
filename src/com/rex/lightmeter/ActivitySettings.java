@@ -27,7 +27,7 @@ import com.rex.lightmeter.R;
 
 public class ActivitySettings extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-	private static final String TAG = "RaxLog";
+	private static final String TAG = "RexLog";
 	private static final boolean DEBUG = true;
 
 	@Override

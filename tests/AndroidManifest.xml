@@ -13,6 +13,6 @@
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
         android:label="Tests for LightMeter"
-        android:targetPackage="com.rax.lightmeter" />
+        android:targetPackage="com.rex.lightmeter" />
 
 </manifest>

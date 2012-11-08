@@ -14,7 +14,7 @@ import com.rex.lightmeter.R;
  */
 public class OrientationHelper {
 
-	private static final String TAG = "RaxLog";
+	private static final String TAG = "RexLog";
 	private static final boolean DEBUG = true;
 	
 	private final Activity mActivity;

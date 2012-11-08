@@ -57,9 +57,9 @@ public class Consts {
 
 	// Intent actions that we send from the BillingReceiver to the
 	// BillingService. Defined by this application.
-	public static final String ACTION_CONFIRM_NOTIFICATION = "com.rax.subscriptions.CONFIRM_NOTIFICATION";
-	public static final String ACTION_GET_PURCHASE_INFORMATION = "com.rax.subscriptions.GET_PURCHASE_INFORMATION";
-	public static final String ACTION_RESTORE_TRANSACTIONS = "com.rax.subscriptions.RESTORE_TRANSACTIONS";
+	public static final String ACTION_CONFIRM_NOTIFICATION = "com.rex.subscriptions.CONFIRM_NOTIFICATION";
+	public static final String ACTION_GET_PURCHASE_INFORMATION = "com.rex.subscriptions.GET_PURCHASE_INFORMATION";
+	public static final String ACTION_RESTORE_TRANSACTIONS = "com.rex.subscriptions.RESTORE_TRANSACTIONS";
 
 	// Intent actions that we receive in the BillingReceiver from Market.
 	// These are defined by Market and cannot be changed.

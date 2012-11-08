@@ -28,7 +28,7 @@ import com.rex.lightmeter.R;
 
 public class ActivityAbout extends PreferenceActivity {
 
-	private static final String TAG = "RaxLog";
+	private static final String TAG = "RexLog";
 	private static final boolean DEBUG = true;
 
 	private static final String KEY_ABOUT_VERSION = "preference_about_version";

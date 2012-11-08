@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -30,19 +29,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rex.flurry.FlurryAgentWrapper;
-import com.rex.lightmeter.R;
-import com.rex.lightmeter.billing.google.BillingService;
-import com.rex.lightmeter.billing.google.Consts;
-import com.rex.lightmeter.billing.google.PurchaseDatabase;
-import com.rex.lightmeter.billing.google.PurchaseObserver;
 import com.rex.lightmeter.billing.google.BillingService.RequestPurchase;
 import com.rex.lightmeter.billing.google.BillingService.RestoreTransactions;
+import com.rex.lightmeter.billing.google.Consts;
 import com.rex.lightmeter.billing.google.Consts.PurchaseState;
 import com.rex.lightmeter.billing.google.Consts.ResponseCode;
+import com.rex.lightmeter.billing.google.PurchaseObserver;
 
 public class ActivityMain extends Activity implements OnClickListener, OnFocusChangeListener {
 	
-	private static final String TAG = "RaxLog";
+	private static final String TAG = "RexLog";
 	private static final boolean DEBUG = true;
 	
 	private final String PREFS_FV = "PREFS_FV";
@@ -87,7 +83,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 //	private Handler mHandler;
 //	private BillingService mBillingService;
 //	private PurchaseDatabase mPurchaseDatabase;
-//	private RaxPurchaseObserver mPurchaseObserver;
+//	private RexPurchaseObserver mPurchaseObserver;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -134,7 +130,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		
 //		mHandler = new Handler();
 		
-//		mPurchaseObserver = new RaxPurchaseObserver(mHandler);
+//		mPurchaseObserver = new RexPurchaseObserver(mHandler);
 //		mBillingService = new BillingService();
 //		mBillingService.setContext(this);
 //
@@ -466,9 +462,9 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		}
 	};
 	
-	private class RaxPurchaseObserver extends PurchaseObserver {
+	private class RexPurchaseObserver extends PurchaseObserver {
 		
-		public RaxPurchaseObserver(Handler handler) {
+		public RexPurchaseObserver(Handler handler) {
 			super(ActivityMain.this, handler);
 		}
 

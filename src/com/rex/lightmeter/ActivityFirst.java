@@ -27,7 +27,7 @@ import com.rex.lightmeter.R;
 public class ActivityFirst extends Activity {
 
 	private static final boolean DEBUG = false;
-	private static final String TAG = "RaxLog";
+	private static final String TAG = "RexLog";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

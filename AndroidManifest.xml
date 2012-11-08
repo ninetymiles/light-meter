@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.rax.lightmeter.ActivityFirst"
+            android:name="com.rex.lightmeter.ActivityFirst"
             android:configChanges="keyboardHidden|orientation|keyboard|uiMode"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
@@ -28,15 +28,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.rax.lightmeter.ActivityMain"
+            android:name="com.rex.lightmeter.ActivityMain"
             android:configChanges="keyboardHidden|keyboard|uiMode" >
         </activity>
         <activity
-            android:name="com.rax.lightmeter.ActivityAbout"
+            android:name="com.rex.lightmeter.ActivityAbout"
             android:configChanges="keyboardHidden|orientation|keyboard|uiMode" >
         </activity>
         <activity
-            android:name=".ActivitySettings"
+            android:name="com.rex.lightmeter.ActivitySettings"
             android:configChanges="keyboardHidden|orientation|keyboard|uiMode" >
         </activity>
 
