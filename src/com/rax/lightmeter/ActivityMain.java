@@ -158,12 +158,12 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			int min = (int) shutter / 60 % 60;
 			int hour = (int) shutter / 3600;
 			if (hour > 0) {
-				str = hour + "h " + min + "\" " + sec;
+				str = hour + "h " + min + "m " + sec + "\"";
 			} else if (min > 0) {
-				str = min + "\" " + sec;
+				str = min + "m " + sec + "\"";
 			}
 		} else {
-			str = String.valueOf(shutter);
+			str = String.valueOf(shutter) + "\"";
 		}
 		return str;
 	}

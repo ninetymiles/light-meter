@@ -194,7 +194,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/main_option_border"
             android:orientation="horizontal"
-            android:paddingTop="2dp"
             android:visibility="gone" >
 
             <Button
