@@ -1,6 +1,12 @@
+H Add i18n for zh-CN
+H Add RaxStudio into about page
+H Change App name to Rax LightMeter
+L Let user can send email back
+L Share this
+L Ask for rating
+H Can set EV+ or EV- to adjust the sensor
 H Add two tab to support reflect and incidence mode
 H Use list view adapter to provide drop-down list instead of UP/DOWN button
-H Add i18n
 M Support Google Play IAP
 M Support Amazon Market IAP
 M Pro version can detect flash light, press button to start measure, but lock on the maximum value
@@ -10,11 +16,5 @@ M Pro version need show help page to tell what is pro version
 L Pro Can save measure list, and computer a average value to suggest that
 L Pro Can force set +1EV or -1EV etc
 L Show mark line on the LCD bottom
-L Notify user device sensor no sensitive enough
-L Use google analytics SDK or Flurry to tracking usage
-    Track measure time, and EV step
-L Let user can send email back
-L Share this
-L Ask for rating
 L Add multiple page OOBE, or show toast cover on the main page elements, after support save measure list
 L Add help, can show the toast content back
