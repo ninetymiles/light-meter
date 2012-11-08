@@ -14,12 +14,12 @@
 	</target>
 
 	<target name="-post-build">
-		<copy tofile="${ant.project.name}.apk" file="${out.final.file}" overwrite="true" />
-		<checksum file="${ant.project.name}.apk" fileext=".md5" />
+		<copy tofile="${ant.project.name}_${version.name}.apk" file="${out.final.file}" overwrite="true" />
+		<checksum file="${ant.project.name}_${version.name}.apk" fileext=".md5" />
 		<if condition="${proguard.enabled}">
 			<then>
 				<echo level="info">Backup proguard files ..."</echo>
-				<zip destfile="${ant.project.name}.proguard.zip">
+				<zip destfile="${ant.project.name}_${version.name}_proguard.zip">
 					<zipfileset dir="${obfuscate.absolute.dir}" prefix="proguard" excludes="*.jar" />
 				</zip>
 			</then>
