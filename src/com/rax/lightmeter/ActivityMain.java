@@ -83,10 +83,10 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private Mode mMode = Mode.UNDEFINED;
 
 	// Google IAP
-	private Handler mHandler;
-	private BillingService mBillingService;
-	private PurchaseDatabase mPurchaseDatabase;
-	private RaxPurchaseObserver mPurchaseObserver;
+//	private Handler mHandler;
+//	private BillingService mBillingService;
+//	private PurchaseDatabase mPurchaseDatabase;
+//	private RaxPurchaseObserver mPurchaseObserver;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -131,7 +131,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		
 		mTextIso.setText(String.valueOf(mMeter.getISO()));
 		
-		mHandler = new Handler();
+//		mHandler = new Handler();
 		
 //		mPurchaseObserver = new RaxPurchaseObserver(mHandler);
 //		mBillingService = new BillingService();
@@ -551,7 +551,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		SharedPreferences prefs = getPreferences(MODE_PRIVATE);
 		boolean initialized = prefs.getBoolean(PREFS_INITIALIZED, false);
 		if (!initialized) {
-			mBillingService.restoreTransactions();
+//			mBillingService.restoreTransactions();
 			//Toast.makeText(this, R.string.restoring_transactions, Toast.LENGTH_LONG).show();
 		}
 	}
@@ -564,10 +564,10 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Cursor cursor = mPurchaseDatabase.queryAllPurchasedItems();
-				if (cursor == null) {
-					return;
-				}
+//				Cursor cursor = mPurchaseDatabase.queryAllPurchasedItems();
+//				if (cursor == null) {
+//					return;
+//				}
 
 //				final Set<String> ownedItems = new HashSet<String>();
 //				try {

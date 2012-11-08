@@ -7,7 +7,10 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="15" />
 
+    <!--
     <uses-permission android:name="com.android.vending.BILLING" />
+    -->
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -37,6 +40,7 @@
             android:configChanges="keyboardHidden|orientation|keyboard|uiMode" >
         </activity>
 
+	<!--
         <service android:name="BillingService" />
 
         <receiver android:name="BillingReceiver" >
@@ -45,7 +49,8 @@
                 <action android:name="com.android.vending.billing.RESPONSE_CODE" />
                 <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
             </intent-filter>
-        </receiver>
+	</receiver>
+	-->
     </application>
 
 </manifest>
