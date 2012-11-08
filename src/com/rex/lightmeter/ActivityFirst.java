@@ -14,48 +14,46 @@
  * limitations under the License.
  */
 
-package com.rax.lightmeter;
+package com.rex.lightmeter;
 
-import android.content.SharedPreferences;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.rax.flurry.FlurryAgentWrapper;
+import com.rex.flurry.FlurryAgentWrapper;
+import com.rex.lightmeter.R;
 
-public class ActivitySettings extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class ActivityFirst extends Activity {
 
+	private static final boolean DEBUG = false;
 	private static final String TAG = "RaxLog";
-	private static final boolean DEBUG = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		if (DEBUG) Log.v(TAG, "ActivityFirst::onCreate");
+		setContentView(R.layout.activity_first);
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.settings);
-		
-		PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
 	}
 
 	@Override
 	protected void onStart() {
-		if (DEBUG) Log.v(TAG, "ActivitySettings::onStart");
+		if (DEBUG) Log.v(TAG, "ActivityFirst::onStart");
 		FlurryAgentWrapper.onStartSession(this);
+		startMain();
 		super.onStart();
 	}
-
+	
 	@Override
 	protected void onStop() {
-		if (DEBUG) Log.v(TAG, "ActivitySettings::onStop");
+		if (DEBUG) Log.v(TAG, "ActivityFirst::onStop");
 		FlurryAgentWrapper.onEndSession(this);
 		super.onStop();
 	}
 
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		if (DEBUG) Log.d(TAG, "ActivitySettings::onSharedPreferenceChanged key:" + key);
-		if ("CONF_ENABLE_TRACKING".equals(key)) {
-			FlurryAgentWrapper.setTrackingEnabled(this, sharedPreferences.getBoolean(key, true));
-		}
+	private void startMain() {
+		Intent intent = new Intent(ActivityFirst.this, ActivityMain.class);
+		startActivity(intent);
+		finish();
 	}
 }

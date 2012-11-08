@@ -1,16 +1,16 @@
 // Copyright 2010 Google Inc. All Rights Reserved.
 
-package com.rax.lightmeter.billing.google;
+package com.rex.lightmeter.billing.google;
 
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.rax.lightmeter.billing.google.BillingService.RequestPurchase;
-import com.rax.lightmeter.billing.google.BillingService.RestoreTransactions;
-import com.rax.lightmeter.billing.google.Consts.PurchaseState;
-import com.rax.lightmeter.billing.google.Consts.ResponseCode;
+import com.rex.lightmeter.billing.google.BillingService.RequestPurchase;
+import com.rex.lightmeter.billing.google.BillingService.RestoreTransactions;
+import com.rex.lightmeter.billing.google.Consts.PurchaseState;
+import com.rex.lightmeter.billing.google.Consts.ResponseCode;
 
 /**
  * This class contains the methods that handle responses from Android Market.  The

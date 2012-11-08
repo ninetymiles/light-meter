@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rax.lightmeter"
+    package="com.rex.lightmeter"
     android:versionCode="1"
     android:versionName="1.0.x" >
 
@@ -36,7 +36,7 @@
             android:configChanges="keyboardHidden|orientation|keyboard|uiMode" >
         </activity>
         <activity
-            android:name="com.rax.lightmeter.ActivitySettings"
+            android:name=".ActivitySettings"
             android:configChanges="keyboardHidden|orientation|keyboard|uiMode" >
         </activity>
 

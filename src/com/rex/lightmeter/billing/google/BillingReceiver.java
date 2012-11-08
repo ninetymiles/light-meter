@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.rax.lightmeter.billing.google;
+package com.rex.lightmeter.billing.google;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.rax.lightmeter.billing.google.Consts.ResponseCode;
+import com.rex.lightmeter.billing.google.Consts.ResponseCode;
 
 /**
  * This class implements the broadcast receiver for in-app billing. All

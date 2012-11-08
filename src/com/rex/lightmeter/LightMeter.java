@@ -1,6 +1,7 @@
-package com.rax.lightmeter;
+package com.rex.lightmeter;
 
 import android.util.Log;
+import com.rex.lightmeter.R;
 
 
 /*

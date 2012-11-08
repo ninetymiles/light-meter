@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.rax.lightmeter.tests;
+package com.rex.lightmeter.tests;
 
 import android.test.InstrumentationTestCase;
 
-import com.rax.lightmeter.LightMeter;
-import com.rax.lightmeter.LightMeter.STEP;
+import com.rex.lightmeter.LightMeter;
+import com.rex.lightmeter.LightMeter.STEP;
 
 public class LightMeterBaseTest extends InstrumentationTestCase {
 

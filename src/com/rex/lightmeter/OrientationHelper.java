@@ -1,4 +1,4 @@
-package com.rax.lightmeter;
+package com.rex.lightmeter;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.util.Log;
 import android.view.Surface;
+import com.rex.lightmeter.R;
 
 
 /*

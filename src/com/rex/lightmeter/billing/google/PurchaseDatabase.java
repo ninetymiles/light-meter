@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.rax.lightmeter.billing.google;
+package com.rex.lightmeter.billing.google;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.rax.lightmeter.billing.google.Consts.PurchaseState;
+import com.rex.lightmeter.billing.google.Consts.PurchaseState;
 
 /**
  * An example database that records the state of each purchase. You should use

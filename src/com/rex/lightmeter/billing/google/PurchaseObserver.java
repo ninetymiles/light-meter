@@ -1,6 +1,6 @@
 // Copyright 2010 Google Inc. All Rights Reserved.
 
-package com.rax.lightmeter.billing.google;
+package com.rex.lightmeter.billing.google;
 
 import java.lang.reflect.Method;
 
@@ -13,10 +13,10 @@ import android.content.IntentSender;
 import android.os.Handler;
 import android.util.Log;
 
-import com.rax.lightmeter.billing.google.BillingService.RequestPurchase;
-import com.rax.lightmeter.billing.google.BillingService.RestoreTransactions;
-import com.rax.lightmeter.billing.google.Consts.PurchaseState;
-import com.rax.lightmeter.billing.google.Consts.ResponseCode;
+import com.rex.lightmeter.billing.google.BillingService.RequestPurchase;
+import com.rex.lightmeter.billing.google.BillingService.RestoreTransactions;
+import com.rex.lightmeter.billing.google.Consts.PurchaseState;
+import com.rex.lightmeter.billing.google.Consts.ResponseCode;
 
 /**
  * An interface for observing changes related to purchases. The main application

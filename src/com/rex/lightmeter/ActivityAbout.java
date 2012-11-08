@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.rax.lightmeter;
+package com.rex.lightmeter;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -23,7 +23,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 
-import com.rax.flurry.FlurryAgentWrapper;
+import com.rex.flurry.FlurryAgentWrapper;
+import com.rex.lightmeter.R;
 
 public class ActivityAbout extends PreferenceActivity {
 

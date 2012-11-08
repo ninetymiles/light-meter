@@ -1,6 +1,6 @@
 // Copyright 2010 Google Inc. All Rights Reserved.
 
-package com.rax.lightmeter.billing.google;
+package com.rex.lightmeter.billing.google;
 
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -21,9 +21,9 @@ import org.json.JSONObject;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.rax.lightmeter.billing.google.Consts.PurchaseState;
-import com.rax.lightmeter.billing.google.util.Base64;
-import com.rax.lightmeter.billing.google.util.Base64DecoderException;
+import com.rex.lightmeter.billing.google.Consts.PurchaseState;
+import com.rex.lightmeter.billing.google.util.Base64;
+import com.rex.lightmeter.billing.google.util.Base64DecoderException;
 
 /**
  * Security-related methods. For a secure implementation, all of this code

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.rax.lightmeter.billing.google;
+package com.rex.lightmeter.billing.google;
 
 /**
  * This class holds global constants that are used throughout the application to

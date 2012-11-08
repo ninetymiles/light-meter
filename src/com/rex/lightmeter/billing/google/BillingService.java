@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.rax.lightmeter.billing.google;
+package com.rex.lightmeter.billing.google;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,9 +32,9 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.android.vending.billing.IMarketBillingService;
-import com.rax.lightmeter.billing.google.Consts.PurchaseState;
-import com.rax.lightmeter.billing.google.Consts.ResponseCode;
-import com.rax.lightmeter.billing.google.Security.VerifiedPurchase;
+import com.rex.lightmeter.billing.google.Consts.PurchaseState;
+import com.rex.lightmeter.billing.google.Consts.ResponseCode;
+import com.rex.lightmeter.billing.google.Security.VerifiedPurchase;
 
 /**
  * This class sends messages to Android Market on behalf of the application by

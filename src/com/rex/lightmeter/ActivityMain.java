@@ -1,4 +1,4 @@
-package com.rax.lightmeter;
+package com.rex.lightmeter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,15 +29,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rax.flurry.FlurryAgentWrapper;
-import com.rax.lightmeter.billing.google.BillingService;
-import com.rax.lightmeter.billing.google.BillingService.RequestPurchase;
-import com.rax.lightmeter.billing.google.BillingService.RestoreTransactions;
-import com.rax.lightmeter.billing.google.Consts;
-import com.rax.lightmeter.billing.google.Consts.PurchaseState;
-import com.rax.lightmeter.billing.google.Consts.ResponseCode;
-import com.rax.lightmeter.billing.google.PurchaseDatabase;
-import com.rax.lightmeter.billing.google.PurchaseObserver;
+import com.rex.flurry.FlurryAgentWrapper;
+import com.rex.lightmeter.R;
+import com.rex.lightmeter.billing.google.BillingService;
+import com.rex.lightmeter.billing.google.Consts;
+import com.rex.lightmeter.billing.google.PurchaseDatabase;
+import com.rex.lightmeter.billing.google.PurchaseObserver;
+import com.rex.lightmeter.billing.google.BillingService.RequestPurchase;
+import com.rex.lightmeter.billing.google.BillingService.RestoreTransactions;
+import com.rex.lightmeter.billing.google.Consts.PurchaseState;
+import com.rex.lightmeter.billing.google.Consts.ResponseCode;
 
 public class ActivityMain extends Activity implements OnClickListener, OnFocusChangeListener {
 	

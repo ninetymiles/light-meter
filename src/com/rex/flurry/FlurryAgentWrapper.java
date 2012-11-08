@@ -1,4 +1,4 @@
-package com.rax.flurry;
+package com.rex.flurry;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
-import com.rax.lightmeter.BuildConfig;
+import com.rex.lightmeter.BuildConfig;
 
 
 public final class FlurryAgentWrapper {
