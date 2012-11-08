@@ -16,12 +16,14 @@ public final class FlurryAgentWrapper {
 	private static final boolean DEBUG = false;
 	
 	private static final String PREFS_ID = "FLURRY_TRACKING_ENABLED";
-	private static final String FLURRY_KEY = "6MKC6G3R9BXBY3N84WZ4";
+	private static final String FLURRY_KEY_DEV = "6MKC6G3R9BXBY3N84WZ4";
+	private static final String FLURRY_KEY_PUB = "X5BB66QDR39R2PGFYSM9";
 	
 	private static boolean isEnableTracking = true;
 	private static boolean isInitialized = false;
 	
 	public static final void onStartSession(Context context) {
+		String flurryKey = FLURRY_KEY_DEV;
 		if (isInitialized == false) {
 			FlurryAgent.setCaptureUncaughtExceptions(false);
 			FlurryAgent.setContinueSessionMillis(15000);
@@ -32,12 +34,12 @@ public final class FlurryAgentWrapper {
 			if (DEBUG) Log.d(TAG, "FlurryAgentWrapper::onStartSession isEnableTracking:" + isEnableTracking);
 
 			Log.i(TAG, "Starting new session with key: "
-							+ FLURRY_KEY.substring(0, 4)
+							+ flurryKey.substring(0, 4)
 							+ "..."
-							+ FLURRY_KEY.substring(FLURRY_KEY.length() - 4,
-									FLURRY_KEY.length()));
+							+ flurryKey.substring(flurryKey.length() - 4,
+									flurryKey.length()));
 		}
-		if (isEnableTracking) FlurryAgent.onStartSession(context, FLURRY_KEY);
+		if (isEnableTracking) FlurryAgent.onStartSession(context, flurryKey);
 	}
 	
 	public static final void onEndSession(Context context) {

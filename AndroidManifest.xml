@@ -7,6 +7,7 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="15" />
 
+    <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -35,6 +36,16 @@
             android:name="com.rax.lightmeter.ActivitySettings"
             android:configChanges="keyboardHidden|orientation|keyboard|uiMode" >
         </activity>
+
+        <service android:name="BillingService" />
+
+        <receiver android:name="BillingReceiver" >
+            <intent-filter>
+                <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
+                <action android:name="com.android.vending.billing.RESPONSE_CODE" />
+                <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

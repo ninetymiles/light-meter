@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,6 +30,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rax.flurry.FlurryAgentWrapper;
+import com.rax.lightmeter.billing.google.BillingService;
+import com.rax.lightmeter.billing.google.BillingService.RequestPurchase;
+import com.rax.lightmeter.billing.google.BillingService.RestoreTransactions;
+import com.rax.lightmeter.billing.google.Consts;
+import com.rax.lightmeter.billing.google.Consts.PurchaseState;
+import com.rax.lightmeter.billing.google.Consts.ResponseCode;
+import com.rax.lightmeter.billing.google.PurchaseDatabase;
+import com.rax.lightmeter.billing.google.PurchaseObserver;
 
 public class ActivityMain extends Activity implements OnClickListener, OnFocusChangeListener {
 	
@@ -38,6 +48,10 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private final String PREFS_TV = "PREFS_TV";
 	private final String PREFS_ISO = "PREFS_ISO";
 	private final String PREFS_MODE = "PREFS_MODE";
+	private final String PREFS_INITIALIZED = "PREFS_INITIALIZED";
+	
+	private static final int DIALOG_CANNOT_CONNECT_ID = 1;
+	private static final int DIALOG_BILLING_NOT_SUPPORTED_ID = 2;
 	
 	private static enum Mode { UNDEFINED, TV_FIRST, FV_FIRST };
 	
@@ -68,6 +82,12 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private int mISO = 200;
 	private Mode mMode = Mode.UNDEFINED;
 
+	// Google IAP
+	private Handler mHandler;
+	private BillingService mBillingService;
+	private PurchaseDatabase mPurchaseDatabase;
+	private RaxPurchaseObserver mPurchaseObserver;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onCreate");
@@ -110,6 +130,20 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mMeter.setISO(200);
 		
 		mTextIso.setText(String.valueOf(mMeter.getISO()));
+		
+		mHandler = new Handler();
+		
+//		mPurchaseObserver = new RaxPurchaseObserver(mHandler);
+//		mBillingService = new BillingService();
+//		mBillingService.setContext(this);
+//
+//		mPurchaseDatabase = new PurchaseDatabase(this);
+//		
+//		// Check if billing is supported.
+//		ResponseHandler.register(mPurchaseObserver);
+//		if (!mBillingService.checkBillingSupported()) {
+//			showDialog(DIALOG_CANNOT_CONNECT_ID);
+//		}
 	}
 	
 	private String printShutterValue(double shutter) {
@@ -138,6 +172,9 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	protected void onStart() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onStart");
 		FlurryAgentWrapper.onStartSession(this);
+
+//		ResponseHandler.register(mPurchaseObserver);
+//		initializeOwnedItems();
 		super.onStart();
 	}
 	
@@ -145,8 +182,10 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	protected void onStop() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onStop");
 		FlurryAgentWrapper.onEndSession(this);
+//		ResponseHandler.unregister(mPurchaseObserver);
 		super.onStop();
 	}
+	
 	@Override
 	protected void onPause() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onPause");
@@ -184,6 +223,14 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 				" mFv:" + mFv + 
 				" mTv:" + mTv);
 		super.onResume();
+	}
+
+	@Override
+	protected void onDestroy() {
+		if (DEBUG) Log.v(TAG, "ActivityMain::onDestroy");
+//		mPurchaseDatabase.close();
+//		mBillingService.unbind();
+		super.onDestroy();
 	}
 
 	@Override
@@ -372,6 +419,12 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		}
 	}
 	
+	private void clearFocus() {
+		if (mTextIso.isFocused()) mTextIso.clearFocus();
+		if (mTextAperture.isFocused()) mTextAperture.clearFocus();
+		if (mTextShutter.isFocused()) mTextShutter.clearFocus();
+	}
+	
 	private OnTouchListener mTouchListener = new OnTouchListener() {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
@@ -410,9 +463,135 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		}
 	};
 	
-	private void clearFocus() {
-		if (mTextIso.isFocused()) mTextIso.clearFocus();
-		if (mTextAperture.isFocused()) mTextAperture.clearFocus();
-		if (mTextShutter.isFocused()) mTextShutter.clearFocus();
+	private class RaxPurchaseObserver extends PurchaseObserver {
+		
+		public RaxPurchaseObserver(Handler handler) {
+			super(ActivityMain.this, handler);
+		}
+
+		@Override
+		public void onBillingSupported(boolean supported, String type) {
+			if (Consts.DEBUG) {
+				Log.i(TAG, "supported: " + supported);
+			}
+			if (type == null || type.equals(Consts.ITEM_TYPE_INAPP)) {
+				if (supported) {
+					//restoreDatabase();
+					// Update UI, enable buy button
+				} else {
+					//showDialog(DIALOG_BILLING_NOT_SUPPORTED_ID);
+				}
+			}
+		}
+
+		@Override
+		public void onPurchaseStateChange(PurchaseState purchaseState,
+				String itemId, int quantity, long purchaseTime,
+				String developerPayload) {
+			if (Consts.DEBUG) {
+				Log.i(TAG, "onPurchaseStateChange() itemId: " + itemId + " "
+						+ purchaseState);
+			}
+
+			if (purchaseState == PurchaseState.PURCHASED) {
+				//mOwnedItems.add(itemId);
+			}
+		}
+
+		@Override
+		public void onRequestPurchaseResponse(RequestPurchase request,
+				ResponseCode responseCode) {
+			if (Consts.DEBUG) {
+				Log.d(TAG, request.mProductId + ": " + responseCode);
+			}
+			if (responseCode == ResponseCode.RESULT_OK) {
+				if (Consts.DEBUG) {
+					Log.i(TAG, "purchase was successfully sent to server");
+				}
+			} else if (responseCode == ResponseCode.RESULT_USER_CANCELED) {
+				if (Consts.DEBUG) {
+					Log.i(TAG, "user canceled purchase");
+				}
+			} else {
+				if (Consts.DEBUG) {
+					Log.i(TAG, "purchase failed");
+				}
+			}
+		}
+
+		@Override
+		public void onRestoreTransactionsResponse(RestoreTransactions request,
+				ResponseCode responseCode) {
+			if (responseCode == ResponseCode.RESULT_OK) {
+				if (Consts.DEBUG) {
+					Log.d(TAG, "completed RestoreTransactions request");
+				}
+				// Update the shared preferences so that we don't perform
+				// a RestoreTransactions again.
+				SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+				SharedPreferences.Editor edit = prefs.edit();
+				edit.putBoolean(PREFS_INITIALIZED, true);
+				edit.commit();
+			} else {
+				if (Consts.DEBUG) {
+					Log.d(TAG, "RestoreTransactions error: " + responseCode);
+				}
+			}
+		}
 	}
+	
+	/**
+	 * If the database has not been initialized, we send a RESTORE_TRANSACTIONS
+	 * request to Android Market to get the list of purchased items for this
+	 * user. This happens if the application has just been installed or the user
+	 * wiped data. We do not want to do this on every startup, rather, we want
+	 * to do only when the database needs to be initialized.
+	 */
+	private void restoreDatabase() {
+		SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+		boolean initialized = prefs.getBoolean(PREFS_INITIALIZED, false);
+		if (!initialized) {
+			mBillingService.restoreTransactions();
+			//Toast.makeText(this, R.string.restoring_transactions, Toast.LENGTH_LONG).show();
+		}
+	}
+
+	/**
+	 * Creates a background thread that reads the database and initializes the
+	 * set of owned items.
+	 */
+	private void initializeOwnedItems() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Cursor cursor = mPurchaseDatabase.queryAllPurchasedItems();
+				if (cursor == null) {
+					return;
+				}
+
+//				final Set<String> ownedItems = new HashSet<String>();
+//				try {
+//					int productIdCol = cursor
+//							.getColumnIndexOrThrow(PurchaseDatabase.PURCHASED_PRODUCT_ID_COL);
+//					while (cursor.moveToNext()) {
+//						String productId = cursor.getString(productIdCol);
+//						ownedItems.add(productId);
+//					}
+//				} finally {
+//					cursor.close();
+//				}
+
+				// We will add the set of owned items in a new Runnable that runs on
+				// the UI thread so that we don't need to synchronize access to
+				// mOwnedItems.
+//				mHandler.post(new Runnable() {
+//					@Override
+//					public void run() {
+//						mOwnedItems.addAll(ownedItems);
+//					}
+//				});
+			}
+		}).start();
+	}
+	
 }
