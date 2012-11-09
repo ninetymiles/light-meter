@@ -17,8 +17,8 @@
     <string name="main_radio_mode_iso">"ISO"</string>
 
     <!-- MainActivity buttons -->
-    <string name="main_button_up">"UP"</string>
-    <string name="main_button_down">"DOWN"</string>
+    <string name="main_button_up">"+"</string>
+    <string name="main_button_down">"-"</string>
     <string name="main_button_measure">"Press me to measure"</string>
 
     <!-- MainActivity menus -->
