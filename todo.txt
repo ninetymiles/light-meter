@@ -5,6 +5,7 @@ H Can set EV+ or EV- to adjust the sensor
 H Add two tab to support reflect and incidence mode
 H Use list view adapter to provide drop-down list instead of UP/DOWN button
 M Support Google Play IAP
+    Use private signature, and hash it
 M Support Amazon Market IAP
 M Pro version can detect flash light, press button to start measure, but lock on the maximum value
 M Pro version Flash light can sum multiple flash value
