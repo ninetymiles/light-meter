@@ -193,7 +193,8 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.edit()
 				.putFloat(PREFS_FV, (float) mFv)
-				.putFloat(PREFS_TV, (float) mTv).putInt(PREFS_ISO, mISO)
+				.putFloat(PREFS_TV, (float) mTv)
+				.putInt(PREFS_ISO, mISO)
 				.putInt(PREFS_MODE, mMode.ordinal())
 				.commit();
 		super.onPause();
@@ -213,6 +214,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mISO = prefs.getInt(PREFS_ISO, 200);
 		mMode = Mode.values()[prefs.getInt(PREFS_MODE, 0)];
 		setMode(mMode);
+		mTextIso.setText(String.valueOf(mISO));
 		mTextAperture.setText(String.valueOf(mFv));
 		mTextShutter.setText(printShutterValue(mTv));
 		if (DEBUG) Log.v(TAG, "ActivityMain::onResume" +
