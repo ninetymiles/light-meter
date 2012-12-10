@@ -1,7 +1,10 @@
-L Let user can send email back
+H Change orientation ISO may change
+H Show drop down list for select values
+H Make the dash line more clear
+H Can set EV+ or EV- to adjust the sensor
+H Let user can send email back
 L Share this
 L Ask for rating
-H Can set EV+ or EV- to adjust the sensor
 H Add two tab to support reflect and incidence mode
 H Use list view adapter to provide drop-down list instead of UP/DOWN button
 M Support Google Play IAP
