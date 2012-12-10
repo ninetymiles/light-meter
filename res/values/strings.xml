@@ -25,6 +25,17 @@
     <string name="menu_about">"About"</string>
     <string name="menu_setting">"Setting"</string>
     <string name="menu_feedback">"Feedback"</string>
+    <string name="menu_share">"Share"</string>
+
+    <!-- Share this app -->
+    <string name="share_this_chooser_title">"Share our app via"</string>
+    <string name="share_this_subject">"I found a cool app %1$s!"</string>
+    <string name="share_this_content">"This is a very useful tool app that can help you learn photography! It’s at: %1$s"</string>
+
+    <!-- Contact US -->
+    <string name="contact_mail_default_body_device">"[Device]: %1$s"</string>
+    <string name="contact_mail_default_body_version">"[App]: %1$s"</string>
+    <string name="contact_mail_chooser_title">"Select an application to send the email"</string>
 
     <!-- Config settins -->
     <string name="conf_category_title">"Setting"</string>
