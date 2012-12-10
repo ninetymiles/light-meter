@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +26,7 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +69,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private Button mBtnMeasure;
 	private Button mBtnUp;
 	private Button mBtnDown;
+	private ImageView mBtnDot;
 
 	private SensorManager mSensorManager;
 	private Sensor mLightSensor;
@@ -114,8 +118,8 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		
 		mBtnLayout = (LinearLayout) findViewById(R.id.main_button_layout);
 		mBtnMeasure = (Button) findViewById(R.id.main_button);
-		mBtnMeasure.setOnClickListener(this);
 		mBtnMeasure.setOnTouchListener(mTouchListener);
+		mBtnDot = (ImageView) findViewById(R.id.main_button_dot);
 		mBtnUp = (Button) findViewById(R.id.main_button_up);
 		mBtnUp.setOnClickListener(this);
 		mBtnDown = (Button) findViewById(R.id.main_button_down);
@@ -245,8 +249,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			break;
 		case R.id.menu_about:
 			startActivity(new Intent(this, ActivityAbout.class));
-			break;
-		default:
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -392,6 +394,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	protected void onSaveInstanceState(Bundle outState) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onSaveInstanceState");
 		outState.putDouble("LUX", mMeter.getLux());
+		outState.putBoolean("DOT", mBtnDot.isSelected());
 		super.onSaveInstanceState(outState);
 	}
 
@@ -401,6 +404,10 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mMeter.setLux(savedInstanceState.getDouble("LUX"));
 		mTextLux.setText(String.format("%.2f", mMeter.getLux()));
 		mTextEv.setText(String.format("%.2f", mMeter.getEv()));
+		if (savedInstanceState.getBoolean("DOT")) {
+			mBtnDot.setSelected(true);
+			doStartMeasure();
+		}
 		super.onRestoreInstanceState(savedInstanceState);
 	}
 	
@@ -422,25 +429,77 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		if (mTextShutter.isFocused()) mTextShutter.clearFocus();
 	}
 	
+	private void doStartMeasure() {
+		if (DEBUG) Log.v(TAG, "ActivityMain::doStartMeasure");
+		mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
+		FlurryAgentWrapper.logEvent("MEASURE", true);
+		//mOrientation.lock();
+		clearFocus();
+	}
+	
+	private void doStopMeasure() {
+		if (DEBUG) Log.v(TAG, "ActivityMain::doStopMeasure");
+		mSensorManager.unregisterListener(mSensorListener, mLightSensor);
+		FlurryAgentWrapper.endTimedEvent("MEASURE");
+		//mOrientation.unlock();
+	}
+	
+	private GestureDetector mGestureDetector = new GestureDetector(new SimpleOnGestureListener() {
+		
+		boolean mDownState = false;
+		
+		@Override
+		public void onLongPress(MotionEvent e) {
+			//if (DEBUG) Log.v(TAG, "ActivityMain::GestureDetector::onLongPress");
+			mBtnDot.setSelected(true);
+		}
+
+		@Override
+		public boolean onDoubleTap(MotionEvent e) {
+			//if (DEBUG) Log.v(TAG, "ActivityMain::GestureDetector::onDoubleTap e:" + e.getAction());
+			if (mDownState == false) {
+				mBtnDot.setSelected(true);
+			}
+			return super.onDoubleTap(e);
+		}
+
+		@Override
+		public boolean onSingleTapUp(MotionEvent e) {
+			//if (DEBUG) Log.v(TAG, "ActivityMain::GestureDetector::onSingleTapUp");
+			if (mBtnDot.isSelected()) {
+				mBtnDot.setSelected(false);
+				doStopMeasure();
+			}
+			return super.onSingleTapUp(e);
+		}
+
+		@Override
+		public boolean onDown(MotionEvent e) {
+			//if (DEBUG) Log.v(TAG, "ActivityMain::GestureDetector::onDown");
+			mDownState = mBtnDot.isSelected();
+			return super.onDown(e);
+		}
+	});
+	
 	private OnTouchListener mTouchListener = new OnTouchListener() {
+		
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			//if (DEBUG) Log.v(TAG, "ActivityMain::OnTouchListener::onTouch id:" + v.getId() + " action:" + event.getAction());
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
-				mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
-				FlurryAgentWrapper.logEvent("MEASURE", true);
-				mOrientation.lock();
-				clearFocus();
+				if (mBtnDot.isSelected() == false) {
+					doStartMeasure();
+				}
 				break;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
-				mSensorManager.unregisterListener(mSensorListener, mLightSensor);
-				FlurryAgentWrapper.endTimedEvent("MEASURE");
-				mOrientation.unlock();
+				if (mBtnDot.isSelected() == false) {
+					doStopMeasure();
+				}
 				break;
 			}
-			return false;
+			return mGestureDetector.onTouchEvent(event);
 		}
 	};
 	
