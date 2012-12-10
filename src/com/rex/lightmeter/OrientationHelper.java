@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.util.Log;
 import android.view.Surface;
-import com.rex.lightmeter.R;
 
 
 /*
@@ -39,21 +38,24 @@ public class OrientationHelper {
 		final int rotation = mActivity.getWindowManager().getDefaultDisplay().getRotation();
 		int value = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE;
 		
-		switch (orientation) {
-		case Configuration.ORIENTATION_PORTRAIT:
-			if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_180) {
-				value = SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-			} else {
+		if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_90) {
+			switch (orientation) {
+			case Configuration.ORIENTATION_PORTRAIT:
 				value = SCREEN_ORIENTATION_PORTRAIT;
-			}
-			break;
-		case Configuration.ORIENTATION_LANDSCAPE:
-			if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_90) {
+				break;
+			case Configuration.ORIENTATION_LANDSCAPE:
 				value = SCREEN_ORIENTATION_LANDSCAPE;
-			} else {
-				value = SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+				break;
 			}
-			break;
+		} else { // 180 and 270
+			switch (orientation) {
+			case Configuration.ORIENTATION_PORTRAIT:
+				value = SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+				break;
+			case Configuration.ORIENTATION_LANDSCAPE:
+				value = SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+				break;
+			}
 		}
 		mActivity.setRequestedOrientation(value);
 	}

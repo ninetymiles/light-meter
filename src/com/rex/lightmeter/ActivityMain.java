@@ -74,7 +74,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private SensorManager mSensorManager;
 	private Sensor mLightSensor;
 	private LightMeter mMeter;
-	private OrientationHelper mOrientation;
 	
 	private boolean mIsEnableVolumeKey = true;
 	private LightMeter.STEP mEvStep = LightMeter.STEP.THIRD;
@@ -99,7 +98,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		}
 		
 		setContentView(R.layout.activity_main);
-		mOrientation = new OrientationHelper(this);
 		
 		mTextLux = (TextView) findViewById(R.id.main_lux_value);
 		mTextEv = (TextView) findViewById(R.id.main_ev_value);
@@ -433,7 +431,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		if (DEBUG) Log.v(TAG, "ActivityMain::doStartMeasure");
 		mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
 		FlurryAgentWrapper.logEvent("MEASURE", true);
-		//mOrientation.lock();
 		clearFocus();
 	}
 	
@@ -441,7 +438,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		if (DEBUG) Log.v(TAG, "ActivityMain::doStopMeasure");
 		mSensorManager.unregisterListener(mSensorListener, mLightSensor);
 		FlurryAgentWrapper.endTimedEvent("MEASURE");
-		//mOrientation.unlock();
 	}
 	
 	private GestureDetector mGestureDetector = new GestureDetector(new SimpleOnGestureListener() {
