@@ -1,5 +1,7 @@
 package com.rex.lightmeter;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,9 +27,13 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +65,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	
 	private TextView mTextLux;
 	private TextView mTextEv;
-	private TextView mTextIso;
+	private Spinner mSpinnerIso;
 	private TextView mTextAperture;
 	private TextView mTextShutter;
 	
@@ -74,6 +80,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private SensorManager mSensorManager;
 	private Sensor mLightSensor;
 	private LightMeter mMeter;
+	private MainSpinnerItem[] mISOValue;
 	
 	private boolean mIsEnableVolumeKey = true;
 	private LightMeter.STEP mEvStep = LightMeter.STEP.THIRD;
@@ -104,9 +111,10 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		
 		mTextLux = (TextView) findViewById(R.id.main_lux_value);
 		mTextEv = (TextView) findViewById(R.id.main_ev_value);
-		mTextIso = (TextView) findViewById(R.id.main_iso_value);
-		mTextIso.setOnClickListener(this);
-		mTextIso.setOnFocusChangeListener(this);
+		
+		mSpinnerIso = (Spinner) findViewById(R.id.main_iso_value);
+		mSpinnerIso.setOnItemSelectedListener(mISOSelectedListener);
+		
 		mTextAperture = (TextView) findViewById(R.id.main_aperture_value);
 		mTextAperture.setOnClickListener(this);
 		mTextAperture.setOnFocusChangeListener(this);
@@ -132,8 +140,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 		mMeter = new LightMeter();
 		mMeter.setISO(200);
-		
-		mTextIso.setText(String.valueOf(mMeter.getISO()));
 		
 		mAnimationFadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
 		mAnimationFadeOut = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
@@ -221,7 +227,26 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mISO = prefs.getInt(PREFS_ISO, 200);
 		mMode = Mode.values()[prefs.getInt(PREFS_MODE, 0)];
 		setMode(mMode);
-		mTextIso.setText(String.valueOf(mISO));
+		
+		Integer value;
+		int position = 0;
+		List<Integer> arr = mMeter.getISOArray();
+		mISOValue = new MainSpinnerItem[arr.size()];
+		for (int i = 0; i < arr.size(); i++) {
+			value = arr.get(i);
+			mISOValue[i] = new MainSpinnerItem(value, String.valueOf(value));
+			if (value == mISO) {
+				position = i;
+			}
+		}
+		
+		ArrayAdapter<MainSpinnerItem> adapter;
+		adapter = new ArrayAdapter<MainSpinnerItem>(this, android.R.layout.simple_spinner_item, mISOValue);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		mSpinnerIso.setAdapter(adapter);
+		mSpinnerIso.setSelection(position);
+
 		mTextAperture.setText(String.valueOf(mFv));
 		mTextShutter.setText(printShutterValue(mTv));
 		if (DEBUG) Log.v(TAG, "ActivityMain::onResume" +
@@ -317,11 +342,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		switch (v.getId()) {
 		case R.id.main_button_up:
 			if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_UP");
-			if (mTextIso.isFocused()) {
-				mISO = mMeter.getNextISO();
-				mTextIso.setText(String.valueOf(mISO));
-				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mISO:" + mISO);
-			}
 			if (mTextShutter.isFocused()) {
 				mTv = mMeter.getNextShutter(mTv);
 				mTextShutter.setText(printShutterValue(mTv));
@@ -335,11 +355,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			break;
 		case R.id.main_button_down:
 			if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_DOWN");
-			if (mTextIso.isFocused()) {
-				mISO = mMeter.getPreviousISO();
-				mTextIso.setText(String.valueOf(mISO));
-				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mISO:" + mISO);
-			}
 			if (mTextShutter.isFocused()) {
 				mTv = mMeter.getPreviousShutter(mTv);
 				mTextShutter.setText(printShutterValue(mTv));
@@ -372,7 +387,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			}
 		}
 		
-		if (mTextIso.isFocused() || mTextAperture.isFocused() || mTextShutter.isFocused()) {
+		if (mSpinnerIso.isFocused() || mTextAperture.isFocused() || mTextShutter.isFocused()) {
 			if (mBtnLayout.isShown() == false) {
 				mBtnLayout.startAnimation(mAnimationFadeIn);
 				mBtnLayout.setVisibility(View.VISIBLE);
@@ -449,7 +464,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	}
 	
 	private void clearFocus() {
-		if (mTextIso.isFocused()) mTextIso.clearFocus();
+		if (mSpinnerIso.isFocused()) mSpinnerIso.clearFocus();
 		if (mTextAperture.isFocused()) mTextAperture.clearFocus();
 		if (mTextShutter.isFocused()) mTextShutter.clearFocus();
 	}
@@ -465,6 +480,21 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mSensorManager.unregisterListener(mSensorListener, mLightSensor);
 		FlurryAgentWrapper.endTimedEvent("MEASURE");
 	}
+	
+	private OnItemSelectedListener mISOSelectedListener = new OnItemSelectedListener() {
+		
+		@Override
+		public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
+			if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected position:" + position + " id:" + id);
+			if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected ISO:" + mISOValue[position]);
+			mISO = (Integer) mISOValue[position].getValue();
+		}
+		
+		@Override
+		public void onNothingSelected(AdapterView<?> parentView) {
+			if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onNothingSelected");
+		}
+	};
 	
 	private OnLongClickListener mLongClickListener = new OnLongClickListener() {
 		@Override

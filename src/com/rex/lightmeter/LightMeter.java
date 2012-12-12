@@ -1,7 +1,9 @@
 package com.rex.lightmeter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.util.Log;
-import com.rex.lightmeter.R;
 
 
 /*
@@ -125,6 +127,14 @@ public class LightMeter {
 			}
 		}
 		return matched;
+	}
+	
+	public List<Integer> getISOArray() {
+		List<Integer> arr = new ArrayList<Integer>();
+		for (int i = 0; i < sISOIndex.length; i += mStepValue) {
+			arr.add(sISOIndex[i]);
+		}
+		return arr;
 	}
 	
 	public int getNextISO() {

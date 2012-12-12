@@ -76,7 +76,7 @@
                     android:textSize="12dp" />
             </FrameLayout>
 
-            <TextView
+            <Spinner
                 android:id="@+id/main_iso_value"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
