@@ -12,6 +12,13 @@ echo "VersionName:${VERSION_NAME}"
 echo "VersionCode:${VERSION_CODE}"
 echo ""
 
+if [ x"$TARGET" = "x" ]; then
+    echo "Usage:";
+    echo "    bulid.sh TARGET";
+    echo "";
+    exit 1;
+fi
+
 if [ x"$TARGET" = "xrelease" -o x"$TARGET" = "xall" ]; then
     sed -i "/versionName/s/\".*\"/\"${VERSION_NAME}\"/" AndroidManifest.xml
     ant clean release
