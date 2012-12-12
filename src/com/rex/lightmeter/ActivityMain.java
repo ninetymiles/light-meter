@@ -23,6 +23,7 @@ import android.view.View.OnFocusChangeListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -80,6 +81,9 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private double mTv = -60;
 	private int mISO = 200;
 	private Mode mMode = Mode.UNDEFINED;
+	
+	private Animation mAnimationFadeIn;
+	private Animation mAnimationFadeOut;
 
 	// Google IAP
 //	private Handler mHandler;
@@ -130,6 +134,9 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mMeter.setISO(200);
 		
 		mTextIso.setText(String.valueOf(mMeter.getISO()));
+		
+		mAnimationFadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
+		mAnimationFadeOut = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
 		
 //		mHandler = new Handler();
 		
@@ -367,13 +374,17 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		
 		if (mTextIso.isFocused() || mTextAperture.isFocused() || mTextShutter.isFocused()) {
 			if (mBtnLayout.isShown() == false) {
-				mBtnLayout.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+				mBtnLayout.startAnimation(mAnimationFadeIn);
 				mBtnLayout.setVisibility(View.VISIBLE);
+				mBtnDot.startAnimation(mAnimationFadeOut);
+				mBtnDot.setVisibility(View.GONE);
 			}
 		} else {
 			if (mBtnLayout.isShown()) {
-				mBtnLayout.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
+				mBtnLayout.startAnimation(mAnimationFadeOut);
 				mBtnLayout.setVisibility(View.GONE);
+				mBtnDot.startAnimation(mAnimationFadeIn);
+				mBtnDot.setVisibility(View.VISIBLE);
 			}
 		}
 	}
@@ -447,7 +458,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		if (DEBUG) Log.v(TAG, "ActivityMain::doStartMeasure");
 		mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
 		FlurryAgentWrapper.logEvent("MEASURE", true);
-		clearFocus();
 	}
 	
 	private void doStopMeasure() {
@@ -475,6 +485,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 				if (mBtnDot.isSelected() == false) {
 					doStartMeasure();
 				}
+				clearFocus();
 				break;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
