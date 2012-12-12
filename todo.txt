@@ -1,8 +1,6 @@
 H Show drop down list for select values
 H Make the dash line more clear
 H Can set EV+ or EV- to adjust the sensor
-H Translate new strings
-H Fix toggle icon position incorrect on Android 2.2/2.3
 L Ask for rating
 H Add two tab to support reflect and incidence mode
 H Use list view adapter to provide drop-down list instead of UP/DOWN button

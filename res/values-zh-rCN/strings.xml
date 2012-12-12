@@ -25,6 +25,17 @@
     <string name="menu_about">"关于"</string>
     <string name="menu_setting">"设置"</string>
     <string name="menu_feedback">"反馈"</string>
+    <string name="menu_share">"分享"</string>
+    
+    <!-- Share this app -->
+    <string name="share_this_chooser_title">"分享我们的应用"</string>
+    <string name="share_this_subject">"我找到一个很酷的应用 %1$s !"</string>
+    <string name="share_this_content">"这是一个很有用的小工具能帮助你学习摄影技术哦，在这里可以下载 %1$s"</string>
+
+    <!-- Contact US -->
+    <string name="contact_mail_default_body_device">"[Device]: %1$s"</string>
+    <string name="contact_mail_default_body_version">"[App]: %1$s"</string>
+    <string name="contact_mail_chooser_title">"选择一个应用以发送Email"</string>
 
     <!-- Config settins -->
     <string name="conf_category_title">"设置"</string>
