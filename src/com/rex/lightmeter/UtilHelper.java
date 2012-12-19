@@ -70,7 +70,7 @@ public class UtilHelper {
 		
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("text/plain"); // Can show "Facebook" or "Twitter"
-		intent.putExtra(Intent.EXTRA_SUBJECT,  String.format(context.getString(R.string.share_this_subject, productName)));
+		intent.putExtra(Intent.EXTRA_SUBJECT, String.format(context.getString(R.string.share_this_subject), productName));
 		intent.putExtra(Intent.EXTRA_TEXT,  defaultBody);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_this_chooser_title)));

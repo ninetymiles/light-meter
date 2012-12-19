@@ -137,6 +137,22 @@ public class LightMeter {
 		return arr;
 	}
 	
+	public List<Double> getApertureArray() {
+		List<Double> arr = new ArrayList<Double>();
+		for (int i = 0; i < sApertureIndex.length; i += mStepValue) {
+			arr.add(sApertureIndex[i]);
+		}
+		return arr;
+	}
+	
+	public List<Double> getShutterArray() {
+		List<Double> arr = new ArrayList<Double>();
+		for (int i = 0; i < sShutterIndex.length; i += mStepValue) {
+			arr.add(sShutterIndex[i]);
+		}
+		return arr;
+	}
+	
 	public int getNextISO() {
 		int value = mISO;
 		int index = findIndexByValue(mISO, sISOIndex);

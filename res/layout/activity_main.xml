@@ -80,7 +80,6 @@
                 android:id="@+id/main_iso_value"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_lcd_text_background_selector"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:padding="6dp"
@@ -113,12 +112,11 @@
                     android:textSize="12dp" />
             </FrameLayout>
 
-            <TextView
+            <Spinner
                 android:id="@+id/main_shutter_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/main_lcd_text_background_selector"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:padding="6dp"
@@ -152,13 +150,12 @@
                     android:textSize="12dp" />
             </FrameLayout>
 
-            <TextView
+            <Spinner
                 android:id="@+id/main_aperture_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.8"
-                android:background="@drawable/main_lcd_text_background_selector"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:padding="6dp"

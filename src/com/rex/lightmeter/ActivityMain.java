@@ -66,8 +66,8 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private TextView mTextLux;
 	private TextView mTextEv;
 	private Spinner mSpinnerIso;
-	private TextView mTextAperture;
-	private TextView mTextShutter;
+	private Spinner mSpinnerAperture;
+	private Spinner mSpinnerShutter;
 	
 	private LinearLayout mLcdLayout;
 	private LinearLayout mBtnLayout;
@@ -81,6 +81,12 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private Sensor mLightSensor;
 	private LightMeter mMeter;
 	private MainSpinnerItem[] mISOValue;
+	private MainSpinnerItem[] mApertureValue;
+	private MainSpinnerItem[] mShutterValue;
+	
+	private List<Integer> mArrISO;
+	private List<Double> mArrAperture;
+	private List<Double> mArrShutter;
 	
 	private boolean mIsEnableVolumeKey = true;
 	private LightMeter.STEP mEvStep = LightMeter.STEP.THIRD;
@@ -115,12 +121,10 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mSpinnerIso = (Spinner) findViewById(R.id.main_iso_value);
 		mSpinnerIso.setOnItemSelectedListener(mISOSelectedListener);
 		
-		mTextAperture = (TextView) findViewById(R.id.main_aperture_value);
-		mTextAperture.setOnClickListener(this);
-		mTextAperture.setOnFocusChangeListener(this);
-		mTextShutter = (TextView) findViewById(R.id.main_shutter_value);
-		mTextShutter.setOnClickListener(this);
-		mTextShutter.setOnFocusChangeListener(this);
+		mSpinnerAperture = (Spinner) findViewById(R.id.main_aperture_value);
+		mSpinnerAperture.setOnItemSelectedListener(mISOSelectedListener);
+		mSpinnerShutter = (Spinner) findViewById(R.id.main_shutter_value);
+		mSpinnerShutter.setOnItemSelectedListener(mISOSelectedListener);
 		
 		mLcdLayout = (LinearLayout) findViewById(R.id.main_lcd_layout);
 		mLcdLayout.setOnClickListener(this);
@@ -230,25 +234,58 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		
 		Integer value;
 		int position = 0;
-		List<Integer> arr = mMeter.getISOArray();
-		mISOValue = new MainSpinnerItem[arr.size()];
-		for (int i = 0; i < arr.size(); i++) {
-			value = arr.get(i);
+		
+		mArrISO = mMeter.getISOArray();
+		mISOValue = new MainSpinnerItem[mArrISO.size()];
+		for (int i = 0; i < mArrISO.size(); i++) {
+			value = mArrISO.get(i);
 			mISOValue[i] = new MainSpinnerItem(value, String.valueOf(value));
 			if (value == mISO) {
 				position = i;
 			}
 		}
 		
-		ArrayAdapter<MainSpinnerItem> adapter;
-		adapter = new ArrayAdapter<MainSpinnerItem>(this, android.R.layout.simple_spinner_item, mISOValue);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<MainSpinnerItem> adapterISO;
+		adapterISO = new ArrayAdapter<MainSpinnerItem>(this, android.R.layout.simple_spinner_item, mISOValue);
+		adapterISO.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
-		mSpinnerIso.setAdapter(adapter);
+		mSpinnerIso.setAdapter(adapterISO);
 		mSpinnerIso.setSelection(position);
-
-		mTextAperture.setText(String.valueOf(mFv));
-		mTextShutter.setText(printShutterValue(mTv));
+		
+		Double aperture;
+		mArrAperture = mMeter.getApertureArray();
+		mApertureValue = new MainSpinnerItem[mArrAperture.size()];
+		for (int i = 0; i < mArrAperture.size(); i++) {
+			aperture = mArrAperture.get(i);
+			mApertureValue[i] = new MainSpinnerItem(aperture, String.valueOf(aperture));
+			if (aperture == mFv) {
+				position = i;
+			}
+		}
+		ArrayAdapter<MainSpinnerItem> adapterAperture;
+		adapterAperture = new ArrayAdapter<MainSpinnerItem>(this, android.R.layout.simple_spinner_item, mApertureValue);
+		adapterAperture.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		mSpinnerAperture.setAdapter(adapterAperture);
+		mSpinnerAperture.setSelection(position);
+		
+		Double shutter;
+		mArrShutter = mMeter.getShutterArray();
+		mShutterValue = new MainSpinnerItem[mArrShutter.size()];
+		for (int i = 0; i < mArrShutter.size(); i++) {
+			shutter = mArrShutter.get(i);
+			mShutterValue[i] = new MainSpinnerItem(shutter, printShutterValue(shutter));
+			if (shutter == mTv) {
+				position = i;
+			}
+		}
+		ArrayAdapter<MainSpinnerItem> adapterShutter;
+		adapterShutter = new ArrayAdapter<MainSpinnerItem>(this, android.R.layout.simple_spinner_item, mShutterValue);
+		adapterShutter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		mSpinnerShutter.setAdapter(adapterShutter);
+		mSpinnerShutter.setSelection(position);
+		
 		if (DEBUG) Log.v(TAG, "ActivityMain::onResume" +
 				" mIsEnableVolumeKey:" + mIsEnableVolumeKey + 
 				" mEvStep:" + mEvStep +
@@ -330,8 +367,8 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			shutter = mMeter.getShutterByAperture(aperture);
 			break;
 		}
-		mTextAperture.setText(String.valueOf(aperture));
-		mTextShutter.setText(printShutterValue(shutter));
+		mSpinnerAperture.setSelection(mArrAperture.indexOf(aperture));
+		mSpinnerShutter.setSelection(mArrShutter.indexOf(shutter));
 		mTv = shutter;
 		mFv = aperture;
 	}
@@ -342,29 +379,9 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		switch (v.getId()) {
 		case R.id.main_button_up:
 			if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_UP");
-			if (mTextShutter.isFocused()) {
-				mTv = mMeter.getNextShutter(mTv);
-				mTextShutter.setText(printShutterValue(mTv));
-				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mTv:" + mTv);
-			}
-			if (mTextAperture.isFocused()) {
-				mFv = mMeter.getNextAperture(mFv);
-				mTextAperture.setText(String.valueOf(mFv));
-				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mFv:" + mFv);
-			}
 			break;
 		case R.id.main_button_down:
 			if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_DOWN");
-			if (mTextShutter.isFocused()) {
-				mTv = mMeter.getPreviousShutter(mTv);
-				mTextShutter.setText(printShutterValue(mTv));
-				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mTv:" + mTv);
-			}
-			if (mTextAperture.isFocused()) {
-				mFv = mMeter.getPreviousAperture(mFv);
-				mTextAperture.setText(String.valueOf(mFv));
-				if (DEBUG) Log.v(TAG, "ActivityMain::onClick mFv:" + mFv);
-			}
 			break;
 		case R.id.main_button:
 			if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_MEASURE");
@@ -387,7 +404,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			}
 		}
 		
-		if (mSpinnerIso.isFocused() || mTextAperture.isFocused() || mTextShutter.isFocused()) {
+		if (mSpinnerIso.isFocused() || mSpinnerAperture.isFocused() || mSpinnerShutter.isFocused()) {
 			if (mBtnLayout.isShown() == false) {
 				mBtnLayout.startAnimation(mAnimationFadeIn);
 				mBtnLayout.setVisibility(View.VISIBLE);
@@ -463,10 +480,11 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		}
 	}
 	
+	// FIXME: Should remove this
 	private void clearFocus() {
 		if (mSpinnerIso.isFocused()) mSpinnerIso.clearFocus();
-		if (mTextAperture.isFocused()) mTextAperture.clearFocus();
-		if (mTextShutter.isFocused()) mTextShutter.clearFocus();
+		if (mSpinnerAperture.isFocused()) mSpinnerAperture.clearFocus();
+		if (mSpinnerShutter.isFocused()) mSpinnerShutter.clearFocus();
 	}
 	
 	private void doStartMeasure() {
@@ -485,9 +503,26 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		
 		@Override
 		public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-			if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected position:" + position + " id:" + id);
-			if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected ISO:" + mISOValue[position]);
-			mISO = (Integer) mISOValue[position].getValue();
+			if (DEBUG) {
+				Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected" +
+					" parentView:" + parentView.getId() + 
+					" position:" + position + 
+					" id:" + id);
+			}
+			switch (parentView.getId()) {
+			case R.id.main_iso_value:
+				if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected ISO:" + mISOValue[position]);
+				mISO = (Integer) mISOValue[position].getValue();
+				break;
+			case R.id.main_aperture_value:
+				if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected Aperture:" + mApertureValue[position]);
+				mFv = (Double) mApertureValue[position].getValue();
+				break;
+			case R.id.main_shutter_value:
+				if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected Shutter:" + mShutterValue[position]);
+				mTv = (Double) mShutterValue[position].getValue();
+				break;
+			}
 		}
 		
 		@Override
