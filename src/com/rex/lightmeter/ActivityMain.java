@@ -25,8 +25,6 @@ import android.view.View.OnFocusChangeListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -69,12 +67,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private Spinner mSpinnerAperture;
 	private Spinner mSpinnerShutter;
 	
-	private LinearLayout mLcdLayout;
-	private LinearLayout mBtnLayout;
-	
 	private Button mBtnMeasure;
-	private Button mBtnUp;
-	private Button mBtnDown;
 	private ImageView mBtnDot;
 
 	private SensorManager mSensorManager;
@@ -94,9 +87,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private double mTv = -60;
 	private int mISO = 200;
 	private Mode mMode = Mode.UNDEFINED;
-	
-	private Animation mAnimationFadeIn;
-	private Animation mAnimationFadeOut;
 
 	// Google IAP
 //	private Handler mHandler;
@@ -119,34 +109,23 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mTextEv = (TextView) findViewById(R.id.main_ev_value);
 		
 		mSpinnerIso = (Spinner) findViewById(R.id.main_iso_value);
-		mSpinnerIso.setOnItemSelectedListener(mISOSelectedListener);
+		mSpinnerIso.setOnItemSelectedListener(mSpinnerSelectedListener);
 		
 		mSpinnerAperture = (Spinner) findViewById(R.id.main_aperture_value);
-		mSpinnerAperture.setOnItemSelectedListener(mISOSelectedListener);
+		mSpinnerAperture.setOnItemSelectedListener(mSpinnerSelectedListener);
 		mSpinnerShutter = (Spinner) findViewById(R.id.main_shutter_value);
-		mSpinnerShutter.setOnItemSelectedListener(mISOSelectedListener);
+		mSpinnerShutter.setOnItemSelectedListener(mSpinnerSelectedListener);
 		
-		mLcdLayout = (LinearLayout) findViewById(R.id.main_lcd_layout);
-		mLcdLayout.setOnClickListener(this);
-		
-		mBtnLayout = (LinearLayout) findViewById(R.id.main_button_layout);
 		mBtnMeasure = (Button) findViewById(R.id.main_button);
 		mBtnMeasure.setOnTouchListener(mTouchListener);
 		mBtnMeasure.setOnClickListener(this);
 		mBtnMeasure.setOnLongClickListener(mLongClickListener);
 		mBtnDot = (ImageView) findViewById(R.id.main_button_dot);
-		mBtnUp = (Button) findViewById(R.id.main_button_up);
-		mBtnUp.setOnClickListener(this);
-		mBtnDown = (Button) findViewById(R.id.main_button_down);
-		mBtnDown.setOnClickListener(this);
 		
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 		mMeter = new LightMeter();
 		mMeter.setISO(200);
-		
-		mAnimationFadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
-		mAnimationFadeOut = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
 		
 //		mHandler = new Handler();
 		
@@ -377,12 +356,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	public void onClick(View v) {
 		//if (DEBUG) Log.v(TAG, "ActivityMain::onClick id:" + v.getId());
 		switch (v.getId()) {
-		case R.id.main_button_up:
-			if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_UP");
-			break;
-		case R.id.main_button_down:
-			if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_DOWN");
-			break;
 		case R.id.main_button:
 			if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_MEASURE");
 			if (mBtnDot.isSelected()) {
@@ -403,22 +376,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			case R.id.main_shutter_value: setMode(Mode.TV_FIRST); break;
 			}
 		}
-		
-		if (mSpinnerIso.isFocused() || mSpinnerAperture.isFocused() || mSpinnerShutter.isFocused()) {
-			if (mBtnLayout.isShown() == false) {
-				mBtnLayout.startAnimation(mAnimationFadeIn);
-				mBtnLayout.setVisibility(View.VISIBLE);
-				mBtnDot.startAnimation(mAnimationFadeOut);
-				mBtnDot.setVisibility(View.GONE);
-			}
-		} else {
-			if (mBtnLayout.isShown()) {
-				mBtnLayout.startAnimation(mAnimationFadeOut);
-				mBtnLayout.setVisibility(View.GONE);
-				mBtnDot.startAnimation(mAnimationFadeIn);
-				mBtnDot.setVisibility(View.VISIBLE);
-			}
-		}
 	}
 	
 	@Override
@@ -428,11 +385,11 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		if (mIsEnableVolumeKey) {
 			switch (keyCode) {
 			case KeyEvent.KEYCODE_VOLUME_DOWN:
-				mBtnDown.performClick();
+				// TODO: Select current spinner position + 1
 				handled = true;
 				break;
 			case KeyEvent.KEYCODE_VOLUME_UP:
-				mBtnUp.performClick();
+				// TODO: Select current spinner position - 1
 				handled = true;
 				break;
 			}
@@ -499,7 +456,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		FlurryAgentWrapper.endTimedEvent("MEASURE");
 	}
 	
-	private OnItemSelectedListener mISOSelectedListener = new OnItemSelectedListener() {
+	private OnItemSelectedListener mSpinnerSelectedListener = new OnItemSelectedListener() {
 		
 		@Override
 		public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {

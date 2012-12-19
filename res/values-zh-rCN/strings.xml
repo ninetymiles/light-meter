@@ -17,8 +17,6 @@
     <string name="main_radio_mode_iso">"ISO"</string>
 
     <!-- MainActivity buttons -->
-    <string name="main_button_up">"+"</string>
-    <string name="main_button_down">"-"</string>
     <string name="main_button_measure">"按下测量"</string>
 
     <!-- MainActivity menus -->

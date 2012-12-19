@@ -5,7 +5,6 @@
     android:padding="12dp" >
 
     <LinearLayout
-        android:id="@+id/main_lcd_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/main_lcd_background"
@@ -164,12 +163,6 @@
                 android:textSize="36dp"
                 android:textStyle="bold" />
         </LinearLayout>
-
-        <!-- <ImageView -->
-        <!-- android:layout_width="match_parent" -->
-        <!-- android:layout_height="2dp" -->
-        <!-- android:layout_marginTop="8dp" -->
-        <!-- android:src="@drawable/main_lcd_text_underline" /> -->
     </LinearLayout>
 
     <FrameLayout
@@ -194,31 +187,6 @@
             android:layout_marginTop="16dp"
             android:src="@drawable/main_button_dot_selector" >
         </ImageView>
-
-        <LinearLayout
-            android:id="@+id/main_button_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/main_option_border"
-            android:orientation="horizontal"
-            android:visibility="gone" >
-
-            <Button
-                android:id="@+id/main_button_up"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/main_button_up" >
-            </Button>
-
-            <Button
-                android:id="@+id/main_button_down"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/main_button_down" >
-            </Button>
-        </LinearLayout>
     </FrameLayout>
 
 </LinearLayout>
