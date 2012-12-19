@@ -19,7 +19,6 @@ package com.rex.lightmeter.tests;
 import android.test.InstrumentationTestCase;
 
 import com.rex.lightmeter.LightMeter;
-import com.rex.lightmeter.LightMeter.STEP;
 
 public class LightMeterBaseTest extends InstrumentationTestCase {
 
@@ -45,92 +44,6 @@ public class LightMeterBaseTest extends InstrumentationTestCase {
 		assertEquals(0d, mMeter.setLux(Math.pow(2, 0) * 2.5));
 		assertEquals(10d, mMeter.setLux(Math.pow(2, 10) * 2.5));
 		assertEquals(3d, mMeter.setLux(Math.pow(2, 3) * 2.5));
-	}
-	
-	public void testResetISO() throws Exception {
-		mMeter.setISO(200);
-		assertEquals(200, mMeter.resetISO());
-		
-		mMeter.setISO(250);
-		assertEquals(200, mMeter.resetISO());
-		
-		mMeter.setISO(300);
-		assertEquals(200, mMeter.resetISO());
-		
-		mMeter.setISO(320);
-		assertEquals(200, mMeter.resetISO());
-	}
-	
-	public void testGetNextISO() throws Exception {
-		mMeter.setISO(200);
-		mMeter.setStep(STEP.THIRD);
-		
-		assertEquals(250, mMeter.getNextISO());
-		assertEquals(320, mMeter.getNextISO());
-		assertEquals(400, mMeter.getNextISO());
-	}
-	
-	public void testGetPriviousISO() throws Exception {
-		mMeter.setISO(200);
-		mMeter.setStep(STEP.FULL);
-		assertEquals(100, mMeter.getPreviousISO());
-		
-		mMeter.setStep(STEP.HALF);
-		assertEquals(75, mMeter.getPreviousISO());
-		
-		mMeter.setStep(STEP.FULL);
-		assertEquals(50, mMeter.getPreviousISO());
-	}
-	
-	public void testResetAperture() throws Exception {
-		assertEquals(5.6d, mMeter.resetAperture(5.6d));
-		assertEquals(5.6d, mMeter.resetAperture(6.3d));
-		assertEquals(5.6d, mMeter.resetAperture(6.7d));
-		assertEquals(5.6d, mMeter.resetAperture(7.1d));
-	}
-	
-	public void testGetNextAperture() throws Exception {
-		mMeter.setStep(STEP.THIRD);
-		assertEquals(9d, mMeter.getNextAperture(8d));
-		assertEquals(10d, mMeter.getNextAperture(9d));
-		assertEquals(11d, mMeter.getNextAperture(10d));
-		
-		// F1 - 1/2 EV and F1 - 2/3 EV are both F1.2
-		assertEquals(1.1d, mMeter.getNextAperture(1.0d));
-		assertEquals(1.2d, mMeter.getNextAperture(1.1d));
-		assertEquals(1.4d, mMeter.getNextAperture(1.2d));
-	}
-	
-	public void testGetPriviousAperture() throws Exception {
-		mMeter.setStep(STEP.FULL);
-		assertEquals(4d, mMeter.getPreviousAperture(5.6d));
-		assertEquals(1d, mMeter.getPreviousAperture(1d));
-		
-		mMeter.setStep(STEP.HALF);
-		assertEquals(4.8d, mMeter.getPreviousAperture(5.6d));
-	}
-	
-	public void testResetShutter() throws Exception {
-		assertEquals(60d, mMeter.resetShutter(60));
-		assertEquals(60d, mMeter.resetShutter(80));
-		assertEquals(60d, mMeter.resetShutter(100));
-		assertEquals(-2000d, mMeter.resetShutter(-1500));
-	}
-	
-	public void testGetNextShutter() throws Exception {
-		mMeter.setStep(STEP.THIRD);
-		assertEquals(80d, mMeter.getNextShutter(60));
-		assertEquals(100d, mMeter.getNextShutter(80));
-		assertEquals(120d, mMeter.getNextShutter(100));
-	}
-	
-	public void testGetPriviousShutter() throws Exception {
-		mMeter.setStep(STEP.FULL);
-		assertEquals(30d, mMeter.getPreviousShutter(60));
-		assertEquals(15d, mMeter.getPreviousShutter(30));
-		
-		mMeter.setStep(STEP.HALF);
-		assertEquals(-8000d, mMeter.getPreviousShutter(-6000));
 	}
 	
 	public void testGetMatchAperture() throws Exception {
