@@ -35,10 +35,11 @@
                 android:id="@+id/main_lux_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:text="--"
                 android:textColor="@android:color/black"
-                android:textSize="20dp" />
+                android:textSize="16dp" />
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -57,10 +58,11 @@
                 android:id="@+id/main_ev_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:text="--"
                 android:textColor="@android:color/black"
-                android:textSize="20dp" />
+                android:textSize="16dp" />
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -78,7 +80,7 @@
             <Spinner
                 android:id="@+id/main_iso_value"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:prompt="@string/main_label_iso_prompt" />
         </LinearLayout>
@@ -110,7 +112,7 @@
             <Spinner
                 android:id="@+id/main_shutter_value"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:prompt="@string/main_label_shutter_prompt" />
@@ -143,7 +145,7 @@
             <Spinner
                 android:id="@+id/main_aperture_value"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.8"
                 android:prompt="@string/main_label_aperture_prompt" />
