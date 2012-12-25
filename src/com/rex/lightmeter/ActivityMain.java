@@ -117,8 +117,12 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		
 		mSpinnerAperture = (Spinner) findViewById(R.id.main_aperture_value);
 		mSpinnerAperture.setOnItemSelectedListener(mSpinnerSelectedListener);
+		mSpinnerAperture.setOnFocusChangeListener(this);
+		mSpinnerAperture.setFocusableInTouchMode(true);
 		mSpinnerShutter = (Spinner) findViewById(R.id.main_shutter_value);
 		mSpinnerShutter.setOnItemSelectedListener(mSpinnerSelectedListener);
+		mSpinnerShutter.setOnFocusChangeListener(this);
+		mSpinnerShutter.setFocusableInTouchMode(true);
 		
 		mBtnMeasure = (Button) findViewById(R.id.main_button);
 		mBtnMeasure.setOnTouchListener(mTouchListener);
@@ -467,7 +471,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		
 		@Override
 		public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-			if (DEBUG) {
+			if (DEBUG && false) {
 				Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected" +
 					" parentView:" + parentView.getId() + 
 					" position:" + position + 
