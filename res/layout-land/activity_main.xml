@@ -38,7 +38,7 @@
                 android:layout_weight="1"
                 android:text="--"
                 android:textColor="@android:color/black"
-                android:textSize="20dp" />
+                android:textSize="24dp" />
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
                 android:layout_weight="1"
                 android:text="--"
                 android:textColor="@android:color/black"
-                android:textSize="20dp" />
+                android:textSize="24dp" />
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -79,12 +79,8 @@
                 android:id="@+id/main_iso_value"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:padding="6dp"
-                android:text="100"
-                android:textColor="@android:color/black"
-                android:textSize="24dp" />
+                android:layout_gravity="center_vertical"
+                android:prompt="@string/main_label_iso_prompt" />
         </LinearLayout>
 
         <LinearLayout
@@ -95,7 +91,7 @@
 
             <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="3dp" >
 
                 <TextView
@@ -115,18 +111,13 @@
                 android:id="@+id/main_shutter_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:padding="6dp"
-                android:text="1/60"
-                android:textColor="@android:color/black"
-                android:textSize="36dp"
-                android:textStyle="bold" />
+                android:prompt="@string/main_label_shutter_prompt" />
 
             <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="3dp" >
 
                 <TextView
@@ -148,13 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.8"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:padding="6dp"
-                android:text="8"
-                android:textColor="@android:color/black"
-                android:textSize="36dp"
-                android:textStyle="bold" />
+                android:prompt="@string/main_label_aperture_prompt" />
         </LinearLayout>
     </LinearLayout>
 
@@ -175,6 +160,7 @@
             android:id="@+id/main_button_dot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="top"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/main_button_dot_selector" >

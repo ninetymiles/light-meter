@@ -7,6 +7,9 @@
     <string name="main_label_lux">"Lx"</string>
     <string name="main_label_ev">"EV"</string>
     <string name="main_label_iso">"ISO"</string>
+    <string name="main_label_shutter_prompt">"Shutter value"</string>
+    <string name="main_label_aperture_prompt">"Aperture value"</string>
+    <string name="main_label_iso_prompt">"ISO value"</string>
 
     <!-- MainActivity labels in setting -->
     <string name="main_label_aperture">"Aperture:"</string>
@@ -48,7 +51,7 @@
 
     <!-- Dialogs -->
     <string name="dlg_ev_step_title">"Choose a step value"</string>
-    
+
     <!-- Toast -->
     <string name="toast_quit">"Press again to quit"</string>
 
@@ -57,5 +60,5 @@
     <string name="about_app_summary">"© 2012 RexStudio All rights reserved."</string>
     <string name="about_version_title">"Version"</string>
     <string name="about_version_summary">"%1$s"</string>
-    
+
 </resources>

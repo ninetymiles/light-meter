@@ -1,4 +1,7 @@
-H Show drop down list for select values
+H Volume key to select the drop down list
+H Over explose, should select - item
+H Fix spinner size issue
+H Correct prompt for Spinner, and translate
 H Make the dash line more clear
 H Can set EV+ or EV- to adjust the sensor
 L Ask for rating
