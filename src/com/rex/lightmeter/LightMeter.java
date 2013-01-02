@@ -76,7 +76,7 @@ public class LightMeter {
 		}
 	}
 	
-	// Return 0 means invalid
+	// Return valid results or MIN MAX
 	public double getShutterByAperture(double N) {
 		if (DEBUG) Log.v(TAG, "LightMeter::getShutterByAperture N:" + N + " mEv:" + mEv);
 		double t = (N * N * 250) / (mLux * mISO);
@@ -85,7 +85,7 @@ public class LightMeter {
 		return getMatchShutter(t);
 	}
 	
-	// Return 0 for invalid result
+	// Return valid results or MIN MAX
 	public double getApertureByShutter(double t) {
 		if (DEBUG) Log.v(TAG, "LightMeter::getApertureByShutter t:" + t);
 		double T = (t < 0) ? -1 / t : t;
@@ -99,6 +99,9 @@ public class LightMeter {
 		if (MIN_APERTURE_VALUE <= value && value <= MAX_APERTURE_VALUE) {
 			matched = getMatchFromArray(value, sApertureIndex);
 			if (DEBUG) Log.v(TAG, "LightMeter::getMatchAperture matched:" + matched);
+		} else {
+			if (value <= MIN_APERTURE_VALUE) matched = MIN_APERTURE_VALUE;
+			if (value >= MAX_APERTURE_VALUE) matched = MAX_APERTURE_VALUE;
 		}
 		return matched;
 	}
@@ -108,6 +111,9 @@ public class LightMeter {
 		if (MIN_SHUTTER_VALUE <= value && value <= MAX_SHUTTER_VALUE) {
 			matched = getMatchFromArray(value, sShutterIndex);
 			if (DEBUG) Log.v(TAG, "LightMeter::getMatchShutter matched:" + matched);
+		} else {
+			if (value <= MIN_SHUTTER_VALUE) matched = MIN_SHUTTER_VALUE;
+			if (value >= MAX_SHUTTER_VALUE) matched = MAX_SHUTTER_VALUE;
 		}
 		return matched;
 	}
@@ -118,7 +124,7 @@ public class LightMeter {
 		double diff = Double.MAX_VALUE;
 		double matched = 0;
 		value = (value < 0) ? -1 / value : value;
-		for (int i = 0; i < arr.length; i++) {
+		for (int i = 0; i < arr.length; i+= mStepValue) {
 			v = (arr[i] < 0) ? -1 / arr[i] : arr[i];
 			//if (DEBUG) Log.v(TAG, "LightMeter::getMatchFromArray arr[i]:" + arr[i] + " v:" + String.format("%.6f", v) + " diff:" + String.format("%.6f", Math.abs(value - v)));
 			if (Math.abs(value - v) < diff) {
@@ -139,22 +145,26 @@ public class LightMeter {
 	
 	public List<Double> getApertureArray() {
 		List<Double> arr = new ArrayList<Double>();
+		arr.add(MIN_APERTURE_VALUE);
 		for (int i = 0; i < sApertureIndex.length; i += mStepValue) {
 			arr.add(sApertureIndex[i]);
 		}
+		arr.add(MAX_APERTURE_VALUE);
 		return arr;
 	}
 	
 	public List<Double> getShutterArray() {
 		List<Double> arr = new ArrayList<Double>();
+		arr.add(MIN_SHUTTER_VALUE);
 		for (int i = 0; i < sShutterIndex.length; i += mStepValue) {
 			arr.add(sShutterIndex[i]);
 		}
+		arr.add(MAX_SHUTTER_VALUE);
 		return arr;
 	}
 	
-	private static final double MIN_APERTURE_VALUE = 0.9d;
-	private static final double MAX_APERTURE_VALUE = 64 + 64 / 3;	// Add 1/3 EV for detect overflow
+	public static final double MIN_APERTURE_VALUE = 0.9d;
+	public static final double MAX_APERTURE_VALUE = 64 + 64 / 3;	// Add 1/3 EV for detect overflow
 
 	//	0		1/6	2/6		3/6		4/6		5/6
 	//	EV		N/A	+1/3EV	+1/2EV	+2/3EV	N/A
@@ -174,8 +184,8 @@ public class LightMeter {
 		64d,
 	};
 
-	private static final double MIN_SHUTTER_VALUE = -8000 * 4 / 3;
-	private static final double MAX_SHUTTER_VALUE = 60 * 4096 * 4 / 3;
+	public static final double MIN_SHUTTER_VALUE = -8000 * 4 / 3;
+	public static final double MAX_SHUTTER_VALUE = 60 * 4096 * 4 / 3;
 	
 	// Shutter values in second, positive value means seconds, negative value means 1/ seconds
 	private static final double[] sShutterIndex = {

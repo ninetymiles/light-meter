@@ -24,7 +24,7 @@
     <string name="menu_setting">"设置"</string>
     <string name="menu_feedback">"反馈"</string>
     <string name="menu_share">"分享"</string>
-    
+
     <!-- Share this app -->
     <string name="share_this_chooser_title">"分享我们的应用"</string>
     <string name="share_this_subject">"我找到一个很酷的应用 %1$s !"</string>
@@ -48,7 +48,7 @@
 
     <!-- Dialogs -->
     <string name="dlg_ev_step_title">"选择一个步长值"</string>
-    
+
     <!-- Toast -->
     <string name="toast_quit">"再按一次退出应用"</string>
 
@@ -57,5 +57,5 @@
     <string name="about_app_summary">"© 2012 RexStudio 版权保留"</string>
     <string name="about_version_title">"版本"</string>
     <string name="about_version_summary">"%1$s"</string>
-    
+
 </resources>

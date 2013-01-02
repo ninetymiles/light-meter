@@ -81,8 +81,7 @@
                 android:id="@+id/main_iso_value"
                 android:layout_width="80dp"
                 android:layout_height="35dp"
-                android:layout_gravity="center_vertical"
-                android:prompt="@string/main_label_iso_prompt" />
+                android:layout_gravity="center_vertical" />
         </LinearLayout>
 
         <LinearLayout
@@ -114,8 +113,7 @@
                 android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:prompt="@string/main_label_shutter_prompt" />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -147,8 +145,7 @@
                 android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="0.8"
-                android:prompt="@string/main_label_aperture_prompt" />
+                android:layout_weight="0.8" />
         </LinearLayout>
     </LinearLayout>
 
