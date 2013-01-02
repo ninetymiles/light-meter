@@ -394,10 +394,27 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onFocusChange id:" + v.getId() + " hasFocus:" + hasFocus);
+		int position = 0;
 		if (hasFocus) {
 			switch (v.getId()) {
-			case R.id.main_aperture_value: setMode(Mode.FV_FIRST); break;
-			case R.id.main_shutter_value: setMode(Mode.TV_FIRST); break;
+			case R.id.main_aperture_value:
+				setMode(Mode.FV_FIRST);
+				position = mSpinnerAperture.getSelectedItemPosition();
+				if (position != AdapterView.INVALID_POSITION) {
+					if (position < 1) position = 1;
+					else if (position >= mArrAperture.size() - 1) position = mArrAperture.size() - 2;
+					mSpinnerAperture.setSelection(position);
+				}
+				break;
+			case R.id.main_shutter_value:
+				setMode(Mode.TV_FIRST);
+				position = mSpinnerShutter.getSelectedItemPosition();
+				if (position != AdapterView.INVALID_POSITION) {
+					if (position < 1) position = 1;
+					else if (position >= mArrShutter.size() - 1) position = mArrShutter.size() - 2;
+					mSpinnerShutter.setSelection(position);
+				}
+				break;
 			}
 		}
 	}
@@ -416,16 +433,14 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 						if (position < 0) position = 0;
 						mSpinnerIso.setSelection(position);
 					}
-				}
-				if (mSpinnerAperture.isFocused() || mMode == Mode.FV_FIRST) {
+				} else if (mSpinnerAperture.isFocused() || mMode == Mode.FV_FIRST) {
 					int position = mSpinnerAperture.getSelectedItemPosition();
 					if (position != AdapterView.INVALID_POSITION) {
 						position--;
 						if (position < 1) position = 1;
 						mSpinnerAperture.setSelection(position);
 					}
-				}
-				if (mSpinnerShutter.isFocused() || mMode == Mode.TV_FIRST) {
+				} else if (mSpinnerShutter.isFocused() || mMode == Mode.TV_FIRST) {
 					int position = mSpinnerShutter.getSelectedItemPosition();
 					if (position != AdapterView.INVALID_POSITION) {
 						position--;
@@ -443,16 +458,14 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 						if (position >= mArrISO.size()) position = mArrISO.size() - 1;
 						mSpinnerIso.setSelection(position);
 					}
-				}
-				if (mSpinnerAperture.isFocused() || mMode == Mode.FV_FIRST) {
+				} else if (mSpinnerAperture.isFocused() || mMode == Mode.FV_FIRST) {
 					int position = mSpinnerAperture.getSelectedItemPosition();
 					if (position != AdapterView.INVALID_POSITION) {
 						position++;
 						if (position >= mArrAperture.size() - 1) position = mArrAperture.size() - 2;
 						mSpinnerAperture.setSelection(position);
 					}
-				}
-				if (mSpinnerShutter.isFocused() || mMode == Mode.TV_FIRST) {
+				} else if (mSpinnerShutter.isFocused() || mMode == Mode.TV_FIRST) {
 					int position = mSpinnerShutter.getSelectedItemPosition();
 					if (position != AdapterView.INVALID_POSITION) {
 						position++;
