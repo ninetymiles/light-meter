@@ -114,6 +114,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		
 		mSpinnerIso = (Spinner) findViewById(R.id.main_iso_value);
 		mSpinnerIso.setOnItemSelectedListener(mSpinnerSelectedListener);
+		mSpinnerIso.setFocusableInTouchMode(true);
 		
 		mSpinnerAperture = (Spinner) findViewById(R.id.main_aperture_value);
 		mSpinnerAperture.setOnItemSelectedListener(mSpinnerSelectedListener);
@@ -355,6 +356,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			shutter = mMeter.getShutterByAperture(aperture);
 			break;
 		}
+		if (DEBUG) Log.v(TAG, "ActivityMain::updateEv shutter:" + shutter + " aperture:" + aperture);
 		mSpinnerAperture.setSelection(mArrAperture.indexOf(aperture));
 		mSpinnerShutter.setSelection(mArrShutter.indexOf(shutter));
 		mTv = shutter;
@@ -366,7 +368,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		//if (DEBUG) Log.v(TAG, "ActivityMain::onClick id:" + v.getId());
 		switch (v.getId()) {
 		case R.id.main_button:
-			if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_MEASURE");
+			//if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_MEASURE");
 //			if (mBtnDot.isSelected()) {
 //				mBtnDot.setSelected(false);
 //				doStopMeasure();
@@ -378,7 +380,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onFocusChange id:" + v.getId() + " hasFocus:" + hasFocus);
-		
 		if (hasFocus) {
 			switch (v.getId()) {
 			case R.id.main_aperture_value: setMode(Mode.FV_FIRST); break;
@@ -394,11 +395,57 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		if (mIsEnableVolumeKey) {
 			switch (keyCode) {
 			case KeyEvent.KEYCODE_VOLUME_DOWN:
-				// TODO: Select current spinner position + 1
+				if (mSpinnerIso.isFocused()) {
+					int position = mSpinnerIso.getSelectedItemPosition();
+					if (position != AdapterView.INVALID_POSITION) {
+						position--;
+						if (position < 0) position = 0;
+						mSpinnerIso.setSelection(position);
+					}
+				}
+				if (mSpinnerAperture.isFocused()) {
+					int position = mSpinnerAperture.getSelectedItemPosition();
+					if (position != AdapterView.INVALID_POSITION) {
+						position--;
+						if (position < 0) position = 0;
+						mSpinnerAperture.setSelection(position);
+					}
+				}
+				if (mSpinnerShutter.isFocused()) {
+					int position = mSpinnerShutter.getSelectedItemPosition();
+					if (position != AdapterView.INVALID_POSITION) {
+						position--;
+						if (position < 0) position = 0;
+						mSpinnerShutter.setSelection(position);
+					}
+				}
 				handled = true;
 				break;
 			case KeyEvent.KEYCODE_VOLUME_UP:
-				// TODO: Select current spinner position - 1
+				if (mSpinnerIso.isFocused()) {
+					int position = mSpinnerIso.getSelectedItemPosition();
+					if (position != AdapterView.INVALID_POSITION) {
+						position++;
+						if (position >= mArrISO.size()) position = mArrISO.size() - 1;
+						mSpinnerIso.setSelection(position);
+					}
+				}
+				if (mSpinnerAperture.isFocused()) {
+					int position = mSpinnerAperture.getSelectedItemPosition();
+					if (position != AdapterView.INVALID_POSITION) {
+						position++;
+						if (position >= mArrAperture.size()) position = mArrAperture.size() - 1;
+						mSpinnerAperture.setSelection(position);
+					}
+				}
+				if (mSpinnerShutter.isFocused()) {
+					int position = mSpinnerShutter.getSelectedItemPosition();
+					if (position != AdapterView.INVALID_POSITION) {
+						position++;
+						if (position >= mArrShutter.size()) position = mArrShutter.size() - 1;
+						mSpinnerShutter.setSelection(position);
+					}
+				}
 				handled = true;
 				break;
 			}
@@ -409,7 +456,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onConfigurationChanged");
-		
 		super.onConfigurationChanged(newConfig);
 	}
 

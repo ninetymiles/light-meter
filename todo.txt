@@ -1,7 +1,5 @@
-H Volume key to select the drop down list
 H Over explose, should select - item
 H Correct prompt for Spinner, and translate
-H Make the dash line more clear
 H Can set EV+ or EV- to adjust the sensor
 L Ask for rating
 H Add two tab to support reflect and incidence mode
