@@ -30,7 +30,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -152,11 +151,26 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 //		}
 	}
 	
+	private String printApertureValue(double aperture) {
+		if (DEBUG) Log.v(TAG, "ActivityMain::printApertureValue aperture:" + aperture);
+		String str = "";
+		if (aperture == LightMeter.MIN_APERTURE_VALUE) {
+			str = "MIN";
+		} else if (aperture == LightMeter.MAX_APERTURE_VALUE) {
+			str = "MAX";
+		} else {
+			str = String.valueOf(aperture);
+		}
+		return str;
+	}
+	
 	private String printShutterValue(double shutter) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::printShutterValue shutter:" + shutter);
 		String str = "";
-		if (shutter == 0) {
-			str = "N/A";
+		if (shutter == LightMeter.MIN_SHUTTER_VALUE) {
+			str = "MIN";
+		} else if (shutter == LightMeter.MAX_SHUTTER_VALUE) {
+			str = "MAX";
 		} else if (shutter < 0) {
 			str = "1/" + String.valueOf(Math.abs(shutter));
 		} else if (shutter > 60) {
@@ -246,7 +260,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mApertureValue = new MainSpinnerItem[mArrAperture.size()];
 		for (int i = 0; i < mArrAperture.size(); i++) {
 			aperture = mArrAperture.get(i);
-			mApertureValue[i] = new MainSpinnerItem(aperture, String.valueOf(aperture));
+			mApertureValue[i] = new MainSpinnerItem(aperture, printApertureValue(aperture));
 			if (aperture == mFv) {
 				position = i;
 			}
