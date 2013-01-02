@@ -417,19 +417,19 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 						mSpinnerIso.setSelection(position);
 					}
 				}
-				if (mSpinnerAperture.isFocused()) {
+				if (mSpinnerAperture.isFocused() || mMode == Mode.FV_FIRST) {
 					int position = mSpinnerAperture.getSelectedItemPosition();
 					if (position != AdapterView.INVALID_POSITION) {
 						position--;
-						if (position < 0) position = 0;
+						if (position < 1) position = 1;
 						mSpinnerAperture.setSelection(position);
 					}
 				}
-				if (mSpinnerShutter.isFocused()) {
+				if (mSpinnerShutter.isFocused() || mMode == Mode.TV_FIRST) {
 					int position = mSpinnerShutter.getSelectedItemPosition();
 					if (position != AdapterView.INVALID_POSITION) {
 						position--;
-						if (position < 0) position = 0;
+						if (position < 1) position = 1;
 						mSpinnerShutter.setSelection(position);
 					}
 				}
@@ -444,19 +444,19 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 						mSpinnerIso.setSelection(position);
 					}
 				}
-				if (mSpinnerAperture.isFocused()) {
+				if (mSpinnerAperture.isFocused() || mMode == Mode.FV_FIRST) {
 					int position = mSpinnerAperture.getSelectedItemPosition();
 					if (position != AdapterView.INVALID_POSITION) {
 						position++;
-						if (position >= mArrAperture.size()) position = mArrAperture.size() - 1;
+						if (position >= mArrAperture.size() - 1) position = mArrAperture.size() - 2;
 						mSpinnerAperture.setSelection(position);
 					}
 				}
-				if (mSpinnerShutter.isFocused()) {
+				if (mSpinnerShutter.isFocused() || mMode == Mode.TV_FIRST) {
 					int position = mSpinnerShutter.getSelectedItemPosition();
 					if (position != AdapterView.INVALID_POSITION) {
 						position++;
-						if (position >= mArrShutter.size()) position = mArrShutter.size() - 1;
+						if (position >= mArrShutter.size() - 1) position = mArrShutter.size() - 2;
 						mSpinnerShutter.setSelection(position);
 					}
 				}
