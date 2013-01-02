@@ -7,9 +7,6 @@
     <string name="main_label_lux">"Lx"</string>
     <string name="main_label_ev">"EV"</string>
     <string name="main_label_iso">"ISO"</string>
-    <string name="main_label_shutter_prompt">"Shutter value"</string>
-    <string name="main_label_aperture_prompt">"Aperture value"</string>
-    <string name="main_label_iso_prompt">"ISO value"</string>
 
     <!-- MainActivity labels in setting -->
     <string name="main_label_aperture">"Aperture:"</string>

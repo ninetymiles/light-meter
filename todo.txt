@@ -1,4 +1,3 @@
-H Correct prompt for Spinner, and translate
 H Can set EV+ or EV- to adjust the sensor
 L Ask for rating
 H Add two tab to support reflect and incidence mode
