@@ -554,6 +554,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			case R.id.main_iso_value:
 				if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected ISO:" + mISOValue[position]);
 				mISO = (Integer) mISOValue[position].getValue();
+				mMeter.setISO(mISO);
 				break;
 			case R.id.main_aperture_value:
 				if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected Aperture:" + mApertureValue[position]);

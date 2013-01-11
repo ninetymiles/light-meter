@@ -1,3 +1,5 @@
+H Fix android 2.2/2.3 dropdown menu style ugly issue
+H Fix Lux 10, EV 3.0, may got 1" for F2.8, equal between ISO100 and ISO200
 H Can set EV+ or EV- to adjust the sensor
 L Ask for rating
 H Add two tab to support reflect and incidence mode
