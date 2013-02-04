@@ -1,3 +1,4 @@
+M Refine 1/2.0 as 1/2 sec
 H Fix android 2.2/2.3 dropdown menu style ugly issue
 H Can set EV+ or EV- to adjust the sensor
 L Ask for rating

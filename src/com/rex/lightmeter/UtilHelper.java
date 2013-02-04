@@ -1,5 +1,7 @@
 package com.rex.lightmeter;
 
+import java.util.Locale;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -43,6 +45,12 @@ public class UtilHelper {
 		
 		String defaultClientDevice = Build.MANUFACTURER + " - " + Build.MODEL + " - " + Build.PRODUCT + " / " + Build.VERSION.RELEASE;
 		defaultBody += String.format(context.getString(R.string.contact_mail_default_body_device), defaultClientDevice);
+		defaultBody += "\n";
+		
+		Locale locale = Locale.getDefault();
+		String defaultClientLanguage = locale.getLanguage() + "-" + locale.getCountry();
+		
+		defaultBody += String.format(context.getString(R.string.contact_mail_default_body_lang), defaultClientLanguage);
 		defaultBody += "\n";
 		
 		try {

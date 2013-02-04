@@ -33,6 +33,7 @@
     <!-- Contact US -->
     <string name="contact_mail_default_body_device">"[Device]: %1$s"</string>
     <string name="contact_mail_default_body_version">"[App]: %1$s"</string>
+    <string name="contact_mail_default_body_lang">"[Language]: %1$s"</string>
     <string name="contact_mail_chooser_title">"Select an application to send the email"</string>
 
     <!-- Config settins -->

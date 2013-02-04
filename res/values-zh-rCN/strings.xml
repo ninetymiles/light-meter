@@ -33,6 +33,7 @@
     <!-- Contact US -->
     <string name="contact_mail_default_body_device">"[Device]: %1$s"</string>
     <string name="contact_mail_default_body_version">"[App]: %1$s"</string>
+    <string name="contact_mail_default_body_lang">"[Language]: %1$s"</string>
     <string name="contact_mail_chooser_title">"选择一个应用以发送Email"</string>
 
     <!-- Config settins -->
