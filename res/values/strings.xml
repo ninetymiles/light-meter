@@ -43,11 +43,11 @@
     <string name="conf_enable_tracking_summary">"Help improve this product by submitting anonymous usage data"</string>
     <string name="conf_enable_volume_key">"Use volume key"</string>
     <string name="conf_enable_volume_key_summary">"Use volume key to change aperture, shutter speed, and ISO"</string>
-    <string name="conf_ev_step">"EV steps"</string>
-    <string name="conf_ev_step_summary">"Steps to adjust the aperture, shutter speed or ISO"</string>
+    <string name="conf_ev_stop">"EV stops"</string>
+    <string name="conf_ev_stop_summary">"Stops to adjust the aperture, shutter speed or ISO"</string>
 
     <!-- Dialogs -->
-    <string name="dlg_ev_step_title">"Choose a step value"</string>
+    <string name="dlg_ev_stop_title">"Choose a stop value"</string>
 
     <!-- Toast -->
     <string name="toast_quit">"Press again to quit"</string>

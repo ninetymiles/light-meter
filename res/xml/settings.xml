@@ -20,12 +20,12 @@
 
         <ListPreference
             android:defaultValue="2"
-            android:dialogTitle="@string/dlg_ev_step_title"
-            android:entries="@array/pref_ev_step"
-            android:entryValues="@array/pref_ev_step_value"
+            android:dialogTitle="@string/dlg_ev_stop_title"
+            android:entries="@array/pref_ev_stop"
+            android:entryValues="@array/pref_ev_stop_value"
             android:key="CONF_EV_STEP"
-            android:summary="@string/conf_ev_step_summary"
-            android:title="@string/conf_ev_step" />
+            android:summary="@string/conf_ev_stop_summary"
+            android:title="@string/conf_ev_stop" />
     </PreferenceCategory>
 
 </PreferenceScreen>

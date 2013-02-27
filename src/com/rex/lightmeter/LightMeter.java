@@ -27,13 +27,13 @@ public class LightMeter {
 	private static final String TAG = "RexLog";
 	private static final boolean DEBUG = true;
 	
-	public static enum STEP { FULL, HALF, THIRD };
+	public static enum STOP { FULL, HALF, THIRD };
 	
 	private int mISO = 100;
 	
 	private double mLux;
 	private double mEv;
-	private int mStepValue = 2;	// Default use 1/3 EV for step
+	private int mStopValue = 2;	// Default use 1/3 EV for stop
 	
 	private static final double sLog2 = Math.log(2);
 	
@@ -68,11 +68,11 @@ public class LightMeter {
 		return mISO;
 	}
 	
-	public void setStep(STEP step) {
-		switch (step) {
-		case FULL: mStepValue = 6; break;
-		case HALF: mStepValue = 3; break;
-		case THIRD: mStepValue = 2; break;
+	public void setStop(STOP stop) {
+		switch (stop) {
+		case FULL: mStopValue = 6; break;
+		case HALF: mStopValue = 3; break;
+		case THIRD: mStopValue = 2; break;
 		}
 	}
 	
@@ -124,7 +124,7 @@ public class LightMeter {
 		double diff = Double.MAX_VALUE;
 		double matched = 0;
 		value = (value < 0) ? -1 / value : value;
-		for (int i = 0; i < arr.length; i+= mStepValue) {
+		for (int i = 0; i < arr.length; i+= mStopValue) {
 			v = (arr[i] < 0) ? -1 / arr[i] : arr[i];
 			//if (DEBUG) Log.v(TAG, "LightMeter::getMatchFromArray arr[i]:" + arr[i] + " v:" + String.format("%.6f", v) + " diff:" + String.format("%.6f", Math.abs(value - v)));
 			if (Math.abs(value - v) < diff) {
@@ -137,7 +137,7 @@ public class LightMeter {
 	
 	public List<Integer> getISOArray() {
 		List<Integer> arr = new ArrayList<Integer>();
-		for (int i = 0; i < sISOIndex.length; i += mStepValue) {
+		for (int i = 0; i < sISOIndex.length; i += mStopValue) {
 			arr.add(sISOIndex[i]);
 		}
 		return arr;
@@ -146,7 +146,7 @@ public class LightMeter {
 	public List<Double> getApertureArray() {
 		List<Double> arr = new ArrayList<Double>();
 		arr.add(MIN_APERTURE_VALUE);
-		for (int i = 0; i < sApertureIndex.length; i += mStepValue) {
+		for (int i = 0; i < sApertureIndex.length; i += mStopValue) {
 			arr.add(sApertureIndex[i]);
 		}
 		arr.add(MAX_APERTURE_VALUE);
@@ -156,7 +156,7 @@ public class LightMeter {
 	public List<Double> getShutterArray() {
 		List<Double> arr = new ArrayList<Double>();
 		arr.add(MIN_SHUTTER_VALUE);
-		for (int i = 0; i < sShutterIndex.length; i += mStepValue) {
+		for (int i = 0; i < sShutterIndex.length; i += mStopValue) {
 			arr.add(sShutterIndex[i]);
 		}
 		arr.add(MAX_SHUTTER_VALUE);

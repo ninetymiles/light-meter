@@ -43,11 +43,11 @@
     <string name="conf_enable_tracking_summary">"允许提交匿名使用统计以帮助我们改进使用体验"</string>
     <string name="conf_enable_volume_key">"使用音量键"</string>
     <string name="conf_enable_volume_key_summary">"使用音量键调整光圈,快门, 以及 ISO"</string>
-    <string name="conf_ev_step">"EV 调整步长"</string>
-    <string name="conf_ev_step_summary">"调整光圈, 快门以及 ISO 的步长"</string>
+    <string name="conf_ev_stop">"EV 调整步长"</string>
+    <string name="conf_ev_stop_summary">"调整光圈, 快门以及 ISO 的步长"</string>
 
     <!-- Dialogs -->
-    <string name="dlg_ev_step_title">"选择一个步长值"</string>
+    <string name="dlg_ev_stop_title">"选择一个步长值"</string>
 
     <!-- Toast -->
     <string name="toast_quit">"再按一次退出应用"</string>
