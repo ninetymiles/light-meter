@@ -83,7 +83,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private List<Double> mArrShutter;
 	
 	private boolean mIsEnableVolumeKey = true;
-	private LightMeter.STEP mEvStep = LightMeter.STEP.THIRD;
+	private LightMeter.STOP mEvStop = LightMeter.STOP.THIRD;
 	private double mFv = 8f;
 	private double mTv = -60;
 	private int mISO = 200;
@@ -226,8 +226,8 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		//mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mIsEnableVolumeKey = prefs.getBoolean("CONF_ENABLE_VOLUME_KEY", true);
-		mEvStep = LightMeter.STEP.values()[Integer.valueOf(prefs.getString("CONF_EV_STEP", "2"))];
-		mMeter.setStep(mEvStep);
+		mEvStop = LightMeter.STOP.values()[Integer.valueOf(prefs.getString("CONF_EV_STEP", "2"))];
+		mMeter.setStop(mEvStop);
 		mFv = mMeter.getMatchAperture(prefs.getFloat(PREFS_FV, 8f));
 		mTv = prefs.getFloat(PREFS_TV, -60);
 		mTv = mMeter.getMatchShutter((mTv < 0) ? (-1 / mTv) : mTv);
@@ -291,7 +291,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		
 		if (DEBUG) Log.v(TAG, "ActivityMain::onResume" +
 				" mIsEnableVolumeKey:" + mIsEnableVolumeKey + 
-				" mEvStep:" + mEvStep +
+				" mEvStop:" + mEvStop +
 				" mMode:" + mMode +
 				" mISO:" + mISO +
 				" mFv:" + mFv + 
