@@ -44,6 +44,8 @@
     <string name="conf_enable_tracking_summary">"允许提交匿名使用统计以帮助我们改进使用体验"</string>
     <string name="conf_enable_volume_key">"使用音量键"</string>
     <string name="conf_enable_volume_key_summary">"使用音量键调整光圈,快门, 以及 ISO"</string>
+    <string name="conf_enable_record_max">"记录最大值"</string>
+    <string name="conf_enable_record_max_summary">"每次按下测量按钮，只显示测量到的最大值"</string>
     <string name="conf_ev_stop">"EV 调整步长"</string>
     <string name="conf_ev_stop_summary">"调整光圈, 快门以及 ISO 的步长"</string>
 

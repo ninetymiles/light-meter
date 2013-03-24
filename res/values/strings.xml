@@ -44,6 +44,8 @@
     <string name="conf_enable_tracking_summary">"Help improve this product by submitting anonymous usage data"</string>
     <string name="conf_enable_volume_key">"Use volume key"</string>
     <string name="conf_enable_volume_key_summary">"Use volume key to change aperture, shutter speed, and ISO"</string>
+    <string name="conf_enable_record_max">"Record max value"</string>
+    <string name="conf_enable_record_max_summary">"For each time pressed the measure button, record the max value"</string>
     <string name="conf_ev_stop">"EV stops"</string>
     <string name="conf_ev_stop_summary">"Stops to adjust the aperture, shutter speed or ISO"</string>
 

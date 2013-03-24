@@ -83,12 +83,15 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private List<Double> mArrShutter;
 	
 	private boolean mIsEnableVolumeKey = true;
+	private boolean mIsEnableRecordMaxValue = false;
 	private LightMeter.STOP mEvStop = LightMeter.STOP.THIRD;
 	private double mFv = 8f;
 	private double mTv = -60;
 	private int mISO = 200;
 	private Mode mMode = Mode.UNDEFINED;
 
+	private float mMaxLux;
+	
 	// Google IAP
 //	private Handler mHandler;
 //	private BillingService mBillingService;
@@ -226,6 +229,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		//mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mIsEnableVolumeKey = prefs.getBoolean("CONF_ENABLE_VOLUME_KEY", true);
+		mIsEnableRecordMaxValue = prefs.getBoolean("CONF_ENABLE_RECORD_MAX_VALUE", false);
 		mEvStop = LightMeter.STOP.values()[Integer.valueOf(prefs.getString("CONF_EV_STEP", "2"))];
 		mMeter.setStop(mEvStop);
 		mFv = mMeter.getMatchAperture(prefs.getFloat(PREFS_FV, 8f));
@@ -589,6 +593,7 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			//if (DEBUG) Log.v(TAG, "ActivityMain::OnTouchListener::onTouch id:" + v.getId() + " action:" + event.getAction());
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
+				mMaxLux = 0;
 				doStartMeasure();
 //				if (mBtnDot.isSelected() == false) {
 //					doStartMeasure();
@@ -618,6 +623,8 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		public void onSensorChanged(SensorEvent event) {
 			//if (DEBUG) Log.v(TAG, "ActivityMain::SensorEventListener::onSensorChanged");
 			float lux = event.values[0];
+			if (mIsEnableRecordMaxValue && lux <= mMaxLux) return;
+			mMaxLux = lux;
 			double ev = mMeter.setLux(lux);
 			mTextLux.setText(String.format("%.2f", lux));
 			mTextEv.setText(String.format("%.2f", ev));

@@ -8,15 +8,20 @@
             android:summary="@string/conf_enable_tracking_summary"
             android:title="@string/conf_enable_tracking" />
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="CONF_ENABLE_VOLUME_KEY"
+            android:summary="@string/conf_enable_volume_key_summary"
+            android:title="@string/conf_enable_volume_key" />
+        <CheckBoxPreference
             android:defaultValue="false"
             android:key="CONF_ENABLE_KEEP_SCREEN_ON"
             android:summary="@string/conf_enable_keep_screen_on_summary"
             android:title="@string/conf_enable_keep_screen_on" />
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="CONF_ENABLE_VOLUME_KEY"
-            android:summary="@string/conf_enable_volume_key_summary"
-            android:title="@string/conf_enable_volume_key" />
+            android:defaultValue="false"
+            android:key="CONF_ENABLE_RECORD_MAX_VALUE"
+            android:summary="@string/conf_enable_record_max_summary"
+            android:title="@string/conf_enable_record_max" />
 
         <ListPreference
             android:defaultValue="2"
