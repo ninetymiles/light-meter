@@ -330,6 +330,9 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		case R.id.menu_share:
 			UtilHelper.shareThisApp(this);
 			break;
+		case R.id.menu_rate_me:
+			UtilHelper.rateThisApp(this);
+			break;
 		case R.id.menu_about:
 			startActivity(new Intent(this, ActivityAbout.class));
 			break;

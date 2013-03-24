@@ -24,6 +24,7 @@
     <string name="menu_setting">"设置"</string>
     <string name="menu_feedback">"反馈"</string>
     <string name="menu_share">"分享"</string>
+    <string name="menu_rate_me">"给个5星吧亲"</string>
 
     <!-- Share this app -->
     <string name="share_this_chooser_title">"分享我们的应用"</string>

@@ -83,4 +83,11 @@ public class UtilHelper {
 		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_this_chooser_title)));
 	}
+	
+	public static void rateThisApp(Context context) {
+		String appURI = "market://details?id=" + context.getPackageName();
+		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(appURI));
+		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		context.startActivity(intent);
+	}
 }
