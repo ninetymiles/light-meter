@@ -329,9 +329,11 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			break;
 		case R.id.menu_share:
 			UtilHelper.shareThisApp(this);
+			FlurryAgentWrapper.logEvent("SHARE");
 			break;
 		case R.id.menu_rate_me:
 			UtilHelper.rateThisApp(this);
+			FlurryAgentWrapper.logEvent("RATE");
 			break;
 		case R.id.menu_about:
 			startActivity(new Intent(this, ActivityAbout.class));
