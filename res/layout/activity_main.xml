@@ -159,28 +159,13 @@
         </LinearLayout>
     </LinearLayout>
 
-    <FrameLayout
+    <Button
+        android:id="@+id/main_button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="6dp"
-        android:layout_weight="1" >
-
-        <Button
-            android:id="@+id/main_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/main_button_measure" >
-        </Button>
-
-        <ImageView
-            android:id="@+id/main_button_dot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/main_button_dot_selector" >
-        </ImageView>
-    </FrameLayout>
+        android:layout_weight="1"
+        android:text="@string/main_button_measure" >
+    </Button>
 
 </LinearLayout>

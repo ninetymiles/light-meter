@@ -29,7 +29,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +41,7 @@ import com.rex.lightmeter.billing.google.Consts.PurchaseState;
 import com.rex.lightmeter.billing.google.Consts.ResponseCode;
 import com.rex.lightmeter.billing.google.PurchaseObserver;
 
-public class ActivityMain extends Activity implements OnClickListener, OnFocusChangeListener {
+public class ActivityMain extends Activity implements OnFocusChangeListener {
 	
 	private static final String TAG = "RexLog";
 	private static final boolean DEBUG = true;
@@ -67,7 +66,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	private Spinner mSpinnerShutter;
 	
 	private Button mBtnMeasure;
-	private ImageView mBtnDot;
 
 	private SensorManager mSensorManager;
 	private Sensor mLightSensor;
@@ -129,10 +127,8 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		
 		mBtnMeasure = (Button) findViewById(R.id.main_button);
 		mBtnMeasure.setOnTouchListener(mTouchListener);
-		mBtnMeasure.setOnClickListener(this);
+		mBtnMeasure.setOnClickListener(mClickListener);
 		mBtnMeasure.setOnLongClickListener(mLongClickListener);
-		mBtnDot = (ImageView) findViewById(R.id.main_button_dot);
-		mBtnDot.setVisibility(View.GONE);
 		
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -387,20 +383,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	}
 	
 	@Override
-	public void onClick(View v) {
-		//if (DEBUG) Log.v(TAG, "ActivityMain::onClick id:" + v.getId());
-		switch (v.getId()) {
-		case R.id.main_button:
-			//if (DEBUG) Log.v(TAG, "ActivityMain::onClick BUTTON_MEASURE");
-//			if (mBtnDot.isSelected()) {
-//				mBtnDot.setSelected(false);
-//				doStopMeasure();
-//			}
-			break;
-		}
-	}
-	
-	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onFocusChange id:" + v.getId() + " hasFocus:" + hasFocus);
 		int position = 0;
@@ -499,7 +481,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 	protected void onSaveInstanceState(Bundle outState) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onSaveInstanceState");
 		outState.putDouble("LUX", mMeter.getLux());
-//		outState.putBoolean("DOT", mBtnDot.isSelected());
 		super.onSaveInstanceState(outState);
 	}
 
@@ -509,10 +490,6 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		mMeter.setLux(savedInstanceState.getDouble("LUX"));
 		mTextLux.setText(String.format("%.2f", mMeter.getLux()));
 		mTextEv.setText(String.format("%.2f", mMeter.getEv()));
-//		if (savedInstanceState.getBoolean("DOT")) {
-//			mBtnDot.setSelected(true);
-//			doStartMeasure();
-//		}
 		super.onRestoreInstanceState(savedInstanceState);
 	}
 	
@@ -582,11 +559,17 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 		}
 	};
 	
+	private OnClickListener mClickListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			//if (DEBUG) Log.v(TAG, "ActivityMain::OnClickListener::onClick");
+		}
+	};
+	
 	private OnLongClickListener mLongClickListener = new OnLongClickListener() {
 		@Override
 		public boolean onLongClick(View v) {
 			//if (DEBUG) Log.v(TAG, "ActivityMain::OnLongClickListener::onLongClick");
-			//mBtnDot.setSelected(true);
 			return true;
 		}
 	};
@@ -600,17 +583,11 @@ public class ActivityMain extends Activity implements OnClickListener, OnFocusCh
 			case MotionEvent.ACTION_DOWN:
 				mMaxLux = 0;
 				doStartMeasure();
-//				if (mBtnDot.isSelected() == false) {
-//					doStartMeasure();
-//				}
 				clearFocus();
 				break;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
 				doStopMeasure();
-//				if (mBtnDot.isSelected() == false) {
-//					doStopMeasure();
-//				}
 				break;
 			}
 			return false;
