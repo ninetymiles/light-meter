@@ -12,7 +12,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -34,12 +33,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rex.flurry.FlurryAgentWrapper;
-import com.rex.lightmeter.billing.google.BillingService.RequestPurchase;
-import com.rex.lightmeter.billing.google.BillingService.RestoreTransactions;
-import com.rex.lightmeter.billing.google.Consts;
-import com.rex.lightmeter.billing.google.Consts.PurchaseState;
-import com.rex.lightmeter.billing.google.Consts.ResponseCode;
-import com.rex.lightmeter.billing.google.PurchaseObserver;
 
 public class ActivityMain extends Activity implements OnFocusChangeListener {
 	
@@ -50,10 +43,6 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	private final String PREFS_TV = "PREFS_TV";
 	private final String PREFS_ISO = "PREFS_ISO";
 	private final String PREFS_MODE = "PREFS_MODE";
-	private final String PREFS_INITIALIZED = "PREFS_INITIALIZED";
-	
-	private static final int DIALOG_CANNOT_CONNECT_ID = 1;
-	private static final int DIALOG_BILLING_NOT_SUPPORTED_ID = 2;
 	
 	private static enum Mode { UNDEFINED, TV_FIRST, FV_FIRST };
 	
@@ -89,12 +78,6 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	private Mode mMode = Mode.UNDEFINED;
 
 	private float mMaxLux;
-	
-	// Google IAP
-//	private Handler mHandler;
-//	private BillingService mBillingService;
-//	private PurchaseDatabase mPurchaseDatabase;
-//	private RexPurchaseObserver mPurchaseObserver;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -134,20 +117,6 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 		mMeter = new LightMeter();
 		mMeter.setISO(200);
-		
-//		mHandler = new Handler();
-		
-//		mPurchaseObserver = new RexPurchaseObserver(mHandler);
-//		mBillingService = new BillingService();
-//		mBillingService.setContext(this);
-//
-//		mPurchaseDatabase = new PurchaseDatabase(this);
-//		
-//		// Check if billing is supported.
-//		ResponseHandler.register(mPurchaseObserver);
-//		if (!mBillingService.checkBillingSupported()) {
-//			showDialog(DIALOG_CANNOT_CONNECT_ID);
-//		}
 	}
 	
 	private String printApertureValue(double aperture) {
@@ -191,9 +160,6 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	protected void onStart() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onStart");
 		FlurryAgentWrapper.onStartSession(this);
-
-//		ResponseHandler.register(mPurchaseObserver);
-//		initializeOwnedItems();
 		super.onStart();
 	}
 	
@@ -201,14 +167,12 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	protected void onStop() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onStop");
 		FlurryAgentWrapper.onEndSession(this);
-//		ResponseHandler.unregister(mPurchaseObserver);
 		super.onStop();
 	}
 	
 	@Override
 	protected void onPause() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onPause");
-		//mSensorManager.unregisterListener(mSensorListener, mLightSensor);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.edit()
 				.putFloat(PREFS_FV, (float) mFv)
@@ -222,7 +186,6 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	@Override
 	protected void onResume() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onResume");
-		//mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mIsEnableVolumeKey = prefs.getBoolean("CONF_ENABLE_VOLUME_KEY", true);
 		mIsEnableRecordMaxValue = prefs.getBoolean("CONF_ENABLE_RECORD_MAX_VALUE", false);
@@ -302,8 +265,6 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	@Override
 	protected void onDestroy() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onDestroy");
-//		mPurchaseDatabase.close();
-//		mBillingService.unbind();
 		super.onDestroy();
 	}
 
@@ -530,7 +491,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		
 		@Override
 		public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-			if (DEBUG && false) {
+			if (DEBUG) {
 				Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected" +
 					" parentView:" + parentView.getId() + 
 					" position:" + position + 
@@ -613,136 +574,4 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 			updateEv();
 		}
 	};
-	
-	private class RexPurchaseObserver extends PurchaseObserver {
-		
-		public RexPurchaseObserver(Handler handler) {
-			super(ActivityMain.this, handler);
-		}
-
-		@Override
-		public void onBillingSupported(boolean supported, String type) {
-			if (Consts.DEBUG) {
-				Log.i(TAG, "supported: " + supported);
-			}
-			if (type == null || type.equals(Consts.ITEM_TYPE_INAPP)) {
-				if (supported) {
-					//restoreDatabase();
-					// Update UI, enable buy button
-				} else {
-					//showDialog(DIALOG_BILLING_NOT_SUPPORTED_ID);
-				}
-			}
-		}
-
-		@Override
-		public void onPurchaseStateChange(PurchaseState purchaseState,
-				String itemId, int quantity, long purchaseTime,
-				String developerPayload) {
-			if (Consts.DEBUG) {
-				Log.i(TAG, "onPurchaseStateChange() itemId: " + itemId + " "
-						+ purchaseState);
-			}
-
-			if (purchaseState == PurchaseState.PURCHASED) {
-				//mOwnedItems.add(itemId);
-			}
-		}
-
-		@Override
-		public void onRequestPurchaseResponse(RequestPurchase request,
-				ResponseCode responseCode) {
-			if (Consts.DEBUG) {
-				Log.d(TAG, request.mProductId + ": " + responseCode);
-			}
-			if (responseCode == ResponseCode.RESULT_OK) {
-				if (Consts.DEBUG) {
-					Log.i(TAG, "purchase was successfully sent to server");
-				}
-			} else if (responseCode == ResponseCode.RESULT_USER_CANCELED) {
-				if (Consts.DEBUG) {
-					Log.i(TAG, "user canceled purchase");
-				}
-			} else {
-				if (Consts.DEBUG) {
-					Log.i(TAG, "purchase failed");
-				}
-			}
-		}
-
-		@Override
-		public void onRestoreTransactionsResponse(RestoreTransactions request,
-				ResponseCode responseCode) {
-			if (responseCode == ResponseCode.RESULT_OK) {
-				if (Consts.DEBUG) {
-					Log.d(TAG, "completed RestoreTransactions request");
-				}
-				// Update the shared preferences so that we don't perform
-				// a RestoreTransactions again.
-				SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
-				SharedPreferences.Editor edit = prefs.edit();
-				edit.putBoolean(PREFS_INITIALIZED, true);
-				edit.commit();
-			} else {
-				if (Consts.DEBUG) {
-					Log.d(TAG, "RestoreTransactions error: " + responseCode);
-				}
-			}
-		}
-	}
-	
-	/**
-	 * If the database has not been initialized, we send a RESTORE_TRANSACTIONS
-	 * request to Android Market to get the list of purchased items for this
-	 * user. This happens if the application has just been installed or the user
-	 * wiped data. We do not want to do this on every startup, rather, we want
-	 * to do only when the database needs to be initialized.
-	 */
-	private void restoreDatabase() {
-		SharedPreferences prefs = getPreferences(MODE_PRIVATE);
-		boolean initialized = prefs.getBoolean(PREFS_INITIALIZED, false);
-		if (!initialized) {
-//			mBillingService.restoreTransactions();
-			//Toast.makeText(this, R.string.restoring_transactions, Toast.LENGTH_LONG).show();
-		}
-	}
-
-	/**
-	 * Creates a background thread that reads the database and initializes the
-	 * set of owned items.
-	 */
-	private void initializeOwnedItems() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-//				Cursor cursor = mPurchaseDatabase.queryAllPurchasedItems();
-//				if (cursor == null) {
-//					return;
-//				}
-
-//				final Set<String> ownedItems = new HashSet<String>();
-//				try {
-//					int productIdCol = cursor
-//							.getColumnIndexOrThrow(PurchaseDatabase.PURCHASED_PRODUCT_ID_COL);
-//					while (cursor.moveToNext()) {
-//						String productId = cursor.getString(productIdCol);
-//						ownedItems.add(productId);
-//					}
-//				} finally {
-//					cursor.close();
-//				}
-
-				// We will add the set of owned items in a new Runnable that runs on
-				// the UI thread so that we don't need to synchronize access to
-				// mOwnedItems.
-//				mHandler.post(new Runnable() {
-//					@Override
-//					public void run() {
-//						mOwnedItems.addAll(ownedItems);
-//					}
-//				});
-			}
-		}).start();
-	}
-	
 }
