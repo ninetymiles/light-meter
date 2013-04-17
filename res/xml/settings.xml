@@ -19,6 +19,11 @@
             android:title="@string/conf_enable_keep_screen_on" />
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="CONF_ENABLE_KEEP_SCREEN_ORIENTATION"
+            android:summary="@string/conf_enable_keep_screen_orientation_summary"
+            android:title="@string/conf_enable_keep_screen_orientation" />
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="CONF_ENABLE_RECORD_MAX_VALUE"
             android:summary="@string/conf_enable_record_max_summary"
             android:title="@string/conf_enable_record_max" />

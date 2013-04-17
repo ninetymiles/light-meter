@@ -41,6 +41,8 @@
     <string name="conf_category_title">"设置"</string>
     <string name="conf_enable_keep_screen_on">"保持屏幕常亮"</string>
     <string name="conf_enable_keep_screen_on_summary">"使用本应用时保持屏幕常亮, 需要重启应用生效"</string>
+    <string name="conf_enable_keep_screen_orientation">"保持屏幕方向"</string>
+    <string name="conf_enable_keep_screen_orientation_summary">"不随设备旋转自动调整布局"</string>
     <string name="conf_enable_tracking">"帮助提升使用体验"</string>
     <string name="conf_enable_tracking_summary">"允许提交匿名使用统计以帮助我们改进使用体验"</string>
     <string name="conf_enable_volume_key">"使用音量键"</string>

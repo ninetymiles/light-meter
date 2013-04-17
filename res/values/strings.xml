@@ -41,6 +41,8 @@
     <string name="conf_category_title">"Setting"</string>
     <string name="conf_enable_keep_screen_on">"Keep screen on"</string>
     <string name="conf_enable_keep_screen_on_summary">"Keep screen on while using this app, take effect after next launch"</string>
+    <string name="conf_enable_keep_screen_orientation">"Keep screen orientation"</string>
+    <string name="conf_enable_keep_screen_orientation_summary">"Do not rotate the screen"</string>
     <string name="conf_enable_tracking">"Help improve usage"</string>
     <string name="conf_enable_tracking_summary">"Help improve this product by submitting anonymous usage data"</string>
     <string name="conf_enable_volume_key">"Use volume key"</string>

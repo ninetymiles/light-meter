@@ -259,6 +259,12 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 				" mISO:" + mISO +
 				" mFv:" + mFv + 
 				" mTv:" + mTv);
+		
+		if (prefs.getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", false)) {
+			mOrientation.lock();
+		} else {
+			mOrientation.unlock();
+		}
 		super.onResume();
 	}
 
@@ -477,14 +483,18 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		if (DEBUG) Log.v(TAG, "ActivityMain::doStartMeasure");
 		mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
 		FlurryAgentWrapper.logEvent("MEASURE", true);
-		mOrientation.lock();
+		if (false == PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", false)) {
+			mOrientation.lock();
+		}
 	}
 	
 	private void doStopMeasure() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::doStopMeasure");
 		mSensorManager.unregisterListener(mSensorListener, mLightSensor);
 		FlurryAgentWrapper.endTimedEvent("MEASURE");
-		mOrientation.unlock();
+		if (false == PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", false)) {
+			mOrientation.unlock();
+		}
 	}
 	
 	private OnItemSelectedListener mSpinnerSelectedListener = new OnItemSelectedListener() {
