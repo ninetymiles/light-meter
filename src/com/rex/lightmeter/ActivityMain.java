@@ -120,7 +120,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	}
 	
 	private String printApertureValue(double aperture) {
-		if (DEBUG) Log.v(TAG, "ActivityMain::printApertureValue aperture:" + aperture);
+		//if (DEBUG) Log.v(TAG, "ActivityMain::printApertureValue aperture:" + aperture);
 		String str = "";
 		if (aperture == LightMeter.MIN_APERTURE_VALUE) {
 			str = "MIN";
@@ -133,7 +133,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	}
 	
 	private String printShutterValue(double shutter) {
-		if (DEBUG) Log.v(TAG, "ActivityMain::printShutterValue shutter:" + shutter);
+		//if (DEBUG) Log.v(TAG, "ActivityMain::printShutterValue shutter:" + shutter);
 		String str = "";
 		if (shutter == LightMeter.MIN_SHUTTER_VALUE) {
 			str = "MIN";
@@ -195,7 +195,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		mTv = prefs.getFloat(PREFS_TV, -60);
 		mTv = mMeter.getMatchShutter((mTv < 0) ? (-1 / mTv) : mTv);
 		mISO = prefs.getInt(PREFS_ISO, 200);
-		mMode = Mode.values()[prefs.getInt(PREFS_MODE, 0)];
+		mMode = Mode.values()[prefs.getInt(PREFS_MODE, 2)];
 		setMode(mMode);
 		
 		Integer value;
