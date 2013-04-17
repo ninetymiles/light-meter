@@ -1,11 +1,9 @@
-M Refine 1/2.0 as 1/2 sec
+H Fix android 2.3.7 back from setting, may not auto select the value in list
 H Fix android 2.2/2.3 dropdown menu style ugly issue
 H Can set EV+ or EV- to adjust the sensor
-L Ask for rating
 H Add two tab to support reflect and incidence mode
 M Support Google Play IAP
 M Support Amazon Market IAP
-M Pro version can detect flash light, press button to start measure, but lock on the maximum value
 M Pro version Flash light can sum multiple flash value
 M Pro version need list all the purchased item
 M Pro version need show help page to tell what is pro version

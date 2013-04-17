@@ -1,5 +1,6 @@
 package com.rex.lightmeter;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import android.app.Activity;
@@ -122,12 +123,13 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	private String printApertureValue(double aperture) {
 		//if (DEBUG) Log.v(TAG, "ActivityMain::printApertureValue aperture:" + aperture);
 		String str = "";
+		DecimalFormat df = new DecimalFormat("0.#");
 		if (aperture == LightMeter.MIN_APERTURE_VALUE) {
 			str = "MIN";
 		} else if (aperture == LightMeter.MAX_APERTURE_VALUE) {
 			str = "MAX";
 		} else {
-			str = String.valueOf(aperture);
+			str = df.format(aperture);
 		}
 		return str;
 	}
@@ -135,25 +137,30 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	private String printShutterValue(double shutter) {
 		//if (DEBUG) Log.v(TAG, "ActivityMain::printShutterValue shutter:" + shutter);
 		String str = "";
+		DecimalFormat df = new DecimalFormat("0.#");
 		if (shutter == LightMeter.MIN_SHUTTER_VALUE) {
 			str = "MIN";
 		} else if (shutter == LightMeter.MAX_SHUTTER_VALUE) {
 			str = "MAX";
 		} else if (shutter < 0) {
-			str = "1/" + String.valueOf(Math.abs(shutter));
+			str = "1/" + df.format(Math.abs(shutter));
 		} else if (shutter > 60) {
 			int sec = (int) shutter % 60;
 			int min = (int) shutter / 60 % 60;
 			int hour = (int) shutter / 3600;
 			if (hour > 0) {
-				str = hour + "h " + min + "m " + sec + "\"";
-			} else if (min > 0) {
-				str = min + "m " + sec + "\"";
+				str += hour + "h ";
+			}
+			if (min > 0) {
+				str += min + "m ";
+			}
+			if (sec > 0) {
+				str += sec + "\"";
 			}
 		} else {
-			str = String.valueOf(shutter) + "\"";
+			str = df.format(shutter) + "\"";
 		}
-		return str;
+		return str.trim();
 	}
 	
 	@Override
