@@ -18,7 +18,7 @@
             android:summary="@string/conf_enable_keep_screen_on_summary"
             android:title="@string/conf_enable_keep_screen_on" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="CONF_ENABLE_KEEP_SCREEN_ORIENTATION"
             android:summary="@string/conf_enable_keep_screen_orientation_summary"
             android:title="@string/conf_enable_keep_screen_orientation" />

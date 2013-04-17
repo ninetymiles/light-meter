@@ -260,7 +260,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 				" mFv:" + mFv + 
 				" mTv:" + mTv);
 		
-		if (prefs.getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", false)) {
+		if (prefs.getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
 			mOrientation.lock();
 		} else {
 			mOrientation.unlock();
@@ -483,7 +483,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		if (DEBUG) Log.v(TAG, "ActivityMain::doStartMeasure");
 		mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
 		FlurryAgentWrapper.logEvent("MEASURE", true);
-		if (false == PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", false)) {
+		if (false == PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
 			mOrientation.lock();
 		}
 	}
@@ -492,7 +492,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		if (DEBUG) Log.v(TAG, "ActivityMain::doStopMeasure");
 		mSensorManager.unregisterListener(mSensorListener, mLightSensor);
 		FlurryAgentWrapper.endTimedEvent("MEASURE");
-		if (false == PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", false)) {
+		if (false == PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
 			mOrientation.unlock();
 		}
 	}
