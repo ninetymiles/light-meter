@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -502,6 +503,17 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		FlurryAgentWrapper.endTimedEvent("MEASURE");
 		if (false == PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
 			mOrientation.unlock();
+		}
+	}
+	
+	// TODO: Enable the reflect mode if user do have a camera
+	private boolean checkCameraHardware(Context context) {
+		if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+			// this device has a camera
+			return true;
+		} else {
+			// no camera on this device
+			return false;
 		}
 	}
 	

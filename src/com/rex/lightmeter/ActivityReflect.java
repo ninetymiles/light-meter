@@ -6,8 +6,6 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Size;
@@ -26,7 +24,7 @@ import android.widget.Button;
 
 import com.rex.flurry.FlurryAgentWrapper;
 
-public class ActivityReflect extends Activity implements SurfaceHolder.Callback {
+public class ActivityReflect extends Activity {
 	
 	private static final String TAG = "RexLog";
 	private static final boolean DEBUG = true;
@@ -37,8 +35,7 @@ public class ActivityReflect extends Activity implements SurfaceHolder.Callback 
 	
 	private Camera mCamera;
 	private int mCameraNum;
-	private int mCameraId;
-	private int mCameraLocked;
+	private int mCameraId = -1;
 	private List<Size> mSupportedPreviewSizes;
 	
 	@Override
@@ -61,7 +58,7 @@ public class ActivityReflect extends Activity implements SurfaceHolder.Callback 
 		// Install a SurfaceHolder.Callback so we get notified when the
 		// underlying surface is created and destroyed.
 		mHolder = mPreview.getHolder();
-		mHolder.addCallback(this);
+		mHolder.addCallback(mHolderCallback);
 		mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
 		// Find the ID of the default camera
@@ -103,9 +100,14 @@ public class ActivityReflect extends Activity implements SurfaceHolder.Callback 
 	@Override
 	protected void onResume() {
 		if (DEBUG) Log.v(TAG, "ActivityReflect::onResume");
-		mCamera = Camera.open();
-		mCameraLocked = mCameraId;
-		mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
+		try {
+			mCamera = Camera.open(mCameraId); // attempt to get a Camera instance
+		} catch (Exception e) {
+			Log.e(TAG, "ActivityReflect::onResume", e);
+		}
+		if (mCamera != null) {
+			mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
+		}
 		super.onResume();
 	}
 
@@ -158,41 +160,81 @@ public class ActivityReflect extends Activity implements SurfaceHolder.Callback 
 		super.onBackPressed();
 	}
 	
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		if (DEBUG) Log.v(TAG, "ActivityReflect::surfaceCreated");
-		// The Surface has been created, acquire the camera and tell it where
-		// to draw.
-		try {
-			if (mCamera != null) {
-				mCamera.setPreviewDisplay(holder);
-				mCamera.startPreview();
+	private SurfaceHolder.Callback mHolderCallback = new SurfaceHolder.Callback() {
+		@Override
+		public void surfaceCreated(SurfaceHolder holder) {
+			if (DEBUG) Log.v(TAG, "ActivityReflect::surfaceCreated");
+			// The Surface has been created, acquire the camera and tell it where to draw.
+			try {
+				if (mCamera != null) {
+					mCamera.setPreviewDisplay(holder);
+					mCamera.startPreview();
+				}
+			} catch (IOException exception) {
+				Log.e(TAG, "IOException caused by setPreviewDisplay", exception);
 			}
-		} catch (IOException exception) {
-			Log.e(TAG, "IOException caused by setPreviewDisplay()", exception);
 		}
-	}
+		
+		@Override
+		public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+			if (DEBUG) Log.v(TAG, "ActivityReflect::surfaceChanged width:" + width + " height:" + height);
+			
+			if (mHolder.getSurface() == null) {
+				Log.w(TAG, "ActivityReflect::surfaceChanged preview surface does not exist");
+				return;
+			}
+			
+			// Stop preview before making changes
+			try {
+				mCamera.stopPreview();
+			} catch (Exception e) {
+				// ignore: tried to stop a non-existent preview
+			}
+			
+			// Rotate display orientation according to device
+			CameraInfo info = new CameraInfo();
+			Camera.getCameraInfo(mCameraId, info);
+			int rotation = getWindowManager().getDefaultDisplay().getRotation();
+			int degrees = 0;
+			switch (rotation) {
+			case Surface.ROTATION_0:	degrees = 0;	break;
+			case Surface.ROTATION_90:	degrees = 90;	break;
+			case Surface.ROTATION_180:	degrees = 180;	break;
+			case Surface.ROTATION_270:	degrees = 270;	break;
+			}
+			int result;
+			if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+				result = (info.orientation + degrees) % 360;
+				result = (360 - result) % 360; // compensate the mirror
+			} else { // back-facing
+				result = (info.orientation - degrees + 360) % 360;
+			}
+			mCamera.setDisplayOrientation(result);
+			
+			// Set preview size
+			//Camera.Parameters parameters = mCamera.getParameters();
+			//parameters.setPreviewSize(width, height);
+			//mCamera.setParameters(parameters);
+			
+			// Start preview with new settings
+			try {
+				mCamera.setPreviewDisplay(mHolder);
+				mCamera.startPreview();
+			} catch (Exception e) {
+				Log.e(TAG, "ActivityReflect::surfaceChanged Error starting camera preview:" + e.toString());
+			}
+		}
+		
+		@Override
+		public void surfaceDestroyed(SurfaceHolder holder) {
+			if (DEBUG) Log.v(TAG, "ActivityReflect::surfaceDestroyed");
+			// Surface will be destroyed when we return, so stop the preview.
+			if (mCamera != null) {
+				mCamera.stopPreview();
+			}
+		}
+	};
 	
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		if (DEBUG) Log.v(TAG, "ActivityReflect::surfaceChanged width:" + width + " height:" + height);
-		// Now that the size is known, set up the camera parameters and begin
-		// the preview.
-		Camera.Parameters parameters = mCamera.getParameters();
-		parameters.setPreviewSize(width, height);
-		mCamera.setParameters(parameters);
-		mCamera.startPreview();
-	}
-
-	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
-		if (DEBUG) Log.v(TAG, "ActivityReflect::surfaceDestroyed");
-		// Surface will be destroyed when we return, so stop the preview.
-		if (mCamera != null) {
-			mCamera.stopPreview();
-		}
-	}
-
 	private OnClickListener mClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
