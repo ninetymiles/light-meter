@@ -302,10 +302,6 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 			UtilHelper.shareThisApp(this);
 			FlurryAgentWrapper.logEvent("SHARE");
 			break;
-		case R.id.menu_rate_me:
-			UtilHelper.rateThisApp(this);
-			FlurryAgentWrapper.logEvent("RATE");
-			break;
 		case R.id.menu_about:
 			//startActivity(new Intent(this, ActivityAbout.class));
 			startActivity(new Intent(this, ActivityReflect.class));
