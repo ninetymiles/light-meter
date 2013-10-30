@@ -12,3 +12,8 @@ L Pro Can force set +1EV or -1EV etc
 L Show mark line on the LCD bottom
 L Add multiple page OOBE, or show toast cover on the main page elements, after support save measure list
 L Add help, can show the toast content back
+L Test UI
+L Google Analysis
+L Google IAPv3
+L Remove dropdown double click
+L Android 4.3's way to lock screen orientation

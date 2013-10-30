@@ -284,21 +284,11 @@ public class ActivityReflect extends Activity {
 			ExifSubIFDDirectory directory = metadata.getDirectory(ExifSubIFDDirectory.class);
 			ExifSubIFDDescriptor descriptor = new ExifSubIFDDescriptor(directory);
 			
-			// obtain 
-			String aperture = directory.getString(ExifSubIFDDirectory.TAG_APERTURE);
-			String shutter = directory.getString(ExifSubIFDDirectory.TAG_SHUTTER_SPEED);
+			// obtain exposure attributes
+			String f = directory.getString(ExifSubIFDDirectory.TAG_FNUMBER);
+			String t = directory.getString(ExifSubIFDDirectory.TAG_EXPOSURE_TIME);
 			String iso = directory.getString(ExifSubIFDDirectory.TAG_ISO_EQUIVALENT);
-			Log.i(TAG, "Activityeflect::onPictureTaken aperture:" + aperture + " shutter:" + shutter + " iso:" + iso);
-			
-			String apertureDesc = descriptor.getApertureValueDescription();
-			String shutterDesc = descriptor.getShutterSpeedDescription();
-			String isoDesc = descriptor.getIsoEquivalentDescription();
-			String evDesc = descriptor.getExposureProgramDescription();
-			Log.i(TAG, "Activityeflect::onPictureTaken" +
-					" apertureDesc:" + apertureDesc + 
-					" shutterDesc:" + shutterDesc + 
-					" isoDesc:" + isoDesc +
-					" evDesc:" + evDesc);
+			Log.i(TAG, "Activityeflect::onPictureTaken f:" + f + " t:" + t + " iso:" + iso);
 			
 			// Camera HAL of some devices have a bug. 
 			// Starting preview immediately after taking a picture will fail. 
