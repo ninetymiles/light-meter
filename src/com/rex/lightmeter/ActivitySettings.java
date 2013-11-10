@@ -16,11 +16,13 @@
 
 package com.rex.lightmeter;
 
+import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.rex.flurry.FlurryAgentWrapper;
 import com.rex.lightmeter.R;
@@ -34,6 +36,11 @@ public class ActivitySettings extends PreferenceActivity implements SharedPrefer
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings);
+		
+		ActionBar actionBar = getActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
 		
 		PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
 	}
@@ -58,5 +65,16 @@ public class ActivitySettings extends PreferenceActivity implements SharedPrefer
 		if ("CONF_ENABLE_TRACKING".equals(key)) {
 			FlurryAgentWrapper.setTrackingEnabled(this, sharedPreferences.getBoolean(key, true));
 		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// TODO: Should use android:parentActivityName in AndroidManifest.xml instead
+			finish();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }

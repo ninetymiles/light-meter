@@ -32,10 +32,22 @@
         <activity
             android:name="com.rex.lightmeter.ActivityAbout"
             android:configChanges="keyboardHidden|orientation|keyboard|uiMode" >
+
+            <!-- android:parentActivityName="com.rex.lightmeter.ActivityMain" -->
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rex.lightmeter.ActivityMain" />
         </activity>
         <activity
             android:name="com.rex.lightmeter.ActivitySettings"
             android:configChanges="keyboardHidden|orientation|keyboard|uiMode" >
+
+            <!-- android:parentActivityName="com.rex.lightmeter.ActivityMain" -->
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rex.lightmeter.ActivityMain" />
         </activity>
     </application>
 

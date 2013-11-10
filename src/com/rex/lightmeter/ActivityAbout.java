@@ -16,15 +16,16 @@
 
 package com.rex.lightmeter;
 
+import android.app.ActionBar;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.rex.flurry.FlurryAgentWrapper;
-import com.rex.lightmeter.R;
 
 public class ActivityAbout extends PreferenceActivity {
 
@@ -38,6 +39,11 @@ public class ActivityAbout extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		
 		addPreferencesFromResource(R.xml.about);
+		
+		ActionBar actionBar = getActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
 		
 		try {
 			PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -62,5 +68,16 @@ public class ActivityAbout extends PreferenceActivity {
 		if (DEBUG) Log.v(TAG, "ActivityAbout::onStop");
 		FlurryAgentWrapper.onEndSession(this);
 		super.onStop();
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// TODO: Should use android:parentActivityName in AndroidManifest.xml instead
+			finish();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }
