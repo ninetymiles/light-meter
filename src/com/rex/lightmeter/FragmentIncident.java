@@ -3,14 +3,8 @@ package com.rex.lightmeter;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.ActionBar.TabListener;
-import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -21,27 +15,24 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rex.flurry.FlurryAgentWrapper;
 
-public class ActivityMain extends Activity implements OnFocusChangeListener {
+public class FragmentIncident extends Fragment implements OnFocusChangeListener {
 	
 	private static final String TAG = "RexLog";
 	private static final boolean DEBUG = true;
@@ -87,55 +78,41 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	private float mMaxLux;
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		if (DEBUG) Log.v(TAG, "ActivityMain::onCreate");
-		super.onCreate(savedInstanceState);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		if (DEBUG) Log.v(TAG, "FragmentIncident::onCreateView");
+		View fragView = inflater.inflate(R.layout.activity_main, container, false); // TODO: Rename activity_main as fragment_incident
 		
-		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_ENABLE_KEEP_SCREEN_ON", false)) {
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		}
+		mOrientation = new OrientationHelper(getActivity());
 		
-		setContentView(R.layout.activity_main);
+		mTextLux = (TextView) fragView.findViewById(R.id.main_lux_value);
+		mTextEv = (TextView) fragView.findViewById(R.id.main_ev_value);
 		
-		final ActionBar bar = getActionBar();
-		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
-		bar.addTab(bar.newTab().setText("Incident").setTabListener(new MyTabListener(new FragmentIncident())));
-		bar.addTab(bar.newTab().setText("Reflection").setTabListener(new MyTabListener(new FragmentReflect())));
-		if (savedInstanceState != null) {
-			bar.setSelectedNavigationItem(savedInstanceState.getInt("TAB", 0));
-		}
-		
-		
-		mOrientation = new OrientationHelper(this);
-		
-		mTextLux = (TextView) findViewById(R.id.main_lux_value);
-		mTextEv = (TextView) findViewById(R.id.main_ev_value);
-		
-		mSpinnerIso = (Spinner) findViewById(R.id.main_iso_value);
+		mSpinnerIso = (Spinner) fragView.findViewById(R.id.main_iso_value);
 		mSpinnerIso.setOnItemSelectedListener(mSpinnerSelectedListener);
 		mSpinnerIso.setFocusableInTouchMode(true);
 		
-		mSpinnerAperture = (Spinner) findViewById(R.id.main_aperture_value);
+		mSpinnerAperture = (Spinner) fragView.findViewById(R.id.main_aperture_value);
 		mSpinnerAperture.setOnItemSelectedListener(mSpinnerSelectedListener);
 		mSpinnerAperture.setOnFocusChangeListener(this);
 		mSpinnerAperture.setFocusableInTouchMode(true);
-		mSpinnerShutter = (Spinner) findViewById(R.id.main_shutter_value);
+		mSpinnerShutter = (Spinner) fragView.findViewById(R.id.main_shutter_value);
 		mSpinnerShutter.setOnItemSelectedListener(mSpinnerSelectedListener);
 		mSpinnerShutter.setOnFocusChangeListener(this);
 		mSpinnerShutter.setFocusableInTouchMode(true);
 		
-		mBtnMeasure = (Button) findViewById(R.id.main_button);
+		mBtnMeasure = (Button) fragView.findViewById(R.id.main_button);
 		mBtnMeasure.setOnTouchListener(mTouchListener);
 		mBtnMeasure.setOnClickListener(mClickListener);
 		mBtnMeasure.setOnLongClickListener(mLongClickListener);
 		
-		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+		mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
 		mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 		mMeter = new LightMeter();
 		mMeter.setISO(200);
+		
+		return fragView;
 	}
-	
+
 	private String printApertureValue(double aperture) {
 		//if (DEBUG) Log.v(TAG, "ActivityMain::printApertureValue aperture:" + aperture);
 		String str = "";
@@ -180,23 +157,9 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	}
 	
 	@Override
-	protected void onStart() {
-		if (DEBUG) Log.v(TAG, "ActivityMain::onStart");
-		FlurryAgentWrapper.onStartSession(this);
-		super.onStart();
-	}
-	
-	@Override
-	protected void onStop() {
-		if (DEBUG) Log.v(TAG, "ActivityMain::onStop");
-		FlurryAgentWrapper.onEndSession(this);
-		super.onStop();
-	}
-	
-	@Override
-	protected void onPause() {
+	public void onPause() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onPause");
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		prefs.edit()
 				.putFloat(PREFS_FV, (float) mFv)
 				.putFloat(PREFS_TV, (float) mTv)
@@ -207,9 +170,9 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	}
 
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		if (DEBUG) Log.v(TAG, "ActivityMain::onResume");
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		mIsEnableVolumeKey = prefs.getBoolean("CONF_ENABLE_VOLUME_KEY", true);
 		mIsEnableRecordMaxValue = prefs.getBoolean("CONF_ENABLE_RECORD_MAX_VALUE", false);
 		mEvStop = LightMeter.STOP.values()[Integer.valueOf(prefs.getString("CONF_EV_STEP", "2"))];
@@ -235,7 +198,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		}
 		
 		ArrayAdapter<MainSpinnerItem> adapterISO;
-		adapterISO = new ArrayAdapter<MainSpinnerItem>(this, android.R.layout.simple_spinner_item, mISOValue);
+		adapterISO = new ArrayAdapter<MainSpinnerItem>(getActivity(), android.R.layout.simple_spinner_item, mISOValue);
 		adapterISO.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
 		mSpinnerIso.setAdapter(adapterISO);
@@ -252,7 +215,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 			}
 		}
 		ArrayAdapter<MainSpinnerItem> adapterAperture;
-		adapterAperture = new ArrayAdapter<MainSpinnerItem>(this, android.R.layout.simple_spinner_item, mApertureValue);
+		adapterAperture = new ArrayAdapter<MainSpinnerItem>(getActivity(), android.R.layout.simple_spinner_item, mApertureValue);
 		adapterAperture.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
 		mSpinnerAperture.setAdapter(adapterAperture);
@@ -269,7 +232,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 			}
 		}
 		ArrayAdapter<MainSpinnerItem> adapterShutter;
-		adapterShutter = new ArrayAdapter<MainSpinnerItem>(this, android.R.layout.simple_spinner_item, mShutterValue);
+		adapterShutter = new ArrayAdapter<MainSpinnerItem>(getActivity(), android.R.layout.simple_spinner_item, mShutterValue);
 		adapterShutter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
 		mSpinnerShutter.setAdapter(adapterShutter);
@@ -290,46 +253,40 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		}
 		super.onResume();
 	}
-
-	@Override
-	protected void onDestroy() {
-		if (DEBUG) Log.v(TAG, "ActivityMain::onDestroy");
-		super.onDestroy();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main_menu, menu);
-		return true;
-	}
 	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (DEBUG) Log.v(TAG, "ActivityMain::onOptionsItemSelected itemId:" + item.getItemId());
-		switch (item.getItemId()) {
-		case R.id.menu_setting:
-			startActivity(new Intent(this, ActivitySettings.class));
-			break;
-		case R.id.menu_feedback:
-			UtilHelper.sendEmail(this);
-			break;
-		case R.id.menu_share:
-			UtilHelper.shareThisApp(this);
-			FlurryAgentWrapper.logEvent("SHARE");
-			break;
-		case R.id.menu_about:
-			//startActivity(new Intent(this, ActivityAbout.class));
-			startActivity(new Intent(this, ActivityReflect.class));
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		getActivity().getMenuInflater().inflate(R.menu.activity_main_menu, menu);
+//		return true;
+//	}
+	
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		if (DEBUG) Log.v(TAG, "ActivityMain::onOptionsItemSelected itemId:" + item.getItemId());
+//		switch (item.getItemId()) {
+//		case R.id.menu_setting:
+//			startActivity(new Intent(this, ActivitySettings.class));
+//			break;
+//		case R.id.menu_feedback:
+//			UtilHelper.sendEmail(this);
+//			break;
+//		case R.id.menu_share:
+//			UtilHelper.shareThisApp(this);
+//			FlurryAgentWrapper.logEvent("SHARE");
+//			break;
+//		case R.id.menu_about:
+//			//startActivity(new Intent(this, ActivityAbout.class));
+//			startActivity(new Intent(this, ActivityReflect.class));
+//			break;
+//		}
+//		return super.onOptionsItemSelected(item);
+//	}
 	
 	private void setMode(Mode mode) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::setMode mode:" + mode);
 		mMode = mode;
-		findViewById(R.id.main_aperture_mode).setSelected(mMode == Mode.FV_FIRST);
-		findViewById(R.id.main_shutter_mode).setSelected(mMode == Mode.TV_FIRST);
+		getView().findViewById(R.id.main_aperture_mode).setSelected(mMode == Mode.FV_FIRST);
+		getView().findViewById(R.id.main_shutter_mode).setSelected(mMode == Mode.TV_FIRST);
 	}
 	
 	private void updateEv() {
@@ -397,66 +354,66 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		}
 	}
 	
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (DEBUG) Log.v(TAG, "ActivityMain::onKeyDown keyCode:" + keyCode);
-		boolean handled = false;
-		if (mIsEnableVolumeKey) {
-			switch (keyCode) {
-			case KeyEvent.KEYCODE_VOLUME_DOWN:
-				if (mSpinnerIso.isFocused()) {
-					int position = mSpinnerIso.getSelectedItemPosition();
-					if (position != AdapterView.INVALID_POSITION) {
-						position--;
-						if (position < 0) position = 0;
-						mSpinnerIso.setSelection(position);
-					}
-				} else if (mSpinnerAperture.isFocused() || mMode == Mode.FV_FIRST) {
-					int position = mSpinnerAperture.getSelectedItemPosition();
-					if (position != AdapterView.INVALID_POSITION) {
-						position--;
-						if (position < 1) position = 1;
-						mSpinnerAperture.setSelection(position);
-					}
-				} else if (mSpinnerShutter.isFocused() || mMode == Mode.TV_FIRST) {
-					int position = mSpinnerShutter.getSelectedItemPosition();
-					if (position != AdapterView.INVALID_POSITION) {
-						position--;
-						if (position < 1) position = 1;
-						mSpinnerShutter.setSelection(position);
-					}
-				}
-				handled = true;
-				break;
-			case KeyEvent.KEYCODE_VOLUME_UP:
-				if (mSpinnerIso.isFocused()) {
-					int position = mSpinnerIso.getSelectedItemPosition();
-					if (position != AdapterView.INVALID_POSITION) {
-						position++;
-						if (position >= mArrISO.size()) position = mArrISO.size() - 1;
-						mSpinnerIso.setSelection(position);
-					}
-				} else if (mSpinnerAperture.isFocused() || mMode == Mode.FV_FIRST) {
-					int position = mSpinnerAperture.getSelectedItemPosition();
-					if (position != AdapterView.INVALID_POSITION) {
-						position++;
-						if (position >= mArrAperture.size() - 1) position = mArrAperture.size() - 2;
-						mSpinnerAperture.setSelection(position);
-					}
-				} else if (mSpinnerShutter.isFocused() || mMode == Mode.TV_FIRST) {
-					int position = mSpinnerShutter.getSelectedItemPosition();
-					if (position != AdapterView.INVALID_POSITION) {
-						position++;
-						if (position >= mArrShutter.size() - 1) position = mArrShutter.size() - 2;
-						mSpinnerShutter.setSelection(position);
-					}
-				}
-				handled = true;
-				break;
-			}
-		}
-		return handled || super.onKeyDown(keyCode, event);
-	}
+//	@Override
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//		if (DEBUG) Log.v(TAG, "ActivityMain::onKeyDown keyCode:" + keyCode);
+//		boolean handled = false;
+//		if (mIsEnableVolumeKey) {
+//			switch (keyCode) {
+//			case KeyEvent.KEYCODE_VOLUME_DOWN:
+//				if (mSpinnerIso.isFocused()) {
+//					int position = mSpinnerIso.getSelectedItemPosition();
+//					if (position != AdapterView.INVALID_POSITION) {
+//						position--;
+//						if (position < 0) position = 0;
+//						mSpinnerIso.setSelection(position);
+//					}
+//				} else if (mSpinnerAperture.isFocused() || mMode == Mode.FV_FIRST) {
+//					int position = mSpinnerAperture.getSelectedItemPosition();
+//					if (position != AdapterView.INVALID_POSITION) {
+//						position--;
+//						if (position < 1) position = 1;
+//						mSpinnerAperture.setSelection(position);
+//					}
+//				} else if (mSpinnerShutter.isFocused() || mMode == Mode.TV_FIRST) {
+//					int position = mSpinnerShutter.getSelectedItemPosition();
+//					if (position != AdapterView.INVALID_POSITION) {
+//						position--;
+//						if (position < 1) position = 1;
+//						mSpinnerShutter.setSelection(position);
+//					}
+//				}
+//				handled = true;
+//				break;
+//			case KeyEvent.KEYCODE_VOLUME_UP:
+//				if (mSpinnerIso.isFocused()) {
+//					int position = mSpinnerIso.getSelectedItemPosition();
+//					if (position != AdapterView.INVALID_POSITION) {
+//						position++;
+//						if (position >= mArrISO.size()) position = mArrISO.size() - 1;
+//						mSpinnerIso.setSelection(position);
+//					}
+//				} else if (mSpinnerAperture.isFocused() || mMode == Mode.FV_FIRST) {
+//					int position = mSpinnerAperture.getSelectedItemPosition();
+//					if (position != AdapterView.INVALID_POSITION) {
+//						position++;
+//						if (position >= mArrAperture.size() - 1) position = mArrAperture.size() - 2;
+//						mSpinnerAperture.setSelection(position);
+//					}
+//				} else if (mSpinnerShutter.isFocused() || mMode == Mode.TV_FIRST) {
+//					int position = mSpinnerShutter.getSelectedItemPosition();
+//					if (position != AdapterView.INVALID_POSITION) {
+//						position++;
+//						if (position >= mArrShutter.size() - 1) position = mArrShutter.size() - 2;
+//						mSpinnerShutter.setSelection(position);
+//					}
+//				}
+//				handled = true;
+//				break;
+//			}
+//		}
+//		return handled || super.onKeyDown(keyCode, event);
+//	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -464,34 +421,33 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		super.onConfigurationChanged(newConfig);
 	}
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		if (DEBUG) Log.v(TAG, "ActivityMain::onSaveInstanceState");
-		outState.putDouble("LUX", mMeter.getLux());
-		outState.putInt("TAB", getActionBar().getSelectedNavigationIndex());
-		super.onSaveInstanceState(outState);
-	}
-
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		if (DEBUG) Log.v(TAG, "ActivityMain::onRestoreInstanceState");
-		mMeter.setLux(savedInstanceState.getDouble("LUX"));
-		mTextLux.setText(String.format("%.2f", mMeter.getLux()));
-		mTextEv.setText(String.format("%.2f", mMeter.getEv()));
-		super.onRestoreInstanceState(savedInstanceState);
-	}
+//	@Override
+//	public void onSaveInstanceState(Bundle outState) {
+//		if (DEBUG) Log.v(TAG, "ActivityMain::onSaveInstanceState");
+//		outState.putDouble("LUX", mMeter.getLux());
+//		super.onSaveInstanceState(outState);
+//	}
+//
+//	@Override
+//	public void onRestoreInstanceState(Bundle savedInstanceState) {
+//		if (DEBUG) Log.v(TAG, "ActivityMain::onRestoreInstanceState");
+//		mMeter.setLux(savedInstanceState.getDouble("LUX"));
+//		mTextLux.setText(String.format("%.2f", mMeter.getLux()));
+//		mTextEv.setText(String.format("%.2f", mMeter.getEv()));
+//		super.onRestoreInstanceState(savedInstanceState);
+//	}
 	
-	@Override
-	public void onBackPressed() {
-		if (DEBUG) Log.v(TAG, "ActivityMain::onBackPressed");
-		
-		if (System.currentTimeMillis() - mExitTime > 2000) {
-			Toast.makeText(getApplicationContext(), R.string.toast_quit, Toast.LENGTH_SHORT).show();
-			mExitTime = System.currentTimeMillis();
-		} else {
-			finish();
-		}
-	}
+//	@Override
+//	public void onBackPressed() {
+//		if (DEBUG) Log.v(TAG, "ActivityMain::onBackPressed");
+//		
+//		if (System.currentTimeMillis() - mExitTime > 2000) {
+//			Toast.makeText(getApplicationContext(), R.string.toast_quit, Toast.LENGTH_SHORT).show();
+//			mExitTime = System.currentTimeMillis();
+//		} else {
+//			finish();
+//		}
+//	}
 	
 	// FIXME: Should remove this
 	private void clearFocus() {
@@ -504,7 +460,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		if (DEBUG) Log.v(TAG, "ActivityMain::doStartMeasure");
 		mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
 		FlurryAgentWrapper.logEvent("MEASURE", true);
-		if (false == PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
+		if (false == PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
 			mOrientation.lock();
 		}
 	}
@@ -513,7 +469,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		if (DEBUG) Log.v(TAG, "ActivityMain::doStopMeasure");
 		mSensorManager.unregisterListener(mSensorListener, mLightSensor);
 		FlurryAgentWrapper.endTimedEvent("MEASURE");
-		if (false == PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
+		if (false == PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
 			mOrientation.unlock();
 		}
 	}
@@ -616,20 +572,4 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 			updateEv();
 		}
 	};
-	
-	private class MyTabListener implements TabListener {
-		private Fragment mFragment;
-		public MyTabListener(Fragment fragment) {
-			mFragment = fragment;
-		}
-		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-			ft.add(android.R.id.content, mFragment);
-		}
-		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-			ft.remove(mFragment);
-		}
-		public void onTabReselected(Tab tab, FragmentTransaction ft) {
-			if (DEBUG) Log.v(TAG, "ActivityMain::SensorEventListener::onSensorChanged");
-		}
-	}
 }
