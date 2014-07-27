@@ -33,6 +33,7 @@ public class LightMeter {
 	
 	private double mLux;
 	private double mEv;
+	private double mCompensation;
 	private int mStopValue = 2;	// Default use 1/3 EV for stop
 	
 	private static final double sLog2 = Math.log(2);
