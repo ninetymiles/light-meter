@@ -1,6 +1,9 @@
+H Select on the icon to set priority mode
+H Click on the spinner may change the value directly
+H Click on the exposure compensation icon may list and change the value directly
+H Update the icon for exposure compensation
 H Fix android 2.3.7 back from setting, may not auto select the value in list
 H Fix android 2.2/2.3 dropdown menu style ugly issue
-H Can set EV+ or EV- to adjust the sensor
 H Add two tab to support reflect and incidence mode
 M Support Google Play IAP
 M Support Amazon Market IAP
@@ -8,7 +11,6 @@ M Pro version Flash light can sum multiple flash value
 M Pro version need list all the purchased item
 M Pro version need show help page to tell what is pro version
 L Pro Can save measure list, and computer a average value to suggest that
-L Pro Can force set +1EV or -1EV etc
-L Show mark line on the LCD bottom
+L Show mark line on the LCD bottom for +EV or -EV
 L Add multiple page OOBE, or show toast cover on the main page elements, after support save measure list
 L Add help, can show the toast content back
