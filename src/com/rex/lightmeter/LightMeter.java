@@ -52,6 +52,10 @@ public class LightMeter {
 		return mEv;
 	}
 	
+	public void setCompensation(double value) {
+		mCompensation = value;
+	}
+	
 	public void setEv(double ev) {
 		mEv = ev;
 	}
@@ -82,8 +86,8 @@ public class LightMeter {
 	
 	// Return valid results or MIN MAX
 	public double getShutterByAperture(double N) {
-		if (DEBUG) Log.v(TAG, "LightMeter::getShutterByAperture N:" + N + " mEv:" + mEv);
-		double t = (N * N * 250) / (mLux * mISO * Math.pow(2, mCompensation));
+		if (DEBUG) Log.v(TAG, "LightMeter::getShutterByAperture N:" + N + " mEv:" + mEv + " C:" + mCompensation + " pow2:" + Math.pow(2, mCompensation));
+		double t = (N * N * 250) / (mLux * mISO / Math.pow(2, mCompensation));
 		//double t = (N * N) / Math.pow(2, mEv);
 		if (DEBUG) Log.v(TAG, "LightMeter::getShutterByAperture t:" + String.format("%.6f", t));
 		return getMatchShutter(t);
@@ -91,9 +95,9 @@ public class LightMeter {
 	
 	// Return valid results or MIN MAX
 	public double getApertureByShutter(double t) {
-		if (DEBUG) Log.v(TAG, "LightMeter::getApertureByShutter t:" + t);
+		if (DEBUG) Log.v(TAG, "LightMeter::getApertureByShutter t:" + t + " mEv:" + mEv + " C:" + mCompensation + " pow2:" + Math.pow(2, mCompensation));
 		double T = (t < 0) ? -1 / t : t;
-		double N = Math.sqrt(mLux * mISO * Math.pow(2, mCompensation) * T / 250f);
+		double N = Math.sqrt(mLux * mISO / Math.pow(2, mCompensation) * T / 250f);
 		if (DEBUG) Log.v(TAG, "LightMeter::getApertureByShutter N:" + N);
 		return getMatchAperture(N);
 	}
@@ -113,13 +117,14 @@ public class LightMeter {
 	public double getMatchShutter(double value) {
 		double matched = 0;
 		if (DEBUG) Log.v(TAG, "LightMeter::getMatchShutter value:" + String.format("%.6f", value) + " MIN:" + MIN_SHUTTER_VALUE + " MAX:" + MAX_SHUTTER_VALUE);
-		double minShutterValue = -1 / MIN_SHUTTER_VALUE; // Use minor value for small then 1 value, first convert it back
-		if (minShutterValue <= value && value <= MAX_SHUTTER_VALUE) {
-			matched = getMatchFromArray(value, sShutterIndex);
+		double realMinShutterValue = -1 / MIN_SHUTTER_VALUE; // Use minor value for small then 1 value, first convert it back
+		double realValue = (value < 0) ? -1 / value : value;
+		if (realMinShutterValue <= realValue && realValue <= MAX_SHUTTER_VALUE) {
+			matched = getMatchFromArray(realValue, sShutterIndex);
 			if (DEBUG) Log.v(TAG, "LightMeter::getMatchShutter matched:" + matched);
 		} else {
-			if (value <= minShutterValue) matched = MIN_SHUTTER_VALUE;
-			if (value >= MAX_SHUTTER_VALUE) matched = MAX_SHUTTER_VALUE;
+			if (realValue <= realMinShutterValue) matched = MIN_SHUTTER_VALUE;
+			if (realValue >= MAX_SHUTTER_VALUE) matched = MAX_SHUTTER_VALUE;
 		}
 		return matched;
 	}

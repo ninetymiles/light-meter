@@ -269,6 +269,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 			comp = Integer.parseInt(compensation);
 		} catch (Exception ex) {}
 		mCompensation = comp / 3.0f;
+		mMeter.setCompensation(mCompensation);
 		
 		if ("0".equals(compensation)) {
 //			textCompensationLabel.setVisibility(View.INVISIBLE);

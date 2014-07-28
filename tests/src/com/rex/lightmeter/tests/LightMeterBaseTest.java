@@ -21,17 +21,11 @@ import android.test.InstrumentationTestCase;
 import com.rex.lightmeter.LightMeter;
 
 public class LightMeterBaseTest extends InstrumentationTestCase {
-
-	//private AssetManager mLocalAssets;
-	//private AssetManager mTargetAssets;
 	
 	private LightMeter mMeter;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		//mLocalAssets = getInstrumentation().getContext().getAssets();
-		//mTargetAssets = getInstrumentation().getTargetContext().getAssets();
-		
 		mMeter = new LightMeter();
 	}
 
