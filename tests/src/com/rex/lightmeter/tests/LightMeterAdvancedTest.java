@@ -51,8 +51,8 @@ public class LightMeterAdvancedTest extends InstrumentationTestCase {
 		assertEquals(-1000d, mMeter.getShutterByAperture(1.0d));
 		
 		mMeter.setLux(Math.pow(2, 15) * 2.5);	// 15 EV
-		assertEquals(0d, mMeter.getShutterByAperture(1.0d));
-		assertEquals(0d, mMeter.getShutterByAperture(1.4d));
+		assertEquals(LightMeter.MIN_SHUTTER_VALUE, mMeter.getShutterByAperture(1.0d));
+		assertEquals(LightMeter.MIN_SHUTTER_VALUE, mMeter.getShutterByAperture(1.4d));
 		assertEquals(-8000d, mMeter.getShutterByAperture(2.0d));
 		assertEquals(-8d, mMeter.getShutterByAperture(64d));
 	}
@@ -63,7 +63,7 @@ public class LightMeterAdvancedTest extends InstrumentationTestCase {
 		assertEquals(2.8d, mMeter.getApertureByShutter(8));
 		
 		mMeter.setLux(Math.pow(2, 15) * 2.5);	// 15 EV
-		assertEquals(0d, mMeter.getApertureByShutter(-64000));	// Out of range
+		assertEquals(LightMeter.MIN_APERTURE_VALUE, mMeter.getApertureByShutter(-64000));	// Out of range
 		assertEquals(2.0d, mMeter.getApertureByShutter(-8000));
 		assertEquals(64d, mMeter.getApertureByShutter(-8));
 	}
@@ -80,7 +80,7 @@ public class LightMeterAdvancedTest extends InstrumentationTestCase {
 		mMeter.setISO(200);
 		mMeter.setLux(Math.pow(2, 15) * 2.5);	// 15 EV
 		assertEquals(32d, mMeter.getApertureByShutter(-60));
-		assertEquals(0d, mMeter.getApertureByShutter(-8));		// ISO100 15EV will use 1/8 F64, ISO200 will out of range
+		assertEquals(LightMeter.MAX_APERTURE_VALUE, mMeter.getApertureByShutter(-8));		// ISO100 15EV will use 1/8 F64, ISO200 will out of range
 		assertEquals(11d, mMeter.getApertureByShutter(-500));	// ISO100 15EV will use 1/500 F8, ISO200 can use F11 rather than F8
 		
 		mMeter.setISO(50);

@@ -21,6 +21,9 @@ import android.util.Log;
  * 2^EV	= N^2 / t
  * t	= N^2 / 2^EV = N^2 / (Lux / (250 / ISO))
  * N	= sqrt(2^EV * t) = sqrt((Lux / (250 / ISO)) * t)
+ * 
+ * 
+ * 2^C	= 
  */
 public class LightMeter {
 
@@ -80,9 +83,9 @@ public class LightMeter {
 	// Return valid results or MIN MAX
 	public double getShutterByAperture(double N) {
 		if (DEBUG) Log.v(TAG, "LightMeter::getShutterByAperture N:" + N + " mEv:" + mEv);
-		double t = (N * N * 250) / (mLux * mISO);
+		double t = (N * N * 250) / (mLux * mISO * Math.pow(2, mCompensation));
 		//double t = (N * N) / Math.pow(2, mEv);
-		if (DEBUG) Log.v(TAG, "LightMeter::getShutterByAperture t:" + t);
+		if (DEBUG) Log.v(TAG, "LightMeter::getShutterByAperture t:" + String.format("%.6f", t));
 		return getMatchShutter(t);
 	}
 	
@@ -90,7 +93,7 @@ public class LightMeter {
 	public double getApertureByShutter(double t) {
 		if (DEBUG) Log.v(TAG, "LightMeter::getApertureByShutter t:" + t);
 		double T = (t < 0) ? -1 / t : t;
-		double N = Math.sqrt(mLux * mISO * T / 250f);
+		double N = Math.sqrt(mLux * mISO * Math.pow(2, mCompensation) * T / 250f);
 		if (DEBUG) Log.v(TAG, "LightMeter::getApertureByShutter N:" + N);
 		return getMatchAperture(N);
 	}
@@ -109,11 +112,13 @@ public class LightMeter {
 	
 	public double getMatchShutter(double value) {
 		double matched = 0;
-		if (MIN_SHUTTER_VALUE <= value && value <= MAX_SHUTTER_VALUE) {
+		if (DEBUG) Log.v(TAG, "LightMeter::getMatchShutter value:" + String.format("%.6f", value) + " MIN:" + MIN_SHUTTER_VALUE + " MAX:" + MAX_SHUTTER_VALUE);
+		double minShutterValue = -1 / MIN_SHUTTER_VALUE; // Use minor value for small then 1 value, first convert it back
+		if (minShutterValue <= value && value <= MAX_SHUTTER_VALUE) {
 			matched = getMatchFromArray(value, sShutterIndex);
 			if (DEBUG) Log.v(TAG, "LightMeter::getMatchShutter matched:" + matched);
 		} else {
-			if (value <= MIN_SHUTTER_VALUE) matched = MIN_SHUTTER_VALUE;
+			if (value <= minShutterValue) matched = MIN_SHUTTER_VALUE;
 			if (value >= MAX_SHUTTER_VALUE) matched = MAX_SHUTTER_VALUE;
 		}
 		return matched;
