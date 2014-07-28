@@ -3,10 +3,14 @@
     package="com.rex.lightmeter.test"
     android:versionCode="1"
     android:versionName="1.0" >
-    
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="15" />
 
-    <application>
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="15" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher" >
         <uses-library android:name="android.test.runner" />
     </application>
 
