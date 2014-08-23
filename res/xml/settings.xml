@@ -29,6 +29,14 @@
             android:title="@string/conf_enable_record_max" />
 
         <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/dlg_exposure_compensation_title"
+            android:entries="@array/pref_exposure_compensation"
+            android:entryValues="@array/pref_exposure_compensation_value"
+            android:key="CONF_EXPOSURE_COMPENSATION"
+            android:summary="@string/conf_exposure_compensation_summary"
+            android:title="@string/conf_exposure_compensation" />
+        <ListPreference
             android:defaultValue="2"
             android:dialogTitle="@string/dlg_ev_stop_title"
             android:entries="@array/pref_ev_stop"

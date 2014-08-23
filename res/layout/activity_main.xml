@@ -63,6 +63,27 @@
                 android:text="--"
                 android:textColor="@android:color/black"
                 android:textSize="16dp" />
+
+            <!-- <TextView -->
+            <!-- android:id="@+id/main_compensation_label" -->
+            <!-- android:layout_width="wrap_content" -->
+            <!-- android:layout_height="wrap_content" -->
+            <!-- android:layout_marginRight="2dp" -->
+            <!-- android:text="@string/main_label_compensation" -->
+            <!-- android:textColor="@android:color/black" -->
+            <!-- android:textSize="16dp" -->
+            <!-- android:visibility="gone" /> -->
+
+            <TextView
+                android:id="@+id/main_compensation_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text=""
+                android:textColor="@android:color/black"
+                android:textSize="16dp" />
+            <!-- android:layout_weight="1" -->
+
         </LinearLayout>
 
         <LinearLayout

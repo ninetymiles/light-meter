@@ -7,6 +7,7 @@
     <string name="main_label_lux">"Lx"</string>
     <string name="main_label_ev">"EV"</string>
     <string name="main_label_iso">"ISO"</string>
+    <string name="main_label_compensation">"+/-"</string>
 
     <!-- MainActivity labels in setting -->
     <string name="main_label_aperture">"Aperture:"</string>
@@ -50,16 +51,19 @@
     <string name="conf_enable_record_max_summary">"For each time pressed the measure button, record the max value"</string>
     <string name="conf_ev_stop">"EV stops"</string>
     <string name="conf_ev_stop_summary">"Stops to adjust the aperture, shutter speed or ISO"</string>
+    <string name="conf_exposure_compensation">"Exposure Compensation"</string>
+    <string name="conf_exposure_compensation_summary">"Calibrate the light sensor"</string>
 
     <!-- Dialogs -->
     <string name="dlg_ev_stop_title">"Choose a stop value"</string>
+    <string name="dlg_exposure_compensation_title">"Choose a compensation value"</string>
 
     <!-- Toast -->
     <string name="toast_quit">"Press again to quit"</string>
 
     <!-- About -->
     <string name="about_category_title">"About"</string>
-    <string name="about_app_summary">"© 2013 RexStudio All rights reserved."</string>
+    <string name="about_app_summary">"© 2014 RexStudio All rights reserved."</string>
     <string name="about_version_title">"Version"</string>
     <string name="about_version_summary">"%1$s"</string>
 

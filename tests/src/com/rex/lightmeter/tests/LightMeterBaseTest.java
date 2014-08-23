@@ -21,17 +21,11 @@ import android.test.InstrumentationTestCase;
 import com.rex.lightmeter.LightMeter;
 
 public class LightMeterBaseTest extends InstrumentationTestCase {
-
-	//private AssetManager mLocalAssets;
-	//private AssetManager mTargetAssets;
 	
 	private LightMeter mMeter;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		//mLocalAssets = getInstrumentation().getContext().getAssets();
-		//mTargetAssets = getInstrumentation().getTargetContext().getAssets();
-		
 		mMeter = new LightMeter();
 	}
 
@@ -51,7 +45,7 @@ public class LightMeterBaseTest extends InstrumentationTestCase {
 		assertEquals(8d, mMeter.getMatchAperture(8.1d));
 		
 		assertEquals(1d, mMeter.getMatchAperture(0.9d));
-		assertEquals(0d, mMeter.getMatchAperture(0.5d));	// Overflow
+		assertEquals(LightMeter.MIN_APERTURE_VALUE, mMeter.getMatchAperture(0.5d));	// Overflow
 	}
 	
 	public void testGetMatchShutter() throws Exception {
@@ -60,6 +54,6 @@ public class LightMeterBaseTest extends InstrumentationTestCase {
 		assertEquals(-80d, mMeter.getMatchShutter(-75d));
 		
 		assertEquals(-8000d, mMeter.getMatchShutter(-9000d));
-		assertEquals(0d, mMeter.getMatchShutter(60 * 4096 * 3 / 2));
+		assertEquals(LightMeter.MAX_SHUTTER_VALUE, mMeter.getMatchShutter(60 * 4096 * 3 / 2));
 	}
 }

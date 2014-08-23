@@ -7,6 +7,7 @@
     <string name="main_label_lux">"Lx"</string>
     <string name="main_label_ev">"EV"</string>
     <string name="main_label_iso">"ISO"</string>
+    <string name="main_label_compensation">"+/-"</string>
 
     <!-- MainActivity labels in setting -->
     <string name="main_label_aperture">"光圈:"</string>
@@ -50,16 +51,19 @@
     <string name="conf_enable_record_max_summary">"每次按下测量按钮，只显示测量到的最大值"</string>
     <string name="conf_ev_stop">"EV 调整步长"</string>
     <string name="conf_ev_stop_summary">"调整光圈, 快门以及 ISO 的步长"</string>
-
+    <string name="conf_exposure_compensation">"曝光补偿"</string>
+    <string name="conf_exposure_compensation_summary">"设置额外的曝光补偿值来校准光线传感器"</string>
+    
     <!-- Dialogs -->
     <string name="dlg_ev_stop_title">"选择一个步长值"</string>
+    <string name="dlg_exposure_compensation_title">"选择一个曝光补偿值"</string>
 
     <!-- Toast -->
     <string name="toast_quit">"再按一次退出应用"</string>
 
     <!-- About -->
     <string name="about_category_title">"关于"</string>
-    <string name="about_app_summary">"© 2013 RexStudio 版权保留"</string>
+    <string name="about_app_summary">"© 2014 RexStudio 版权保留"</string>
     <string name="about_version_title">"版本"</string>
     <string name="about_version_summary">"%1$s"</string>
 
