@@ -51,6 +51,8 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 	private Spinner mSpinnerIso;
 	private Spinner mSpinnerAperture;
 	private Spinner mSpinnerShutter;
+	private TextView mTextCompensationLabel;
+	private TextView mTextCompensationValue;
 	
 	private Button mBtnMeasure;
 
@@ -73,6 +75,7 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 	private double mFv = 8f;
 	private double mTv = -60;
 	private int mISO = 200;
+	private double mCompensation = 0f;
 	private Mode mMode = Mode.UNDEFINED;
 
 	private float mMaxLux;
@@ -99,6 +102,9 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 		mSpinnerShutter.setOnItemSelectedListener(mSpinnerSelectedListener);
 		mSpinnerShutter.setOnFocusChangeListener(this);
 		mSpinnerShutter.setFocusableInTouchMode(true);
+		
+		mTextCompensationLabel = (TextView) fragView.findViewById(R.id.main_compensation_label);
+		mTextCompensationValue = (TextView) fragView.findViewById(R.id.main_compensation_value);
 		
 		mBtnMeasure = (Button) fragView.findViewById(R.id.main_button);
 		mBtnMeasure.setOnTouchListener(mTouchListener);
@@ -238,6 +244,25 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 		mSpinnerShutter.setAdapter(adapterShutter);
 		mSpinnerShutter.setSelection(position);
 		
+		// TODO: Will use image icon instead
+		String compensation = prefs.getString("CONF_EXPOSURE_COMPENSATION", "0");
+		int comp = 0;
+		try {
+			comp = Integer.parseInt(compensation);
+		} catch (Exception ex) {}
+		mCompensation = comp / 3.0f;
+		mMeter.setCompensation(mCompensation);
+		
+		if ("0".equals(compensation)) {
+//			mTextCompensationLabel.setVisibility(View.INVISIBLE);
+			mTextCompensationValue.setVisibility(View.INVISIBLE);
+		} else {
+			String compValue = String.format("%s %.1f EV", mCompensation > 0 ? "+" : "-", Math.abs(mCompensation));
+//			mTextCompensationLabel.setVisibility(View.VISIBLE);
+			mTextCompensationValue.setVisibility(View.VISIBLE);
+			mTextCompensationValue.setText(compValue);
+		}
+		
 		if (DEBUG) Log.v(TAG, "ActivityMain::onResume" +
 				" mIsEnableVolumeKey:" + mIsEnableVolumeKey + 
 				" mEvStop:" + mEvStop +
@@ -253,34 +278,6 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 		}
 		super.onResume();
 	}
-	
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		getActivity().getMenuInflater().inflate(R.menu.activity_main_menu, menu);
-//		return true;
-//	}
-	
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		if (DEBUG) Log.v(TAG, "ActivityMain::onOptionsItemSelected itemId:" + item.getItemId());
-//		switch (item.getItemId()) {
-//		case R.id.menu_setting:
-//			startActivity(new Intent(this, ActivitySettings.class));
-//			break;
-//		case R.id.menu_feedback:
-//			UtilHelper.sendEmail(this);
-//			break;
-//		case R.id.menu_share:
-//			UtilHelper.shareThisApp(this);
-//			FlurryAgentWrapper.logEvent("SHARE");
-//			break;
-//		case R.id.menu_about:
-//			//startActivity(new Intent(this, ActivityAbout.class));
-//			startActivity(new Intent(this, ActivityReflect.class));
-//			break;
-//		}
-//		return super.onOptionsItemSelected(item);
-//	}
 	
 	private void setMode(Mode mode) {
 		if (DEBUG) Log.v(TAG, "ActivityMain::setMode mode:" + mode);
@@ -427,7 +424,7 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 //		outState.putDouble("LUX", mMeter.getLux());
 //		super.onSaveInstanceState(outState);
 //	}
-//
+
 //	@Override
 //	public void onRestoreInstanceState(Bundle savedInstanceState) {
 //		if (DEBUG) Log.v(TAG, "ActivityMain::onRestoreInstanceState");
@@ -435,18 +432,6 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 //		mTextLux.setText(String.format("%.2f", mMeter.getLux()));
 //		mTextEv.setText(String.format("%.2f", mMeter.getEv()));
 //		super.onRestoreInstanceState(savedInstanceState);
-//	}
-	
-//	@Override
-//	public void onBackPressed() {
-//		if (DEBUG) Log.v(TAG, "ActivityMain::onBackPressed");
-//		
-//		if (System.currentTimeMillis() - mExitTime > 2000) {
-//			Toast.makeText(getApplicationContext(), R.string.toast_quit, Toast.LENGTH_SHORT).show();
-//			mExitTime = System.currentTimeMillis();
-//		} else {
-//			finish();
-//		}
 //	}
 	
 	// FIXME: Should remove this

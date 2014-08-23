@@ -107,7 +107,6 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 			bar.setSelectedNavigationItem(savedInstanceState.getInt("TAB", 0));
 		}
 		
-		
 		mOrientation = new OrientationHelper(this);
 		
 		mTextLux = (TextView) findViewById(R.id.main_lux_value);

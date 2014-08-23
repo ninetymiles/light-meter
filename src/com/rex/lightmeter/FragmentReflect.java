@@ -47,7 +47,7 @@ public class FragmentReflect extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (DEBUG) Log.v(TAG, "FragmentReflect::onCreateView");
-		View fragView = inflater.inflate(R.layout.activity_reflect, container, false);
+		View fragView = inflater.inflate(R.layout.fragment_reflect, container, false);
 		
 		mPreview = (SurfaceView) fragView.findViewById(R.id.reflect_surface);
 		mBtnMeasure = (Button) fragView.findViewById(R.id.reflect_button);
