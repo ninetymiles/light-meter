@@ -163,12 +163,10 @@ public class FragmentReflect extends Fragment {
 		@Override
 		public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 			if (DEBUG) Log.v(TAG, "FragmentReflect::surfaceChanged width:" + width + " height:" + height);
-			
 			if (mHolder.getSurface() == null) {
 				Log.w(TAG, "FragmentReflect::surfaceChanged preview surface does not exist");
 				return;
 			}
-			
 			setupPreview();
 		}
 		

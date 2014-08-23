@@ -341,8 +341,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 			FlurryAgentWrapper.logEvent("SHARE");
 			break;
 		case R.id.menu_about:
-			//startActivity(new Intent(this, ActivityAbout.class));
-			startActivity(new Intent(this, ActivityReflect.class));
+			startActivity(new Intent(this, ActivityAbout.class));
 			break;
 		}
 		return super.onOptionsItemSelected(item);
