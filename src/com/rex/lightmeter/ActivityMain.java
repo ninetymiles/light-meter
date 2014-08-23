@@ -82,6 +82,7 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 	private double mFv = 8f;
 	private double mTv = -60;
 	private int mISO = 200;
+	private double mCompensation = 0f;
 	private Mode mMode = Mode.UNDEFINED;
 
 	private float mMaxLux;
@@ -275,13 +276,35 @@ public class ActivityMain extends Activity implements OnFocusChangeListener {
 		mSpinnerShutter.setAdapter(adapterShutter);
 		mSpinnerShutter.setSelection(position);
 		
+		// TODO: Will use image icon instead
+//		TextView textCompensationLabel = (TextView) findViewById(R.id.main_compensation_label);
+		TextView textCompensationValue = (TextView) findViewById(R.id.main_compensation_value);
+		String compensation = prefs.getString("CONF_EXPOSURE_COMPENSATION", "0");
+		int comp = 0;
+		try {
+			comp = Integer.parseInt(compensation);
+		} catch (Exception ex) {}
+		mCompensation = comp / 3.0f;
+		mMeter.setCompensation(mCompensation);
+		
+		if ("0".equals(compensation)) {
+//			textCompensationLabel.setVisibility(View.INVISIBLE);
+			textCompensationValue.setVisibility(View.INVISIBLE);
+		} else {
+			String compValue = String.format("%s %.1f EV", mCompensation > 0 ? "+" : "-", Math.abs(mCompensation));
+//			textCompensationLabel.setVisibility(View.VISIBLE);
+			textCompensationValue.setVisibility(View.VISIBLE);
+			textCompensationValue.setText(compValue);
+		}
+		
 		if (DEBUG) Log.v(TAG, "ActivityMain::onResume" +
 				" mIsEnableVolumeKey:" + mIsEnableVolumeKey + 
 				" mEvStop:" + mEvStop +
 				" mMode:" + mMode +
 				" mISO:" + mISO +
 				" mFv:" + mFv + 
-				" mTv:" + mTv);
+				" mTv:" + mTv +
+				" mCompensation:" + mCompensation);
 		
 		if (prefs.getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
 			mOrientation.lock();

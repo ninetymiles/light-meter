@@ -6,11 +6,52 @@
         <item>1/2 EV</item>
         <item>1/3 EV</item>
     </string-array>
-
     <string-array name="pref_ev_stop_value">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+    </string-array>
+    <string-array name="pref_exposure_compensation">
+        <item>-3 EV</item>
+        <item>-2 2/3 EV</item>
+        <item>-2 1/3 EV</item>
+        <item>-2 EV</item>
+        <item>-1 2/3 EV</item>
+        <item>-1 1/3 EV</item>
+        <item>-1 EV</item>
+        <item>-2/3 EV</item>
+        <item>-1/3 EV</item>
+        <item>0 EV</item>
+        <item>+1/3 EV</item>
+        <item>+2/3 EV</item>
+        <item>+1 EV</item>
+        <item>+1 1/3 EV</item>
+        <item>+1 2/3 EV</item>
+        <item>+2 EV</item>
+        <item>+2 1/3 EV</item>
+        <item>+2 2/3 EV</item>
+        <item>+3 EV</item>
+    </string-array>
+    <string-array name="pref_exposure_compensation_value">
+        <item>-9</item>
+        <item>-8</item>
+        <item>-7</item>
+        <item>-6</item>
+        <item>-5</item>
+        <item>-4</item>
+        <item>-3</item>
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
     </string-array>
 
 </resources>
