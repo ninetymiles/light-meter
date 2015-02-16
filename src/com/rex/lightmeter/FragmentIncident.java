@@ -44,8 +44,6 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 	
 	private static enum Mode { UNDEFINED, TV_FIRST, FV_FIRST };
 	
-	private long mExitTime;
-	
 	private TextView mTextLux;
 	private TextView mTextEv;
 	private Spinner mSpinnerIso;

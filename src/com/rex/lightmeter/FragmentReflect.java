@@ -20,7 +20,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -37,7 +37,7 @@ public class FragmentReflect extends Fragment {
 	
 	private SurfaceView mPreview;
 	private SurfaceHolder mHolder;
-	private Button mBtnMeasure;
+	private ImageButton mBtnMeasure;
 	
 	private Camera mCamera;
 	private int mCameraNum;
@@ -50,7 +50,7 @@ public class FragmentReflect extends Fragment {
 		View fragView = inflater.inflate(R.layout.fragment_reflect, container, false);
 		
 		mPreview = (SurfaceView) fragView.findViewById(R.id.reflect_surface);
-		mBtnMeasure = (Button) fragView.findViewById(R.id.reflect_button);
+		mBtnMeasure = (ImageButton) fragView.findViewById(R.id.reflect_button);
 		mBtnMeasure.setOnClickListener(mClickListener);
 		
 		// Find the total number of cameras available
