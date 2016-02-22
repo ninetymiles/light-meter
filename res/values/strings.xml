@@ -63,7 +63,7 @@
 
     <!-- About -->
     <string name="about_category_title">"About"</string>
-    <string name="about_app_summary">"© 2014 RexStudio All rights reserved."</string>
+    <string name="about_app_summary">"© 2016 RexStudio All rights reserved."</string>
     <string name="about_version_title">"Version"</string>
     <string name="about_version_summary">"%1$s"</string>
 
