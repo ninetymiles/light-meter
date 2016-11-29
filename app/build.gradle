@@ -1,5 +1,17 @@
 apply plugin: 'com.android.application'
 
+def computeVersionCode() {
+    new ByteArrayOutputStream().withStream { os ->
+        def result = exec {
+            executable = 'git'
+            args = ['log', '--oneline']
+            standardOutput = os
+        }
+        ext.gitRev = os.toString().split('\n').size()
+    }
+    return gitRev
+}
+
 android {
     compileSdkVersion 14
     buildToolsVersion "25.0.0"
@@ -9,6 +21,9 @@ android {
         minSdkVersion 8
         targetSdkVersion 15
 
+        versionName "1.5.0"
+        versionCode computeVersionCode()
+
         testApplicationId "com.rex.lightmeter.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
@@ -16,7 +31,8 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles 'proguard.cfg'
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
