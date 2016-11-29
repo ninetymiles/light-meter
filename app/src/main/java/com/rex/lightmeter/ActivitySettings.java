@@ -30,54 +30,54 @@ import com.rex.lightmeter.R;
 
 public class ActivitySettings extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-	private static final String TAG = "RexLog";
-	private static final boolean DEBUG = true;
+    private static final String TAG = "RexLog";
+    private static final boolean DEBUG = true;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.settings);
-		
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			ActionBar actionBar = getActionBar();
-			if (actionBar != null) {
-				actionBar.setDisplayHomeAsUpEnabled(true);
-			}
-		}
-		
-		PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.settings);
 
-	@Override
-	protected void onStart() {
-		if (DEBUG) Log.v(TAG, "ActivitySettings::onStart");
-		FlurryAgentWrapper.onStartSession(this);
-		super.onStart();
-	}
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            ActionBar actionBar = getActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+        }
 
-	@Override
-	protected void onStop() {
-		if (DEBUG) Log.v(TAG, "ActivitySettings::onStop");
-		FlurryAgentWrapper.onEndSession(this);
-		super.onStop();
-	}
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
+    }
 
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		if (DEBUG) Log.d(TAG, "ActivitySettings::onSharedPreferenceChanged key:" + key);
-		if ("CONF_ENABLE_TRACKING".equals(key)) {
-			FlurryAgentWrapper.setTrackingEnabled(this, sharedPreferences.getBoolean(key, true));
-		}
-	}
+    @Override
+    protected void onStart() {
+        if (DEBUG) Log.v(TAG, "ActivitySettings::onStart");
+        FlurryAgentWrapper.onStartSession(this);
+        super.onStart();
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// TODO: Should use android:parentActivityName in AndroidManifest.xml instead
-			finish();
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    protected void onStop() {
+        if (DEBUG) Log.v(TAG, "ActivitySettings::onStop");
+        FlurryAgentWrapper.onEndSession(this);
+        super.onStop();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (DEBUG) Log.d(TAG, "ActivitySettings::onSharedPreferenceChanged key:" + key);
+        if ("CONF_ENABLE_TRACKING".equals(key)) {
+            FlurryAgentWrapper.setTrackingEnabled(this, sharedPreferences.getBoolean(key, true));
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            // TODO: Should use android:parentActivityName in AndroidManifest.xml instead
+            finish();
+            break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

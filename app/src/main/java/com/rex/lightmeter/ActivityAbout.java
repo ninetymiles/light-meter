@@ -30,57 +30,57 @@ import com.rex.flurry.FlurryAgentWrapper;
 
 public class ActivityAbout extends PreferenceActivity {
 
-	private static final String TAG = "RexLog";
-	private static final boolean DEBUG = true;
+    private static final String TAG = "RexLog";
+    private static final boolean DEBUG = true;
 
-	private static final String KEY_ABOUT_VERSION = "preference_about_version";
+    private static final String KEY_ABOUT_VERSION = "preference_about_version";
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		addPreferencesFromResource(R.xml.about);
-		
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			ActionBar actionBar = getActionBar();
-			if (actionBar != null) {
-				actionBar.setDisplayHomeAsUpEnabled(true);
-			}
-		}
-		
-		try {
-			PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-			Preference prefsVersion = getPreferenceScreen().findPreference(KEY_ABOUT_VERSION);
-			String strTemplate = getResources().getString(R.string.about_version_summary);
-			String strVersion = String.format(strTemplate, packageInfo.versionName);
-			prefsVersion.setSummary(strVersion);
-		} catch (NameNotFoundException ex) {
-			Log.e(TAG, "ActivityAbout::onCreate " + ex.getMessage());
-		}
-	}
-	
-	@Override
-	protected void onStart() {
-		if (DEBUG) Log.v(TAG, "ActivityAbout::onStart");
-		FlurryAgentWrapper.onStartSession(this);
-		super.onStart();
-	}
-	
-	@Override
-	protected void onStop() {
-		if (DEBUG) Log.v(TAG, "ActivityAbout::onStop");
-		FlurryAgentWrapper.onEndSession(this);
-		super.onStop();
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// TODO: Should use android:parentActivityName in AndroidManifest.xml instead
-			finish();
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        addPreferencesFromResource(R.xml.about);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            ActionBar actionBar = getActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+        }
+
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            Preference prefsVersion = getPreferenceScreen().findPreference(KEY_ABOUT_VERSION);
+            String strTemplate = getResources().getString(R.string.about_version_summary);
+            String strVersion = String.format(strTemplate, packageInfo.versionName);
+            prefsVersion.setSummary(strVersion);
+        } catch (NameNotFoundException ex) {
+            Log.e(TAG, "ActivityAbout::onCreate " + ex.getMessage());
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        if (DEBUG) Log.v(TAG, "ActivityAbout::onStart");
+        FlurryAgentWrapper.onStartSession(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        if (DEBUG) Log.v(TAG, "ActivityAbout::onStop");
+        FlurryAgentWrapper.onEndSession(this);
+        super.onStop();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            // TODO: Should use android:parentActivityName in AndroidManifest.xml instead
+            finish();
+            break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

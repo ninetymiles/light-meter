@@ -26,34 +26,34 @@ import com.rex.lightmeter.R;
 
 public class ActivityFirst extends Activity {
 
-	private static final boolean DEBUG = false;
-	private static final String TAG = "RexLog";
+    private static final boolean DEBUG = false;
+    private static final String TAG = "RexLog";
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		if (DEBUG) Log.v(TAG, "ActivityFirst::onCreate");
-		setContentView(R.layout.activity_first);
-		super.onCreate(savedInstanceState);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        if (DEBUG) Log.v(TAG, "ActivityFirst::onCreate");
+        setContentView(R.layout.activity_first);
+        super.onCreate(savedInstanceState);
+    }
 
-	@Override
-	protected void onStart() {
-		if (DEBUG) Log.v(TAG, "ActivityFirst::onStart");
-		FlurryAgentWrapper.onStartSession(this);
-		startMain();
-		super.onStart();
-	}
-	
-	@Override
-	protected void onStop() {
-		if (DEBUG) Log.v(TAG, "ActivityFirst::onStop");
-		FlurryAgentWrapper.onEndSession(this);
-		super.onStop();
-	}
+    @Override
+    protected void onStart() {
+        if (DEBUG) Log.v(TAG, "ActivityFirst::onStart");
+        FlurryAgentWrapper.onStartSession(this);
+        startMain();
+        super.onStart();
+    }
 
-	private void startMain() {
-		Intent intent = new Intent(ActivityFirst.this, ActivityMain.class);
-		startActivity(intent);
-		finish();
-	}
+    @Override
+    protected void onStop() {
+        if (DEBUG) Log.v(TAG, "ActivityFirst::onStop");
+        FlurryAgentWrapper.onEndSession(this);
+        super.onStop();
+    }
+
+    private void startMain() {
+        Intent intent = new Intent(ActivityFirst.this, ActivityMain.class);
+        startActivity(intent);
+        finish();
+    }
 }
