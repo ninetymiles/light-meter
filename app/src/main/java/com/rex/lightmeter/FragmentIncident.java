@@ -30,8 +30,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.rex.flurry.FlurryAgentWrapper;
-
 public class FragmentIncident extends Fragment implements OnFocusChangeListener {
 
     private static final String TAG = "RexLog";
@@ -442,7 +440,6 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
     private void doStartMeasure() {
         if (DEBUG) Log.v(TAG, "ActivityMain::doStartMeasure");
         mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
-        FlurryAgentWrapper.logEvent("MEASURE", true);
         if (false == PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
             mOrientation.lock();
         }
@@ -451,7 +448,6 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
     private void doStopMeasure() {
         if (DEBUG) Log.v(TAG, "ActivityMain::doStopMeasure");
         mSensorManager.unregisterListener(mSensorListener, mLightSensor);
-        FlurryAgentWrapper.endTimedEvent("MEASURE");
         if (false == PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
             mOrientation.unlock();
         }

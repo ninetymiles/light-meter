@@ -26,8 +26,6 @@ import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.rex.flurry.FlurryAgentWrapper;
-
 public class ActivityAbout extends PreferenceActivity {
 
     private static final String TAG = "RexLog";
@@ -61,16 +59,14 @@ public class ActivityAbout extends PreferenceActivity {
 
     @Override
     protected void onStart() {
-        if (DEBUG) Log.v(TAG, "ActivityAbout::onStart");
-        FlurryAgentWrapper.onStartSession(this);
         super.onStart();
+        if (DEBUG) Log.v(TAG, "ActivityAbout::onStart");
     }
 
     @Override
     protected void onStop() {
-        if (DEBUG) Log.v(TAG, "ActivityAbout::onStop");
-        FlurryAgentWrapper.onEndSession(this);
         super.onStop();
+        if (DEBUG) Log.v(TAG, "ActivityAbout::onStop");
     }
 
     @Override

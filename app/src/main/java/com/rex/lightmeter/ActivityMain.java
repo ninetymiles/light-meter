@@ -19,8 +19,6 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.rex.flurry.FlurryAgentWrapper;
-
 public class ActivityMain extends Activity {
 
     private static final String TAG = "RexLog";
@@ -59,14 +57,12 @@ public class ActivityMain extends Activity {
     protected void onStart() {
         super.onStart();
         if (DEBUG) Log.v(TAG, "ActivityMain::onStart");
-        FlurryAgentWrapper.onStartSession(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         if (DEBUG) Log.v(TAG, "ActivityMain::onStop");
-        FlurryAgentWrapper.onEndSession(this);
     }
 
     @Override
@@ -111,7 +107,6 @@ public class ActivityMain extends Activity {
             break;
         case R.id.menu_share:
             UtilHelper.shareThisApp(this);
-            FlurryAgentWrapper.logEvent("SHARE");
             break;
         case R.id.menu_about:
             startActivity(new Intent(this, ActivityAbout.class));

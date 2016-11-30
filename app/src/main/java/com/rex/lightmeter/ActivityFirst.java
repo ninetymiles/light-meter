@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.rex.flurry.FlurryAgentWrapper;
 import com.rex.lightmeter.R;
 
 public class ActivityFirst extends Activity {
@@ -39,7 +38,6 @@ public class ActivityFirst extends Activity {
     @Override
     protected void onStart() {
         if (DEBUG) Log.v(TAG, "ActivityFirst::onStart");
-        FlurryAgentWrapper.onStartSession(this);
         startMain();
         super.onStart();
     }
@@ -47,7 +45,6 @@ public class ActivityFirst extends Activity {
     @Override
     protected void onStop() {
         if (DEBUG) Log.v(TAG, "ActivityFirst::onStop");
-        FlurryAgentWrapper.onEndSession(this);
         super.onStop();
     }
 

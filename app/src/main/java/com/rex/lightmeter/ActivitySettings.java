@@ -25,7 +25,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.rex.flurry.FlurryAgentWrapper;
 import com.rex.lightmeter.R;
 
 public class ActivitySettings extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -51,23 +50,18 @@ public class ActivitySettings extends PreferenceActivity implements SharedPrefer
     @Override
     protected void onStart() {
         if (DEBUG) Log.v(TAG, "ActivitySettings::onStart");
-        FlurryAgentWrapper.onStartSession(this);
         super.onStart();
     }
 
     @Override
     protected void onStop() {
         if (DEBUG) Log.v(TAG, "ActivitySettings::onStop");
-        FlurryAgentWrapper.onEndSession(this);
         super.onStop();
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (DEBUG) Log.d(TAG, "ActivitySettings::onSharedPreferenceChanged key:" + key);
-        if ("CONF_ENABLE_TRACKING".equals(key)) {
-            FlurryAgentWrapper.setTrackingEnabled(this, sharedPreferences.getBoolean(key, true));
-        }
     }
 
     @Override
