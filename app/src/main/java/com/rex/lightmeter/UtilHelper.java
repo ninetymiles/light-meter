@@ -8,10 +8,12 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.Locale;
 
 /*
@@ -43,7 +45,7 @@ public class UtilHelper {
         defaultBody += String.format(context.getString(R.string.contact_mail_default_body_version), defaultClientVersion);
         defaultBody += "\n";
 
-        String defaultClientDevice = Build.MANUFACTURER + " - " + Build.MODEL + " - " + Build.PRODUCT + " / " + Build.VERSION.RELEASE;
+        String defaultClientDevice = Build.MANUFACTURER + " " + Build.MODEL + "/" + Build.VERSION.RELEASE + " " + Build.PRODUCT + " (" + Build.DEVICE + " - " + Build.HARDWARE + ")";
         defaultBody += String.format(context.getString(R.string.contact_mail_default_body_device), defaultClientDevice);
         defaultBody += "\n";
 
@@ -57,6 +59,7 @@ public class UtilHelper {
             Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto: " + defaultAddr));
             intent.putExtra(Intent.EXTRA_SUBJECT, defaultSubject);
             intent.putExtra(Intent.EXTRA_TEXT, defaultBody);
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), RexApp.sExternalLogFile)));
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             context.startActivity(intent);
         } catch(Exception ex) {
@@ -66,6 +69,7 @@ public class UtilHelper {
             intent.putExtra(Intent.EXTRA_EMAIL, new String[] { defaultAddr });
             intent.putExtra(Intent.EXTRA_SUBJECT, defaultSubject);
             intent.putExtra(Intent.EXTRA_TEXT, defaultBody);
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), RexApp.sExternalLogFile)));
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             context.startActivity(Intent.createChooser(intent, context.getString(R.string.contact_mail_chooser_title)));
         }
