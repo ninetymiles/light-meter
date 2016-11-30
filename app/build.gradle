@@ -1,0 +1,44 @@
+apply plugin: 'com.android.application'
+
+def computeVersionCode() {
+    new ByteArrayOutputStream().withStream { os ->
+        def result = exec {
+            executable = 'git'
+            args = ['log', '--oneline']
+            standardOutput = os
+        }
+        ext.gitRev = os.toString().split('\n').size()
+    }
+    return gitRev
+}
+
+android {
+    compileSdkVersion 14
+    buildToolsVersion "25.0.0"
+
+    defaultConfig {
+        applicationId "com.rex.lightmeter"
+        minSdkVersion 8
+        targetSdkVersion 15
+
+        versionName "1.5.0"
+        versionCode computeVersionCode()
+
+        testApplicationId "com.rex.lightmeter.test"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:18.0.0'
+    compile files('libs/FlurryAnalytics-6.2.0.jar')
+    compile files('libs/metadata-extractor-2.6.4.jar')
+}
