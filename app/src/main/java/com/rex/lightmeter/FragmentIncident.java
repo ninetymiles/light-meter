@@ -1,20 +1,15 @@
 package com.rex.lightmeter;
 
-import java.text.DecimalFormat;
-import java.util.List;
-
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,10 +25,15 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.text.DecimalFormat;
+import java.util.List;
+
 public class FragmentIncident extends Fragment implements OnFocusChangeListener {
 
-    private static final String TAG = "RexLog";
-    private static final boolean DEBUG = true;
+    private final Logger mLogger = LoggerFactory.getLogger("RexLog");
 
     private final String PREFS_FV = "PREFS_FV";
     private final String PREFS_TV = "PREFS_TV";
@@ -78,7 +78,7 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (DEBUG) Log.v(TAG, "FragmentIncident::onCreateView");
+        mLogger.trace("");
         View fragView = inflater.inflate(R.layout.activity_main, container, false); // TODO: Rename activity_main as fragment_incident
 
         mOrientation = new OrientationHelper(getActivity());
@@ -116,7 +116,7 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
     }
 
     private String printApertureValue(double aperture) {
-        //if (DEBUG) Log.v(TAG, "ActivityMain::printApertureValue aperture:" + aperture);
+        //mLogger.trace("aperture:{}", aperture);
         String str = "";
         DecimalFormat df = new DecimalFormat("0.#");
         if (aperture == LightMeter.MIN_APERTURE_VALUE) {
@@ -130,7 +130,7 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
     }
 
     private String printShutterValue(double shutter) {
-        //if (DEBUG) Log.v(TAG, "ActivityMain::printShutterValue shutter:" + shutter);
+        //mLogger.trace("shutter:{}", shutter);
         String str = "";
         DecimalFormat df = new DecimalFormat("0.#");
         if (shutter == LightMeter.MIN_SHUTTER_VALUE) {
@@ -160,7 +160,8 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 
     @Override
     public void onPause() {
-        if (DEBUG) Log.v(TAG, "ActivityMain::onPause");
+        super.onPause();
+        mLogger.trace("");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         prefs.edit()
                 .putFloat(PREFS_FV, (float) mFv)
@@ -168,12 +169,14 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
                 .putInt(PREFS_ISO, mISO)
                 .putInt(PREFS_MODE, mMode.ordinal())
                 .commit();
-        super.onPause();
+
     }
 
     @Override
     public void onResume() {
-        if (DEBUG) Log.v(TAG, "ActivityMain::onResume");
+        super.onResume();
+        mLogger.trace("");
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mIsEnableVolumeKey = prefs.getBoolean("CONF_ENABLE_VOLUME_KEY", true);
         mIsEnableRecordMaxValue = prefs.getBoolean("CONF_ENABLE_RECORD_MAX_VALUE", false);
@@ -259,31 +262,23 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
             mTextCompensationValue.setText(compValue);
         }
 
-        if (DEBUG) Log.v(TAG, "ActivityMain::onResume" +
-                " mIsEnableVolumeKey:" + mIsEnableVolumeKey +
-                " mEvStop:" + mEvStop +
-                " mMode:" + mMode +
-                " mISO:" + mISO +
-                " mFv:" + mFv +
-                " mTv:" + mTv);
-
+        mLogger.trace("mIsEnableVolumeKey:{} mEvStop:{} mMode:{} mISO:{} mFv:{} mTv:{}", mIsEnableVolumeKey, mEvStop, mMode, mISO, mFv, mTv);
         if (prefs.getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
             mOrientation.lock();
         } else {
             mOrientation.unlock();
         }
-        super.onResume();
     }
 
     private void setMode(Mode mode) {
-        if (DEBUG) Log.v(TAG, "ActivityMain::setMode mode:" + mode);
+        mLogger.trace("mode:{}", mode);
         mMode = mode;
         getView().findViewById(R.id.main_aperture_mode).setSelected(mMode == Mode.FV_FIRST);
         getView().findViewById(R.id.main_shutter_mode).setSelected(mMode == Mode.TV_FIRST);
     }
 
     private void updateEv() {
-        if (DEBUG) Log.v(TAG, "ActivityMain::updateEv mMode:" + mMode + " mFv:" + mFv + " mTv:" + mTv);
+        mLogger.trace("mMode:{} mFv:{} mTv:{}", mMode, mFv, mTv);
         double shutter = 0;
         double aperture = 0;
         switch (mMode) {
@@ -312,7 +307,7 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
             shutter = mMeter.getShutterByAperture(aperture);
             break;
         }
-        if (DEBUG) Log.v(TAG, "ActivityMain::updateEv shutter:" + shutter + " aperture:" + aperture);
+        mLogger.trace("shutter:{} aperture:{}", shutter, aperture);
         mSpinnerAperture.setSelection(mArrAperture.indexOf(aperture));
         mSpinnerShutter.setSelection(mArrShutter.indexOf(shutter));
         mTv = shutter;
@@ -321,7 +316,7 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        if (DEBUG) Log.v(TAG, "ActivityMain::onFocusChange id:" + v.getId() + " hasFocus:" + hasFocus);
+        mLogger.trace("id:{} hasFocus:{}", v.getId(), hasFocus);
         int position = 0;
         if (hasFocus) {
             switch (v.getId()) {
@@ -349,7 +344,7 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 
 //	@Override
 //	public boolean onKeyDown(int keyCode, KeyEvent event) {
-//		if (DEBUG) Log.v(TAG, "ActivityMain::onKeyDown keyCode:" + keyCode);
+//		mLogger.trace("keyCode:{}", keyCode);
 //		boolean handled = false;
 //		if (mIsEnableVolumeKey) {
 //			switch (keyCode) {
@@ -408,22 +403,16 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 //		return handled || super.onKeyDown(keyCode, event);
 //	}
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        if (DEBUG) Log.v(TAG, "ActivityMain::onConfigurationChanged");
-        super.onConfigurationChanged(newConfig);
-    }
-
 //	@Override
 //	public void onSaveInstanceState(Bundle outState) {
-//		if (DEBUG) Log.v(TAG, "ActivityMain::onSaveInstanceState");
+//		mLogger.trace("");
 //		outState.putDouble("LUX", mMeter.getLux());
 //		super.onSaveInstanceState(outState);
 //	}
 
 //	@Override
 //	public void onRestoreInstanceState(Bundle savedInstanceState) {
-//		if (DEBUG) Log.v(TAG, "ActivityMain::onRestoreInstanceState");
+//		mLogger.trace("");
 //		mMeter.setLux(savedInstanceState.getDouble("LUX"));
 //		mTextLux.setText(String.format("%.2f", mMeter.getLux()));
 //		mTextEv.setText(String.format("%.2f", mMeter.getEv()));
@@ -438,7 +427,7 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
     }
 
     private void doStartMeasure() {
-        if (DEBUG) Log.v(TAG, "ActivityMain::doStartMeasure");
+        mLogger.trace("");
         mSensorManager.registerListener(mSensorListener, mLightSensor, SensorManager.SENSOR_DELAY_GAME);
         if (false == PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
             mOrientation.lock();
@@ -446,7 +435,7 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
     }
 
     private void doStopMeasure() {
-        if (DEBUG) Log.v(TAG, "ActivityMain::doStopMeasure");
+        mLogger.trace("");
         mSensorManager.unregisterListener(mSensorListener, mLightSensor);
         if (false == PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
             mOrientation.unlock();
@@ -468,24 +457,19 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 
         @Override
         public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-            if (DEBUG) {
-                Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected" +
-                    " parentView:" + parentView.getId() +
-                    " position:" + position +
-                    " id:" + id);
-            }
+            mLogger.trace("parentView:{} position:{} id:{}", parentView.getId(), position, id);
             switch (parentView.getId()) {
             case R.id.main_iso_value:
-                if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected ISO:" + mISOValue[position]);
+                mLogger.trace("ISO:", mISOValue[position]);
                 mISO = (Integer) mISOValue[position].getValue();
                 mMeter.setISO(mISO);
                 break;
             case R.id.main_aperture_value:
-                if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected Aperture:" + mApertureValue[position]);
+                mLogger.trace("Aperture:{}", mApertureValue[position]);
                 mFv = (Double) mApertureValue[position].getValue();
                 break;
             case R.id.main_shutter_value:
-                if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onItemSelected Shutter:" + mShutterValue[position]);
+                mLogger.trace("Shutter:{}", mShutterValue[position]);
                 mTv = (Double) mShutterValue[position].getValue();
                 break;
             }
@@ -493,21 +477,21 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 
         @Override
         public void onNothingSelected(AdapterView<?> parentView) {
-            if (DEBUG) Log.v(TAG, "ActivityMain::OnItemSelectedListener::onNothingSelected");
+            //mLogger.trace("");
         }
     };
 
     private OnClickListener mClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            //if (DEBUG) Log.v(TAG, "ActivityMain::OnClickListener::onClick");
+            //mLogger.trace("");
         }
     };
 
     private OnLongClickListener mLongClickListener = new OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
-            //if (DEBUG) Log.v(TAG, "ActivityMain::OnLongClickListener::onLongClick");
+            //mLogger.trace("");
             return true;
         }
     };
@@ -516,7 +500,7 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            //if (DEBUG) Log.v(TAG, "ActivityMain::OnTouchListener::onTouch id:" + v.getId() + " action:" + event.getAction());
+            //mLogger.trace("id:{} action:{}", v.getId(), event.getAction());
             switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mMaxLux = 0;
@@ -536,12 +520,12 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            if (DEBUG) Log.v(TAG, "ActivityMain::SensorEventListener::onAccuracyChanged accuracy:" + accuracy);
+            mLogger.trace("accuracy:{}", accuracy);
         }
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            //if (DEBUG) Log.v(TAG, "ActivityMain::SensorEventListener::onSensorChanged");
+            //mLogger.trace("");
             float lux = event.values[0];
             if (mIsEnableRecordMaxValue && lux <= mMaxLux) return;
             mMaxLux = lux;

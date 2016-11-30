@@ -22,15 +22,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.rex.lightmeter.R;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ActivitySettings extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final String TAG = "RexLog";
-    private static final boolean DEBUG = true;
+    private final Logger mLogger = LoggerFactory.getLogger("RexLog");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,19 +48,19 @@ public class ActivitySettings extends PreferenceActivity implements SharedPrefer
 
     @Override
     protected void onStart() {
-        if (DEBUG) Log.v(TAG, "ActivitySettings::onStart");
         super.onStart();
+        mLogger.trace("");
     }
 
     @Override
     protected void onStop() {
-        if (DEBUG) Log.v(TAG, "ActivitySettings::onStop");
         super.onStop();
+        mLogger.trace("");
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (DEBUG) Log.d(TAG, "ActivitySettings::onSharedPreferenceChanged key:" + key);
+        mLogger.trace("key:{}", key);
     }
 
     @Override

@@ -4,16 +4,17 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
-import android.util.Log;
 import android.view.Surface;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * Helper class for lock/unlock orientation
  */
 public class OrientationHelper {
 
-    private static final String TAG = "RexLog";
-    private static final boolean DEBUG = true;
+    private final Logger mLogger = LoggerFactory.getLogger("RexLog");
 
     private final Activity mActivity;
 
@@ -32,7 +33,7 @@ public class OrientationHelper {
     }
 
     public void lock() {
-        if (DEBUG) Log.v(TAG, "OrientationHelper::lock");
+        mLogger.trace("");
         final int orientation = mActivity.getResources().getConfiguration().orientation;
         final int rotation = mActivity.getWindowManager().getDefaultDisplay().getRotation();
         int value = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE;
@@ -58,7 +59,7 @@ public class OrientationHelper {
     }
 
     public void unlock() {
-        if (DEBUG) Log.v(TAG, "OrientationHelper::unlock");
+        mLogger.trace("");
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 }

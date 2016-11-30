@@ -1,10 +1,5 @@
 package com.rex.lightmeter;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.List;
-
 import android.app.Fragment;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
@@ -12,7 +7,6 @@ import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -30,10 +24,17 @@ import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifSubIFDDescriptor;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
+
 public class FragmentReflect extends Fragment {
 
-    private static final String TAG = "RexLog";
-    private static final boolean DEBUG = true;
+    private final Logger mLogger = LoggerFactory.getLogger("RexLog");
 
     private SurfaceView mPreview;
     private SurfaceHolder mHolder;
@@ -46,7 +47,7 @@ public class FragmentReflect extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (DEBUG) Log.v(TAG, "FragmentReflect::onCreateView");
+        mLogger.trace("");
         View fragView = inflater.inflate(R.layout.fragment_reflect, container, false);
 
         mPreview = (SurfaceView) fragView.findViewById(R.id.reflect_surface);
@@ -66,7 +67,7 @@ public class FragmentReflect extends Fragment {
         CameraInfo cameraInfo = new CameraInfo();
         for (int i = 0; i < mCameraNum; i++) {
             Camera.getCameraInfo(i, cameraInfo);
-            if (DEBUG) Log.v(TAG, "FragmentReflect::onCreateView cameraInfo:" + cameraInfo.facing);
+            mLogger.trace("cameraInfo:{}", cameraInfo.facing);
             if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
                 mCameraId = i;
             }
@@ -77,32 +78,32 @@ public class FragmentReflect extends Fragment {
 
     @Override
     public void onPause() {
-        if (DEBUG) Log.v(TAG, "FragmentReflect::onPause");
+        super.onPause();
+        mLogger.trace("");
         // Because the Camera object is a shared resource, it's very
         // important to release it when the activity is paused.
         if (mCamera != null) {
             mCamera.release();
             mCamera = null;
         }
-        super.onPause();
     }
 
     @Override
     public void onResume() {
-        if (DEBUG) Log.v(TAG, "FragmentReflect::onResume");
+        super.onResume();
+        mLogger.trace("");
         try {
             mCamera = Camera.open(mCameraId); // attempt to get a Camera instance
         } catch (Exception e) {
-            Log.w(TAG, "FragmentReflect::onResume", e);
+            mLogger.warn("Failed to open camera\n", e);
         }
         //if (mCamera != null) {
         //	mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
         //}
-        super.onResume();
     }
 
     private void setupPreview() {
-        if (DEBUG) Log.v(TAG, "FragmentReflect::setupPreview");
+        mLogger.trace("");
         // Stop preview before making changes
         try {
             mCamera.stopPreview();
@@ -141,30 +142,30 @@ public class FragmentReflect extends Fragment {
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
         } catch (Exception e) {
-            Log.e(TAG, "FragmentReflect::surfaceChanged Error starting camera preview:" + e.toString());
+            mLogger.error("Failed to start camera preview\n", e);
         }
     }
 
     private SurfaceHolder.Callback mHolderCallback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
-            if (DEBUG) Log.v(TAG, "FragmentReflect::surfaceCreated");
+            mLogger.trace("");
             // The Surface has been created, acquire the camera and tell it where to draw.
             try {
                 if (mCamera != null) {
                     mCamera.setPreviewDisplay(holder);
                     mCamera.startPreview();
                 }
-            } catch (IOException exception) {
-                Log.e(TAG, "IOException caused by setPreviewDisplay", exception);
+            } catch (IOException ex) {
+                mLogger.error("Failed to set preview display\n", ex);
             }
         }
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            if (DEBUG) Log.v(TAG, "FragmentReflect::surfaceChanged width:" + width + " height:" + height);
+            mLogger.trace("format:{} width:{} height:{}", format, width, height);
             if (mHolder.getSurface() == null) {
-                Log.w(TAG, "FragmentReflect::surfaceChanged preview surface does not exist");
+                mLogger.warn("Preview surface does not exist");
                 return;
             }
             setupPreview();
@@ -172,7 +173,7 @@ public class FragmentReflect extends Fragment {
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
-            if (DEBUG) Log.v(TAG, "FragmentReflect::surfaceDestroyed");
+            mLogger.trace("");
             // Surface will be destroyed when we return, so stop the preview.
             if (mCamera != null) {
                 mCamera.stopPreview();
@@ -183,7 +184,7 @@ public class FragmentReflect extends Fragment {
     private OnClickListener mClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (DEBUG) Log.v(TAG, "FragmentReflect::onClick");
+            mLogger.trace("");
             if (mCamera != null) {
                 mCamera.takePicture(null, null, mPictureCallback);
             }
@@ -193,20 +194,20 @@ public class FragmentReflect extends Fragment {
     private PictureCallback mPictureCallback = new PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            if (DEBUG) Log.v(TAG, "FragmentReflect::onPictureTaken");
+            mLogger.trace("");
 
             BufferedInputStream stream = new BufferedInputStream(new ByteArrayInputStream(data));
             Metadata metadata = null;
             try {
                 metadata = ImageMetadataReader.readMetadata(stream, false);
             } catch (IOException ex) {
-                Log.e(TAG, "FragmentReflect::onPictureTaken read meta data failed", ex);
+                mLogger.error("Failed to read meta data\n", ex);
             } catch (ImageProcessingException ex) {
-                Log.w(TAG, "FragmentReflect::onPictureTaken image process failed", ex);
+                mLogger.warn("Failed to process image\n", ex);
             }
             for (Directory directory : metadata.getDirectories()) {
                 for (Tag tag : directory.getTags()) {
-                    Log.i(TAG, tag.toString());
+                    mLogger.info("  {}", tag.toString());
                 }
             }
             // obtain the Exif directory
@@ -217,7 +218,7 @@ public class FragmentReflect extends Fragment {
             String f = directory.getString(ExifSubIFDDirectory.TAG_FNUMBER);
             String t = directory.getString(ExifSubIFDDirectory.TAG_EXPOSURE_TIME);
             String iso = directory.getString(ExifSubIFDDirectory.TAG_ISO_EQUIVALENT);
-            Log.i(TAG, "Activityeflect::onPictureTaken f:" + f + " t:" + t + " iso:" + iso);
+            mLogger.info("f:{} t:{} iso:{}", f, t, iso);
 
             // Camera HAL of some devices have a bug.
             // Starting preview immediately after taking a picture will fail.

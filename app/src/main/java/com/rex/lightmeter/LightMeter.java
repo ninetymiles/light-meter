@@ -1,9 +1,11 @@
 package com.rex.lightmeter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import android.util.Log;
+import java.util.Locale;
 
 
 /*
@@ -27,8 +29,7 @@ import android.util.Log;
  */
 public class LightMeter {
 
-    private static final String TAG = "RexLog";
-    private static final boolean DEBUG = true;
+    private final Logger mLogger = LoggerFactory.getLogger("RexLog");
 
     public static enum STOP { FULL, HALF, THIRD };
 
@@ -42,13 +43,13 @@ public class LightMeter {
     private static final double sLog2 = Math.log(2);
 
     public LightMeter() {
-        if (DEBUG) Log.v(TAG, "LightMeter::constructor sLog2:" + sLog2);
+        mLogger.trace("sLog2:{}", sLog2);
     }
 
     public double setLux(double lux) {
         mLux = lux;
         mEv = Math.log((mLux * mISO / 250f)) / sLog2;
-        if (DEBUG) Log.v(TAG, "LightMeter::caculateEv lux:" + lux + " mEv:" + mEv);
+        mLogger.trace("lux:{} mEv:{}", lux, mEv);
         return mEv;
     }
 
@@ -86,19 +87,19 @@ public class LightMeter {
 
     // Return valid results or MIN MAX
     public double getShutterByAperture(double N) {
-        if (DEBUG) Log.v(TAG, "LightMeter::getShutterByAperture N:" + N + " mEv:" + mEv + " C:" + mCompensation + " pow2:" + Math.pow(2, mCompensation));
+        mLogger.trace("N:{} mEv:{} C:{} pow2:{}", N, mEv, mCompensation, Math.pow(2, mCompensation));
         double t = (N * N * 250) / (mLux * mISO / Math.pow(2, mCompensation));
         //double t = (N * N) / Math.pow(2, mEv);
-        if (DEBUG) Log.v(TAG, "LightMeter::getShutterByAperture t:" + String.format("%.6f", t));
+        mLogger.trace("t:{}", String.format(Locale.US, "%.6f", t));
         return getMatchShutter(t);
     }
 
     // Return valid results or MIN MAX
     public double getApertureByShutter(double t) {
-        if (DEBUG) Log.v(TAG, "LightMeter::getApertureByShutter t:" + t + " mEv:" + mEv + " C:" + mCompensation + " pow2:" + Math.pow(2, mCompensation));
+        mLogger.trace("t:{} mEv:{} C:{} pow2:{}", t, mEv, mCompensation, Math.pow(2, mCompensation));
         double T = (t < 0) ? -1 / t : t;
         double N = Math.sqrt(mLux * mISO / Math.pow(2, mCompensation) * T / 250f);
-        if (DEBUG) Log.v(TAG, "LightMeter::getApertureByShutter N:" + N);
+        mLogger.trace("N:{}", N);
         return getMatchAperture(N);
     }
 
@@ -106,7 +107,7 @@ public class LightMeter {
         double matched = 0;
         if (MIN_APERTURE_VALUE <= value && value <= MAX_APERTURE_VALUE) {
             matched = getMatchFromArray(value, sApertureIndex);
-            if (DEBUG) Log.v(TAG, "LightMeter::getMatchAperture matched:" + matched);
+            mLogger.trace("matched:{}", matched);
         } else {
             if (value <= MIN_APERTURE_VALUE) matched = MIN_APERTURE_VALUE;
             if (value >= MAX_APERTURE_VALUE) matched = MAX_APERTURE_VALUE;
@@ -116,12 +117,12 @@ public class LightMeter {
 
     public double getMatchShutter(double value) {
         double matched = 0;
-        if (DEBUG) Log.v(TAG, "LightMeter::getMatchShutter value:" + String.format("%.6f", value) + " MIN:" + MIN_SHUTTER_VALUE + " MAX:" + MAX_SHUTTER_VALUE);
+        mLogger.trace("value:{} MIN:{} MAX:{}", String.format(Locale.US, "%.6f", value), MIN_SHUTTER_VALUE, MAX_SHUTTER_VALUE);
         double realMinShutterValue = -1 / MIN_SHUTTER_VALUE; // Use minor value for small then 1 value, first convert it back
         double realValue = (value < 0) ? -1 / value : value;
         if (realMinShutterValue <= realValue && realValue <= MAX_SHUTTER_VALUE) {
             matched = getMatchFromArray(realValue, sShutterIndex);
-            if (DEBUG) Log.v(TAG, "LightMeter::getMatchShutter matched:" + matched);
+            mLogger.trace("matched:{}", matched);
         } else {
             if (realValue <= realMinShutterValue) matched = MIN_SHUTTER_VALUE;
             if (realValue >= MAX_SHUTTER_VALUE) matched = MAX_SHUTTER_VALUE;
@@ -130,14 +131,14 @@ public class LightMeter {
     }
 
     protected double getMatchFromArray(double value, double [] arr) {
-        if (DEBUG) Log.v(TAG, "LightMeter::getMatchFromArray value:" + String.format("%.6f", value));
+        mLogger.trace("value:{}", String.format(Locale.US, "%.6f", value));
         double v = 0;
         double diff = Double.MAX_VALUE;
         double matched = 0;
         value = (value < 0) ? -1 / value : value;
         for (int i = 0; i < arr.length; i+= mStopValue) {
             v = (arr[i] < 0) ? -1 / arr[i] : arr[i];
-            //if (DEBUG) Log.v(TAG, "LightMeter::getMatchFromArray arr[i]:" + arr[i] + " v:" + String.format("%.6f", v) + " diff:" + String.format("%.6f", Math.abs(value - v)));
+            mLogger.trace("arr[i]:{} v:{} diff:{}", arr[i], String.format(Locale.US, "%.6f", v), String.format(Locale.US, "%.6f", Math.abs(value - v)));
             if (Math.abs(value - v) < diff) {
                 diff = Math.abs(value - v);
                 matched = arr[i];

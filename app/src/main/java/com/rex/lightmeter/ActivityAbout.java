@@ -23,19 +23,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.util.Log;
 import android.view.MenuItem;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ActivityAbout extends PreferenceActivity {
 
-    private static final String TAG = "RexLog";
-    private static final boolean DEBUG = true;
+    private final Logger mLogger = LoggerFactory.getLogger("RexLog");
 
     private static final String KEY_ABOUT_VERSION = "preference_about_version";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLogger.trace("");
 
         addPreferencesFromResource(R.xml.about);
 
@@ -53,20 +55,20 @@ public class ActivityAbout extends PreferenceActivity {
             String strVersion = String.format(strTemplate, packageInfo.versionName);
             prefsVersion.setSummary(strVersion);
         } catch (NameNotFoundException ex) {
-            Log.e(TAG, "ActivityAbout::onCreate " + ex.getMessage());
+            mLogger.error("Failed to parse package info {}", ex.getMessage());
         }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (DEBUG) Log.v(TAG, "ActivityAbout::onStart");
+        mLogger.trace("");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (DEBUG) Log.v(TAG, "ActivityAbout::onStop");
+        mLogger.trace("");
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.rex.lightmeter;
 
-import java.util.Locale;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -10,15 +8,18 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Locale;
 
 /*
  * Helper class for sending email or other separately functions
  */
 public class UtilHelper {
 
-    private static final String TAG = "RexLog";
-    private static final boolean DEBUG = true;
+    private static final Logger sLogger = LoggerFactory.getLogger("RexLog");
 
     public static void sendEmail(Context context) {
         String defaultAddr = "timonlio@gmail.com";
@@ -59,7 +60,7 @@ public class UtilHelper {
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             context.startActivity(intent);
         } catch(Exception ex) {
-            if (DEBUG) Log.w(TAG, "UtilHelper::sendEmail ex:" + ex.toString() + " will try ACTION_SEND");
+            sLogger.warn("Failed to send mail by SENDTO\n", ex);
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("message/rfc822");
             intent.putExtra(Intent.EXTRA_EMAIL, new String[] { defaultAddr });

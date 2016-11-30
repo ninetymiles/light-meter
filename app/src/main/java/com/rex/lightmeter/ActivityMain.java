@@ -13,16 +13,17 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ActivityMain extends Activity {
 
-    private static final String TAG = "RexLog";
-    private static final boolean DEBUG = true;
+    private final Logger mLogger = LoggerFactory.getLogger("RexLog");
 
     private long mExitTime;
 
@@ -30,8 +31,8 @@ public class ActivityMain extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (DEBUG) Log.v(TAG, "ActivityMain::onCreate");
         super.onCreate(savedInstanceState);
+        mLogger.trace("");
 
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("CONF_ENABLE_KEEP_SCREEN_ON", false)) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -56,25 +57,25 @@ public class ActivityMain extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (DEBUG) Log.v(TAG, "ActivityMain::onStart");
+        mLogger.trace("");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (DEBUG) Log.v(TAG, "ActivityMain::onStop");
+        mLogger.trace("");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (DEBUG) Log.v(TAG, "ActivityMain::onPause");
+        mLogger.trace("");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (DEBUG) Log.v(TAG, "ActivityMain::onResume");
+        mLogger.trace("");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getBoolean("CONF_ENABLE_KEEP_SCREEN_ORIENTATION", true)) {
             mOrientation.lock();
@@ -85,8 +86,8 @@ public class ActivityMain extends Activity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        if (DEBUG) Log.v(TAG, "ActivityMain::onDestroy");
+        super.onDestroy()
+        mLogger.trace("");
     }
 
     @Override
@@ -97,7 +98,7 @@ public class ActivityMain extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (DEBUG) Log.v(TAG, "ActivityMain::onOptionsItemSelected itemId:" + item.getItemId());
+        mLogger.trace("itemId:{}", item.getItemId());
         switch (item.getItemId()) {
         case R.id.menu_setting:
             startActivity(new Intent(this, ActivitySettings.class));
@@ -118,26 +119,26 @@ public class ActivityMain extends Activity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (DEBUG) Log.v(TAG, "ActivityMain::onConfigurationChanged");
+        mLogger.trace("");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        if (DEBUG) Log.v(TAG, "ActivityMain::onSaveInstanceState");
+        mLogger.trace("");
         //outState.putDouble("LUX", mMeter.getLux());
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        if (DEBUG) Log.v(TAG, "ActivityMain::onRestoreInstanceState");
+        mLogger.trace("");
         //mMeter.setLux(savedInstanceState.getDouble("LUX"));
         super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     public void onBackPressed() {
-        if (DEBUG) Log.v(TAG, "ActivityMain::onBackPressed");
+        mLogger.trace("");
         if (System.currentTimeMillis() - mExitTime > 2000) {
             Toast.makeText(getApplicationContext(), R.string.toast_quit, Toast.LENGTH_SHORT).show();
             mExitTime = System.currentTimeMillis();
@@ -168,7 +169,7 @@ public class ActivityMain extends Activity {
             //ft.remove(mFragment);
         }
         public void onTabReselected(Tab tab, FragmentTransaction ft) {
-            if (DEBUG) Log.v(TAG, "ActivityMain::SensorEventListener::onSensorChanged");
+            mLogger.trace("");
         }
     }
 }

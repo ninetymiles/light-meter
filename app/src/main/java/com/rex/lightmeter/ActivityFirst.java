@@ -19,36 +19,36 @@ package com.rex.lightmeter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.rex.lightmeter.R;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ActivityFirst extends Activity {
 
-    private static final boolean DEBUG = false;
-    private static final String TAG = "RexLog";
+    private final Logger mLogger = LoggerFactory.getLogger("RexLog");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (DEBUG) Log.v(TAG, "ActivityFirst::onCreate");
-        setContentView(R.layout.activity_first);
         super.onCreate(savedInstanceState);
+        mLogger.trace("");
+        setContentView(R.layout.activity_first);
     }
 
     @Override
     protected void onStart() {
-        if (DEBUG) Log.v(TAG, "ActivityFirst::onStart");
-        startMain();
         super.onStart();
+        mLogger.trace("");
+        startMain();
     }
 
     @Override
     protected void onStop() {
-        if (DEBUG) Log.v(TAG, "ActivityFirst::onStop");
         super.onStop();
+        mLogger.trace("");
     }
 
     private void startMain() {
+        mLogger.trace("");
         Intent intent = new Intent(ActivityFirst.this, ActivityMain.class);
         startActivity(intent);
         finish();
