@@ -45,7 +45,6 @@ public class RexApp extends Application {
 //                    .build());
         }
 
-        mLogger.info("LogFile:{}", Environment.getExternalStorageDirectory() + File.separator + sExternalLogFile);
         if (! BuildConfig.DEBUG) {
             LoggerContext ctx = (LoggerContext) LoggerFactory.getILoggerFactory();
             Logger rootLogger = ctx.getLogger(Logger.ROOT_LOGGER_NAME);
@@ -58,7 +57,7 @@ public class RexApp extends Application {
 
             TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = new TimeBasedRollingPolicy<ILoggingEvent>();
             rollingPolicy.setContext(ctx);
-            rollingPolicy.setFileNamePattern(Environment.getExternalStorageDirectory()  + File.separator + "rex.%d{yyyy-MM-dd}.log");
+            rollingPolicy.setFileNamePattern(Environment.getExternalStorageDirectory() + File.separator + sExternalLogFile + ".%d{yyyy-MM-dd}");
             rollingPolicy.setMaxHistory(6);
             rollingPolicy.setParent(rollingFileAppender);
             rollingPolicy.start();
