@@ -86,7 +86,7 @@ public class ActivityMain extends Activity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy()
+        super.onDestroy();
         mLogger.trace("");
     }
 
