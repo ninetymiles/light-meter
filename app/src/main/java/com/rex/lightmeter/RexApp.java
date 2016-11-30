@@ -4,9 +4,11 @@ import android.app.Application;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
-import android.text.TextUtils;
-import android.util.Base64;
 
+import org.acra.ACRA;
+import org.acra.ReportField;
+import org.acra.ReportingInteractionMode;
+import org.acra.annotation.ReportsCrashes;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
@@ -19,6 +21,24 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 
+@ReportsCrashes(
+mailTo = "timonlio@gmail.com",
+applicationLogFile = "/mnt/sdcard/rex.log",
+customReportContent = { ReportField.APP_VERSION_NAME,
+    ReportField.APP_VERSION_CODE,
+    ReportField.ANDROID_VERSION,
+    ReportField.PHONE_MODEL,
+    ReportField.CUSTOM_DATA,
+    ReportField.STACK_TRACE,
+    ReportField.LOGCAT },
+mode = ReportingInteractionMode.DIALOG,
+resToastText = R.string.crash_toast_text, // optional, displayed as soon as the crash occurs, before collecting data which can take a few second    s
+resDialogText = R.string.crash_dialog_text,
+resDialogIcon = android.R.drawable.ic_dialog_info, //optional. default is a warning sign
+resDialogTitle = R.string.crash_dialog_title, // optional. default is your application name
+resDialogCommentPrompt = R.string.crash_dialog_comment_prompt, // optional. when defined, adds a user text field input with this text resource a    s a label
+resDialogOkToast = R.string.crash_dialog_ok_toast // optional. displays a Toast message when the user accepts to send a report.
+)
 public class RexApp extends Application {
 
     private final org.slf4j.Logger mLogger = LoggerFactory.getLogger("RexLog");
@@ -43,6 +63,10 @@ public class RexApp extends Application {
 //                    .penaltyLog()
 //                    .penaltyDeath()
 //                    .build());
+        }
+
+        if (! BuildConfig.DEBUG) {
+            ACRA.init(this); // This line triggers the initialization of ACRA
         }
 
         if (! BuildConfig.DEBUG) {
