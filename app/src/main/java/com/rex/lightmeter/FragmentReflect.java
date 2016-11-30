@@ -199,7 +199,7 @@ public class FragmentReflect extends Fragment {
             BufferedInputStream stream = new BufferedInputStream(new ByteArrayInputStream(data));
             Metadata metadata = null;
             try {
-                metadata = ImageMetadataReader.readMetadata(stream, false);
+                metadata = ImageMetadataReader.readMetadata(stream, -1);
             } catch (IOException ex) {
                 mLogger.error("Failed to read meta data\n", ex);
             } catch (ImageProcessingException ex) {
@@ -211,7 +211,7 @@ public class FragmentReflect extends Fragment {
                 }
             }
             // obtain the Exif directory
-            ExifSubIFDDirectory directory = metadata.getDirectory(ExifSubIFDDirectory.class);
+            ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
             ExifSubIFDDescriptor descriptor = new ExifSubIFDDescriptor(directory);
 
             // obtain exposure attributes
