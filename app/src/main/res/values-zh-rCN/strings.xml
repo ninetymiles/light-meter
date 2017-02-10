@@ -63,7 +63,7 @@
 
     <!-- About -->
     <string name="about_category_title">"关于"</string>
-    <string name="about_app_summary">"© 2016 RexStudio 版权保留"</string>
+    <string name="about_app_summary">"© 2017 RexStudio 版权保留"</string>
     <string name="about_version_title">"版本"</string>
     <string name="about_version_summary">"%1$s"</string>
 

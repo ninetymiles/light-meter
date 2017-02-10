@@ -25,7 +25,7 @@ public class UtilHelper {
 
     public static void sendEmail(Context context) {
         String defaultAddr = "timonlio@gmail.com";
-        String defaultSubject = "Rax LightMeter";
+        String defaultSubject = "Rex LightMeter";
         String defaultBody = "\n\n";
         String defaultClientVersion = "";
         try {
