@@ -1,5 +1,28 @@
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light" />
+    <!-- All customizations that are NOT specific to a particular API-level can goes here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- For customized alert dialog view padding, already public in Material, only for API before 21 -->
+        <item name="dialogPreferredPadding">@dimen/alert_dialog_customize_view_horizontal_marging</item>
+    </style>
+
+    <!-- Do not use Light theme, avoid showing a white screen before activity showing up -->
+    <style name="AppTheme.Fullscreen" parent="Theme.AppCompat.NoActionBar">
+        <!-- Fullscreen -->
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="AppTheme.Preference" parent="AppTheme">
+        <!-- For PreferenceFragmentCompat -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
+        <!-- For preference title too large on Nexus4@API19(4.4.4) -->
+        <item name="android:textAppearanceLarge">@android:style/TextAppearance.Medium</item>
+    </style>
 
 </resources>

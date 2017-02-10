@@ -1,0 +1,7 @@
+<resources>
+    <!-- Alert dialog -->
+    <!-- Ref to @android:layout/alert_dialog_material -->
+    <!-- @dimen/dialog_padding_top_material -->
+    <!-- @attr/dialogPreferredPadding -->
+    <dimen name="alert_dialog_customize_view_vertical_marging">18dp</dimen>
+</resources>

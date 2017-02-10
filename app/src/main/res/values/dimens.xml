@@ -1,0 +1,10 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Alert dialog -->
+    <!-- Ref @android:layout/alert_dialog_holo -->
+    <dimen name="alert_dialog_customize_view_vertical_marging">8dp</dimen>
+    <dimen name="alert_dialog_customize_view_horizontal_marging">16dp</dimen>
+</resources>

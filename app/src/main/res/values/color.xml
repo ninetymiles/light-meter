@@ -1,11 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
+    <!-- System color since version 1 -->
+    <!--<color name="darker_gray">#aaa</color>-->
+    <!--<color name="primary_text_dark" />-->
+    <!--<color name="primary_text_dark_nodisable" />-->
+    <!--<color name="primary_text_light" />-->
+    <!--<color name="primary_text_light_nodisable" />-->
+    <!--<color name="secondary_text_dark" />-->
+    <!--<color name="secondary_text_dark_nodisable" />-->
+    <!--<color name="secondary_text_light" />-->
+    <!--<color name="secondary_text_light_nodisable" />-->
+    <!--<color name="tab_indicator_text" />-->
+    <!--<color name="widget_edittext_dark" />-->
+    <!--<color name="white">#ffffffff</color>-->
+    <!--<color name="black">#ff000000</color>-->
+    <!--<color name="transparent">#00000000</color>-->
+    <!--<color name="background_dark">#ff000000</color>-->
+    <!--<color name="background_light">#ffffffff</color>-->
+    <!--<color name="tertiary_text_dark" />-->
+    <!--<color name="tertiary_text_light" />-->
+
+    <!-- System color added version 14 (Ice Scream Sandwich / 4.0) -->
+    <!--<color name="holo_blue_light">#ff33b5e5</color>-->
+    <!--<color name="holo_blue_dark">#ff0099cc</color>-->
+    <!--<color name="holo_green_light">#ff99cc00</color>-->
+    <!--<color name="holo_green_dark">#ff669900</color>-->
+    <!--<color name="holo_red_light">#ffff4444</color>-->
+    <!--<color name="holo_red_dark">#ffcc0000</color>-->
+    <!--<color name="holo_orange_light">#ffffbb33</color>-->
+    <!--<color name="holo_orange_dark">#ffff8800</color>-->
+    <!--<color name="holo_purple">#ffaa66cc</color>-->
+    <!--<color name="holo_blue_bright">#ff00ddff</color>-->
+
+    <!-- Material color -->
+    <color name="colorPrimary">#4c4c4c</color><!--   your app branding color for the app bar -->
+    <color name="colorPrimaryDark">#424242</color><!--   darker variant for the status bar and contextual app bars -->
+    <color name="colorAccent">#436476</color><!--   theme UI controls like checkboxes and text fields -->
+
     <color name="transparent_white">#99EEEEEE</color>
-    <color name="red">#FF0000</color>
     <color name="transparent_red">#99FF0000</color>
+    <color name="red">#FF0000</color>
     <color name="green">#0000FF</color>
     <color name="blue">#00FF00</color>
     <color name="gray">#666666</color>
