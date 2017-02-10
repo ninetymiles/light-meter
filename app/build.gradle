@@ -13,13 +13,13 @@ def computeVersionCode() {
 }
 
 android {
-    compileSdkVersion 14
-    buildToolsVersion "25.0.0"
+    compileSdkVersion 21
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.rex.lightmeter"
-        minSdkVersion 8
-        targetSdkVersion 15
+        minSdkVersion 14
+        targetSdkVersion 21
 
         versionName "1.5.0"
         versionCode computeVersionCode()
@@ -34,11 +34,14 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard-acra.pro', 'proguard-logback.pro'
         }
+        debug {
+            minifyEnabled false
+        }
     }
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:18.0.0'
+    compile 'com.android.support:support-v4:21.0.0'
     compile 'com.drewnoakes:metadata-extractor:2.9.1'
     compile 'ch.acra:acra:4.8.5'
     compile 'org.slf4j:slf4j-api:1.7.21'
