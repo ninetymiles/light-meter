@@ -38,7 +38,8 @@
     <string name="contact_mail_chooser_title">"选择一个应用以发送Email"</string>
 
     <!-- Config settins -->
-    <string name="conf_category_title">"设置"</string>
+    <string name="conf_category_general">"通用设置"</string>
+    <string name="conf_category_experimental">"试验性设置"</string>
     <string name="conf_enable_keep_screen_on">"保持屏幕常亮"</string>
     <string name="conf_enable_keep_screen_on_summary">"使用本应用时保持屏幕常亮, 需要重启应用生效"</string>
     <string name="conf_enable_keep_screen_orientation">"保持屏幕方向"</string>
@@ -53,7 +54,7 @@
     <string name="conf_ev_stop_summary">"调整光圈, 快门以及 ISO 的步长"</string>
     <string name="conf_exposure_compensation">"曝光补偿"</string>
     <string name="conf_exposure_compensation_summary">"设置额外的曝光补偿值来校准光线传感器"</string>
-    
+
     <!-- Dialogs -->
     <string name="dlg_ev_stop_title">"选择一个步长值"</string>
     <string name="dlg_exposure_compensation_title">"选择一个曝光补偿值"</string>
@@ -66,5 +67,7 @@
     <string name="about_app_summary">"© 2017 RexStudio 版权保留"</string>
     <string name="about_version_title">"版本"</string>
     <string name="about_version_summary">"%1$s"</string>
+    <string name="about_toast_experimental">"再按 %1$d 次可以启用试验性设置"</string>
+    <string name="about_toast_experimental_on">"您已经启用试验性设置"</string>
 
 </resources>
