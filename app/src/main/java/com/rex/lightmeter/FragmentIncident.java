@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class FragmentIncident extends Fragment implements OnFocusChangeListener {
 
@@ -168,8 +169,7 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
                 .putFloat(PREFS_TV, (float) mTv)
                 .putInt(PREFS_ISO, mISO)
                 .putInt(PREFS_MODE, mMode.ordinal())
-                .commit();
-
+                .apply();
     }
 
     @Override
@@ -253,11 +253,11 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
         mMeter.setCompensation(mCompensation);
 
         if ("0".equals(compensation)) {
-//			mTextCompensationLabel.setVisibility(View.INVISIBLE);
+            //mTextCompensationLabel.setVisibility(View.INVISIBLE);
             mTextCompensationValue.setVisibility(View.INVISIBLE);
         } else {
-            String compValue = String.format("%s %.1f EV", mCompensation > 0 ? "+" : "-", Math.abs(mCompensation));
-//			mTextCompensationLabel.setVisibility(View.VISIBLE);
+            String compValue = String.format(Locale.US, "%s %.1f EV", mCompensation > 0 ? "+" : "-", Math.abs(mCompensation));
+            //mTextCompensationLabel.setVisibility(View.VISIBLE);
             mTextCompensationValue.setVisibility(View.VISIBLE);
             mTextCompensationValue.setText(compValue);
         }
@@ -530,8 +530,8 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
             if (mIsEnableRecordMaxValue && lux <= mMaxLux) return;
             mMaxLux = lux;
             double ev = mMeter.setLux(lux);
-            mTextLux.setText(String.format("%.2f", lux));
-            mTextEv.setText(String.format("%.2f", ev));
+            mTextLux.setText(String.format(Locale.US, "%.2f", lux));
+            mTextEv.setText(String.format(Locale.US, "%.2f", ev));
             updateEv();
         }
     };

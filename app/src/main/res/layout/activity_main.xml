@@ -21,6 +21,7 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
                 android:layout_marginRight="6dp">
 
                 <TextView
@@ -28,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/main_label_lux"
                     android:textColor="@android:color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </FrameLayout>
 
             <TextView
@@ -39,11 +40,12 @@
                 android:layout_weight="1"
                 android:text="--"
                 android:textColor="@android:color/black"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
 
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="2dp"
                 android:layout_marginRight="2dp">
 
                 <TextView
@@ -51,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/main_label_ev"
                     android:textColor="@android:color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </FrameLayout>
 
             <TextView
@@ -62,16 +64,17 @@
                 android:layout_weight="1"
                 android:text="--"
                 android:textColor="@android:color/black"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/main_compensation_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
                 android:layout_marginRight="2dp"
                 android:text="@string/main_label_compensation"
                 android:textColor="@android:color/black"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:visibility="gone" />
 
             <TextView
@@ -81,7 +84,7 @@
                 android:layout_gravity="center_vertical"
                 android:text=""
                 android:textColor="@android:color/black"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
             <!-- android:layout_weight="1" -->
 
         </LinearLayout>
@@ -95,6 +98,7 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
                 android:layout_marginRight="2dp">
 
                 <TextView
@@ -104,7 +108,7 @@
                     android:gravity="center"
                     android:text="@string/main_label_iso"
                     android:textColor="@android:color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </FrameLayout>
 
             <Spinner
@@ -124,6 +128,7 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
                 android:layout_marginRight="3dp">
 
                 <TextView
@@ -136,7 +141,7 @@
                     android:padding="3dp"
                     android:text="T"
                     android:textColor="@android:color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </FrameLayout>
 
             <Spinner
@@ -156,6 +161,7 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
                 android:layout_marginRight="3dp">
 
                 <TextView
@@ -168,7 +174,7 @@
                     android:padding="3dp"
                     android:text="F"
                     android:textColor="@android:color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </FrameLayout>
 
             <Spinner
