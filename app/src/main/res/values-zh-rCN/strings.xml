@@ -66,7 +66,7 @@
     <string name="about_category_title">"关于"</string>
     <string name="about_app_summary">"© 2017 RexStudio 版权保留"</string>
     <string name="about_version_title">"版本"</string>
-    <string name="about_version_summary">"%1$s"</string>
+    <string name="about_version_summary">"%1$s r%2$d"</string>
     <string name="about_toast_experimental">"再按 %1$d 次可以启用试验性设置"</string>
     <string name="about_toast_experimental_on">"您已经启用试验性设置"</string>
 

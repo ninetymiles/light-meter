@@ -66,7 +66,7 @@
     <string name="about_category_title">"About"</string>
     <string name="about_app_summary">"© 2017 RexStudio All rights reserved."</string>
     <string name="about_version_title">"Version"</string>
-    <string name="about_version_summary">"%1$s"</string>
+    <string name="about_version_summary">"%1$s r%2$d"</string>
     <string name="about_toast_experimental">"Press %1$d more time(s) to enable experimental setting"</string>
     <string name="about_toast_experimental_on">"Already enabled experimental settings"</string>
 

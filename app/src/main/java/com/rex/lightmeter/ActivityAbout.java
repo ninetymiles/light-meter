@@ -56,9 +56,7 @@ public class ActivityAbout extends PreferenceActivity {
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             Preference prefsVersion = getPreferenceScreen().findPreference(KEY_ABOUT_VERSION);
-            String strTemplate = getResources().getString(R.string.about_version_summary);
-            String strVersion = String.format(strTemplate, packageInfo.versionName);
-            prefsVersion.setSummary(strVersion);
+            prefsVersion.setSummary(getResources().getString(R.string.about_version_summary, packageInfo.versionName, packageInfo.versionCode));
             prefsVersion.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 private long mTapTime;
                 private int mTapCount;
