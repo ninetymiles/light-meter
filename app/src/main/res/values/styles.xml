@@ -22,7 +22,8 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
         <!-- For preference title too large on Nexus4@API19(4.4.4) -->
-        <item name="android:textAppearanceLarge">@android:style/TextAppearance.Medium</item>
+        <!-- Upgrade to com.android.support:preference-v14 should fix this issue -->
+        <!--<item name="android:textAppearanceLarge">@android:style/TextAppearance.Medium</item>-->
     </style>
 
 </resources>
