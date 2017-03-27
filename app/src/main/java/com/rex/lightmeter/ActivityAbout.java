@@ -90,11 +90,6 @@ public class ActivityAbout extends PreferenceActivity {
         } catch (NameNotFoundException ex) {
             mLogger.error("Failed to parse package info {}", ex.getMessage());
         }
-
-        PreferenceScreen screen = getPreferenceScreen();
-        if (! prefs.getBoolean("CONF_ENABLE_EXPERIMENTAL", false)) {
-            screen.removePreference(screen.findPreference("CATEGORY_EXPERIMENTAL"));
-        }
     }
 
     @Override

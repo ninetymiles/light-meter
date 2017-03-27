@@ -17,9 +17,12 @@
 package com.rex.lightmeter;
 
 import android.app.ActionBar;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.view.MenuItem;
 
 import org.slf4j.Logger;
@@ -35,6 +38,12 @@ public class ActivitySettings extends PreferenceActivity {
         mLogger.trace("");
 
         addPreferencesFromResource(R.xml.settings);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (! prefs.getBoolean("CONF_ENABLE_EXPERIMENTAL", false)) {
+            PreferenceScreen screen = getPreferenceScreen();
+            screen.removePreference(screen.findPreference("CATEGORY_EXPERIMENTAL"));
+        }
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
