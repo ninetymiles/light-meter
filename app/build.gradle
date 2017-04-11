@@ -13,13 +13,13 @@ def computeVersionCode() {
 }
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.rex.lightmeter"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 25
 
         versionName "1.5.0"
         versionCode computeVersionCode()
@@ -41,12 +41,17 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:21.0.0'
-    compile 'com.drewnoakes:metadata-extractor:2.9.1'
-    compile 'ch.acra:acra:4.8.5'
+    compile 'com.android.support:appcompat-v7:25.3.0'
+    compile 'com.android.support:preference-v14:25.3.0'
+    compile 'com.android.support:design:25.3.0'
+
     compile 'org.slf4j:slf4j-api:1.7.21'
     compile 'com.github.tony19:logback-android-core:1.1.1-6'
     compile ('com.github.tony19:logback-android-classic:1.1.1-6') {
         exclude group: 'com.google.android'
     }
+
+    compile 'ch.acra:acra:4.8.5'
+
+    compile 'com.drewnoakes:metadata-extractor:2.9.1'
 }

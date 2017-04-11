@@ -23,7 +23,7 @@
         <activity
             android:name=".ActivityFirst"
             android:configChanges="keyboardHidden|orientation|keyboard|uiMode"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:theme="@style/AppTheme.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -37,7 +37,8 @@
         <activity
             android:name=".ActivityAbout"
             android:configChanges="keyboardHidden|orientation|keyboard|uiMode"
-            android:parentActivityName=".ActivityMain">
+            android:parentActivityName=".ActivityMain"
+            android:theme="@style/AppTheme.Preference">
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -46,12 +47,19 @@
         <activity
             android:name=".ActivitySettings"
             android:configChanges="keyboardHidden|orientation|keyboard|uiMode"
-            android:parentActivityName=".ActivityMain">
+            android:parentActivityName=".ActivityMain"
+            android:theme="@style/AppTheme.Preference">
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.rex.lightmeter.ActivityMain" />
         </activity>
+
+        <!-- Overwrite theme for ACRA crash report dialog -->
+        <activity
+            android:name="org.acra.dialog.CrashReportDialog"
+            tools:replace="android:theme"
+            android:theme="@style/AppTheme.Dialog.Alert" />
     </application>
 
 </manifest>
