@@ -26,6 +26,10 @@
         <!--<item name="android:textAppearanceLarge">@android:style/TextAppearance.Medium</item>-->
     </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <!-- FIXME: Attribute dialogPreferredPadding not works, the crash report dialog always display in zero padding which is ugly -->
     <style name="AppTheme.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert" />
 
