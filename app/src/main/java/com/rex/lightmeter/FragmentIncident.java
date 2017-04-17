@@ -80,7 +80,7 @@ public class FragmentIncident extends Fragment implements OnFocusChangeListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mLogger.trace("");
-        View fragView = inflater.inflate(R.layout.activity_main, container, false); // TODO: Rename activity_main as fragment_incident
+        View fragView = inflater.inflate(R.layout.fragment_incident, container, false);
 
         mOrientation = new OrientationHelper(getActivity());
 
