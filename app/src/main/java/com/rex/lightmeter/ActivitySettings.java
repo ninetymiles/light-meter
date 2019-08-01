@@ -18,7 +18,6 @@ package com.rex.lightmeter;
 
 import android.app.ActionBar;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -45,9 +44,9 @@ public class ActivitySettings extends PreferenceActivity {
             screen.removePreference(screen.findPreference("CATEGORY_EXPERIMENTAL"));
         }
 
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        ActionBar bar = getActionBar();
+        if (bar != null) {
+            bar.setDisplayHomeAsUpEnabled(true);
         }
     }
 

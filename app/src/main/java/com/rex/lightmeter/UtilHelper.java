@@ -2,10 +2,6 @@ package com.rex.lightmeter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -24,24 +20,15 @@ public class UtilHelper {
     private static final Logger sLogger = LoggerFactory.getLogger("RexLog");
 
     public static void sendEmail(Context context) {
+        String appLabel = context.getResources().getString(R.string.app_name);
         String defaultAddr = "timonlio@gmail.com";
-        String defaultSubject = "Rex LightMeter";
+        String defaultSubject = appLabel;
         String defaultBody = "\n\n";
-        String defaultClientVersion = "";
-        try {
-            String pkgName = context.getPackageName();
-            PackageManager pkgManager = context.getPackageManager();
-            PackageInfo packageInfo = pkgManager.getPackageInfo(pkgName, 0);
-            ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(pkgName, 0);
-            String appLabel = pkgManager.getApplicationLabel(appInfo).toString();
-            String version = String.format("%1$s v%2$s r%3$s",
+        String defaultClientVersion = String.format("%1$s v%2$s r%3$s",
                     appLabel,
-                    packageInfo.versionName,
-                    packageInfo.versionCode);
+                    BuildConfig.VERSION_NAME,
+                    BuildConfig.VERSION_CODE);
 
-            defaultSubject = appLabel;
-            defaultClientVersion = version;
-        } catch (NameNotFoundException e) {}
         defaultBody += String.format(context.getString(R.string.contact_mail_default_body_version), defaultClientVersion);
         defaultBody += "\n";
 

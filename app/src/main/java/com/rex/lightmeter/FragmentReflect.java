@@ -1,12 +1,12 @@
 package com.rex.lightmeter;
 
-import android.app.Fragment;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.SurfaceHolder;

@@ -16,14 +16,14 @@
 
 package com.rex.lightmeter;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ActivityFirst extends Activity {
+public class ActivityFirst extends AppCompatActivity {
 
     private final Logger mLogger = LoggerFactory.getLogger("RexLog");
 

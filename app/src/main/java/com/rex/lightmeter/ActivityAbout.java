@@ -18,14 +18,10 @@ package com.rex.lightmeter;
 
 import android.app.ActionBar;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.view.MenuItem;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
@@ -46,48 +42,43 @@ public class ActivityAbout extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.about);
 
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        ActionBar bar = getActionBar();
+        if (bar != null) {
+            bar.setDisplayHomeAsUpEnabled(true);
         }
 
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        try {
-            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            Preference prefsVersion = getPreferenceScreen().findPreference(KEY_ABOUT_VERSION);
-            prefsVersion.setSummary(getResources().getString(R.string.about_version_summary, packageInfo.versionName, packageInfo.versionCode));
-            prefsVersion.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                private long mTapTime;
-                private int mTapCount;
-                private Toast mToast;
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    //mLogger.trace("mTapCount:{}", mTapCount);
-                    long currentTime = System.currentTimeMillis();
-                    if (currentTime - mTapTime < ViewConfiguration.getJumpTapTimeout()) {
-                        mTapCount++;
-                        if (mToast != null) {
-                            mToast.cancel();
-                        }
-                        if (mTapCount >= 6 || prefs.getBoolean("CONF_ENABLE_EXPERIMENTAL", false)) {
-                            mToast = Toast.makeText(ActivityAbout.this, getResources().getString(R.string.about_toast_experimental_on), Toast.LENGTH_SHORT);
-                            mToast.show();
-                            prefs.edit().putBoolean("CONF_ENABLE_EXPERIMENTAL", true).apply();
-                        } else if (mTapCount >= 3) {
-                            mToast = Toast.makeText(ActivityAbout.this, getResources().getString(R.string.about_toast_experimental, 6 - mTapCount), Toast.LENGTH_SHORT);
-                            mToast.show();
-                        }
-                    } else {
-                        mTapCount = 1;
+        Preference prefsVersion = getPreferenceScreen().findPreference(KEY_ABOUT_VERSION);
+        prefsVersion.setSummary(getResources().getString(R.string.about_version_summary, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+        prefsVersion.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            private long mTapTime;
+            private int mTapCount;
+            private Toast mToast;
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                //mLogger.trace("mTapCount:{}", mTapCount);
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - mTapTime < ViewConfiguration.getJumpTapTimeout()) {
+                    mTapCount++;
+                    if (mToast != null) {
+                        mToast.cancel();
                     }
-                    mTapTime = System.currentTimeMillis();
-                    return true; // Avoid continue report to PreferenceTree
+                    if (mTapCount >= 6 || prefs.getBoolean("CONF_ENABLE_EXPERIMENTAL", false)) {
+                        mToast = Toast.makeText(ActivityAbout.this, getResources().getString(R.string.about_toast_experimental_on), Toast.LENGTH_SHORT);
+                        mToast.show();
+                        prefs.edit().putBoolean("CONF_ENABLE_EXPERIMENTAL", true).apply();
+                    } else if (mTapCount >= 3) {
+                        mToast = Toast.makeText(ActivityAbout.this, getResources().getString(R.string.about_toast_experimental, 6 - mTapCount), Toast.LENGTH_SHORT);
+                        mToast.show();
+                    }
+                } else {
+                    mTapCount = 1;
                 }
-            });
-        } catch (NameNotFoundException ex) {
-            mLogger.error("Failed to parse package info {}", ex.getMessage());
-        }
+                mTapTime = System.currentTimeMillis();
+                return true; // Avoid continue report to PreferenceTree
+            }
+        });
     }
 
     @Override
